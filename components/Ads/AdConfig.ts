@@ -38,10 +38,12 @@ export const ADSTERRA_CONFIG = {
   }
 };
 
+export type AdConfig = typeof ADSTERRA_CONFIG;
+
 let cachedLiveConfig: any = null;
 let activeFetchPromise: Promise<any> | null = null;
 
-function mergeConfig(prev: any, d: any) {
+function mergeConfig(prev: AdConfig, d: any): AdConfig {
   return {
     ...prev,
     enableAds: d.enableAds !== false,
@@ -96,8 +98,8 @@ async function getLiveAdsConfig(): Promise<any> {
 /**
  * Hook that provides real-time ad configuration from database with instant fallback to ADSTERRA_CONFIG.
  */
-export function useDynamicAdConfig() {
-  const [config, setConfig] = useState(() => {
+export function useDynamicAdConfig(): AdConfig {
+  const [config, setConfig] = useState<AdConfig>(() => {
     if (cachedLiveConfig) {
       return mergeConfig(ADSTERRA_CONFIG, cachedLiveConfig);
     }
@@ -108,7 +110,7 @@ export function useDynamicAdConfig() {
     let isMounted = true;
     getLiveAdsConfig().then((d) => {
       if (isMounted && d) {
-        setConfig((prev) => mergeConfig(prev, d));
+        setConfig((prev: AdConfig) => mergeConfig(prev, d));
       }
     });
 
