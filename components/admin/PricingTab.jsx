@@ -175,20 +175,7 @@ export default function PricingTab({
     updateOverrideState(itemSlug, { isEnabled: !current?.isEnabled });
   };
 
-  const toggleItemStock = (itemSlug) => {
-    const current = visibleOverrides.find(o => o.itemSlug === itemSlug);
-    updateOverrideState(itemSlug, { isOutOfStock: !current?.isOutOfStock });
-  };
 
-  const toggleGameStock = (gameSlug) => {
-    setGameConfigs(prev => {
-      const existing = prev.find(g => g.gameSlug === gameSlug);
-      if (existing) {
-        return prev.map(g => g.gameSlug === gameSlug ? { ...g, isOutOfStock: !g.isOutOfStock } : g);
-      }
-      return [...prev, { gameSlug, isOutOfStock: true }];
-    });
-  };
 
   const applyBulkPercentage = () => {
     const percent = Number(bulkPercent);
@@ -315,28 +302,7 @@ export default function PricingTab({
                     <span className="text-[8.5px] font-mono text-[var(--muted)]/50 truncate leading-none">{g.gameSlug}</span>
                   </div>
 
-                  {/* GAME STOCK TOGGLE */}
-                  <div className="flex items-center gap-1 ml-2 shrink-0">
-                    <span className={`text-[7px] font-black uppercase ${gameConfigs.find(gc => gc.gameSlug === g.gameSlug)?.isOutOfStock ? "text-rose-500" : "text-emerald-400"}`}>
-                      {gameConfigs.find(gc => gc.gameSlug === g.gameSlug)?.isOutOfStock ? "OOS" : "Stock"}
-                    </span>
-                    <button aria-label="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleGameStock(g.gameSlug);
-                      }}
-                      title="Stock Status"
-                      className={`w-6 h-3 rounded-full transition-all flex items-center px-0.5 ${
-                        gameConfigs.find(gc => gc.gameSlug === g.gameSlug)?.isOutOfStock 
-                          ? "bg-rose-500" 
-                          : "bg-emerald-500/20 border border-emerald-500/30"
-                      }`}
-                    >
-                      <div className={`w-2 h-2 rounded-full bg-white transition-all ${
-                        gameConfigs.find(gc => gc.gameSlug === g.gameSlug)?.isOutOfStock ? "translate-x-3" : "translate-x-0"
-                      }`} />
-                    </button>
-                  </div>
+
                 </button>
               ))}
               {filteredGames.length === 0 && (
@@ -500,25 +466,8 @@ export default function PricingTab({
                             </div>
                             
                             <div className="flex items-center gap-3 shrink-0">
-                              {/* STOCK TOGGLE */}
-                              <div className="flex flex-col items-end gap-0.5">
-                                <button aria-label="button"
-                                  onClick={() => toggleItemStock(o.itemSlug)}
-                                  className={`relative w-8 h-4 rounded-full transition-colors outline-none flex items-center px-0.5 ${
-                                    o.isOutOfStock ? "bg-rose-500" : "bg-emerald-500/20 border border-emerald-500/30"
-                                  }`}
-                                >
-                                  <div className={`w-3 h-3 bg-white rounded-full transition-all shadow-sm ${
-                                    o.isOutOfStock ? "translate-x-4" : "translate-x-0"
-                                  }`} />
-                                </button>
-                                <span className={`text-[7px] font-black uppercase tracking-wider ${o.isOutOfStock ? "text-rose-500" : "text-emerald-400"}`}>
-                                  {o.isOutOfStock ? "OOS" : "In Stock"}
-                                </span>
-                              </div>
-
                               {/* OVERRIDE TOGGLE */}
-                              <div className="flex flex-col items-end gap-0.5 pl-2 border-l border-[var(--border)]">
+                              <div className="flex flex-col items-end gap-0.5">
                                 <button aria-label="button"
                                   onClick={() => toggleOverrideStatus(o.itemSlug)}
                                   className={`relative w-8 h-4 rounded-full transition-colors outline-none flex items-center px-0.5 ${

@@ -32,7 +32,9 @@ import {
   FiBarChart2,
   FiCalendar,
   FiTv,
+  FiPackage,
 } from "react-icons/fi";
+import ProductCatalogTab from "@/components/admin/ProductCatalogTab";
 
 import AuthGuard from "@/components/AuthGuard";
 import UsersTab from "@/components/admin/UsersTab";
@@ -78,7 +80,8 @@ const MENU_CATEGORIES = [
     items: [
       { id: "orders", label: "Orders", icon: FiShoppingCart },
       { id: "transactions", label: "Transactions", icon: FiRepeat },
-      { id: "pricing", label: "Pricing & Catalog", icon: FiTag },
+      { id: "catalog", label: "Product Catalog", icon: FiPackage },
+      { id: "pricing", label: "Pricing & Margins", icon: FiTag },
       { id: "flash-sale", label: "Flash Sale & Deals", icon: FiZap },
       { id: "wallet", label: "Wallet Balances", icon: FiPocket },
       { id: "usdt", label: "USDT Crypto", icon: FiDatabase },
@@ -119,7 +122,7 @@ const MENU_CATEGORIES = [
 
 const VALID_TABS = [
   "analytics", "activity", "pwa-stats",
-  "orders", "transactions", "pricing", "flash-sale", "wallet", "usdt",
+  "orders", "transactions", "catalog", "pricing", "flash-sale", "wallet", "usdt",
   "users", "memberships", "queries", "blocklist",
   "promotional", "redeem", "coins", "ads", "banners", "giveaway", "events", "tournaments", "blogs",
   "ui-settings", "api-keys", "settings"
@@ -895,6 +898,13 @@ export default function AdminPanalPage() {
             )}
 
 
+            {activeTab === "catalog" && (
+              <ProductCatalogTab
+                onStockUpdated={() => {
+                  fetchPricing(pricingType);
+                }}
+              />
+            )}
             {activeTab === "pricing" && (
               <PricingTab
                 pricingType={pricingType}
