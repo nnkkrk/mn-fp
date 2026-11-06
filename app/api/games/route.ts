@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import PricingConfig from "@/models/PricingConfig";
 
-export const revalidate = 7200; // Cache this route handler for 2 hours
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 /* ================= IMAGES ================= */
 const MLBB_MAIN_IMAGE = "/game-assets/mlbbindia.jpg";
@@ -261,9 +262,23 @@ export async function GET() {
 
     await connectDB();
     const userPricing = await PricingConfig.findOne({ userType: "user" }).lean();
-    const outOfStockSlugs = (userPricing as any)?.gameConfigs
+    const rawOosSlugs: string[] = (userPricing as any)?.gameConfigs
       ?.filter((gc: any) => gc.isOutOfStock)
       ?.map((gc: any) => gc.gameSlug) || [];
+
+    // Expand known game aliases (e.g. pubg-mobile135 / pubg-mobile138, bgmi226 / bgmi-manual)
+    const oosSet = new Set<string>(rawOosSlugs);
+    if (rawOosSlugs.some((s) => s.startsWith("pubg-mobile") || s === "pubg")) {
+      oosSet.add("pubg-mobile135");
+      oosSet.add("pubg-mobile138");
+      oosSet.add("pubg");
+    }
+    if (rawOosSlugs.some((s) => s.startsWith("bgmi"))) {
+      oosSet.add("bgmi226");
+      oosSet.add("bgmi-manual");
+      oosSet.add("bgmi");
+    }
+    const outOfStockSlugs = Array.from(oosSet);
 
     const filteredGames =
       data?.data?.games
@@ -353,31 +368,33 @@ export async function GET() {
         //   items: OTTS.filter((o) => o.available),
         //   total: OTTS.filter((o) => o.available).length,
         // },
+        outOfStockSlugs,
+
         // 🔥 MEMBERSHIP SECTION
         memberships: {
           title: "Memberships & Passes",
-          items: MEMBERSHIPS.filter((m) => m.available),
-          total: MEMBERSHIPS.filter((m) => m.available).length,
+          items: MEMBERSHIPS.filter((m) => m.available && !outOfStockSlugs.includes(m.slug)),
+          total: MEMBERSHIPS.filter((m) => m.available && !outOfStockSlugs.includes(m.slug)).length,
         },
 
         // 🔥 VOUCHER SECTION
         vouchers: {
           title: "Premium Vouchers",
-          items: VOUCHERS.filter((v) => v.available),
-          total: VOUCHERS.filter((v) => v.available).length,
+          items: VOUCHERS.filter((v) => v.available && !outOfStockSlugs.includes(v.slug)),
+          total: VOUCHERS.filter((v) => v.available && !outOfStockSlugs.includes(v.slug)).length,
         },
 
         // 🔥 SERVICE SECTION
         services: {
           title: "Premium Services",
-          items: SERVICES.filter((s) => s.available),
-          total: SERVICES.filter((s) => s.available).length,
+          items: SERVICES.filter((s) => s.available && !outOfStockSlugs.includes(s.slug)),
+          total: SERVICES.filter((s) => s.available && !outOfStockSlugs.includes(s.slug)).length,
         },
 
       },
     }, {
       headers: {
-        'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=59'
+        'Cache-Control': 'no-store, no-cache, must-revalidate'
       }
     });
   } catch (error) {
@@ -391,7 +408,7 @@ export async function GET() {
       {
         status: 500,
         headers: {
-          'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=59'
+          'Cache-Control': 'no-store, no-cache, must-revalidate'
         }
       }
     );

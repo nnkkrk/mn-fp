@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -28,6 +29,7 @@ const storyData = [
     color: "#b91c1c", // Red
     image: "/game-assets/weekly-monthly-bundle.webp",
     link: "/games/weeklymonthly-bundle646",
+    slug: "weeklymonthly-bundle646",
   },
   {
     id: 2,
@@ -36,6 +38,7 @@ const storyData = [
     color: "#15803d", // Green
     image: "/game-assets/mlbbindia.webp",
     link: "/games/mobile-legends114",
+    slug: "mobile-legends114",
   },
   {
     id: 3,
@@ -44,6 +47,7 @@ const storyData = [
     color: "#1d4ed8", // Blue
     image: "/game-assets/double-dias.webp",
     link: "/games/mlbb-double332",
+    slug: "mlbb-double332",
   },
   {
     id: 4,
@@ -51,6 +55,7 @@ const storyData = [
     color: "#7e22ce", // Purple
     image: "/game-assets/mlbb-ph-small.webp",
     link: "/games/mobile-legends-philippines888",
+    slug: "mobile-legends-philippines888",
   },
 
   {
@@ -60,6 +65,7 @@ const storyData = [
     color: "#0e7490", // Cyan
     image: "/game-assets/starkight.webp",
     link: "/games/starlight-card-manual",
+    slug: "starlight-card-manual",
   },
   {
     id: 6,
@@ -68,6 +74,7 @@ const storyData = [
     color: "#15803d", // Green
     image: "/game-assets/hok.webp",
     link: "/games/honor-of-kings57",
+    slug: "honor-of-kings57",
   },
   {
     id: 7,
@@ -76,6 +83,7 @@ const storyData = [
     color: "#db2777", // Pink
     image: "/membership/silver-m.webp",
     link: "/games/membership/silver-membership",
+    slug: "silver-membership",
   },
   {
     id: 8,
@@ -84,15 +92,41 @@ const storyData = [
     color: "#ca8a04", // Yellow/Gold
     image: "/membership/reseller-m.webp",
     link: "/games/membership/reseller-membership",
+    slug: "reseller-membership",
   },
 ];
 
 export default function StorySlider() {
+  const [outOfStockSlugs, setOutOfStockSlugs] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch("/api/games")
+      .then((res) => res.json())
+      .then((json) => {
+        if (!mounted) return;
+        setOutOfStockSlugs(json?.data?.outOfStockSlugs || []);
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const visibleStories = storyData.filter((item) => {
+    if (outOfStockSlugs.includes(item.slug)) return false;
+    return true;
+  });
+
+  if (visibleStories.length === 0) {
+    return null;
+  }
+
   return (
     <section className="relative py-4 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex gap-3 md:gap-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory relative z-10">
-          {storyData.map((item) => (
+          {visibleStories.map((item) => (
             <div
               key={item.id}
               className="opacity-100"

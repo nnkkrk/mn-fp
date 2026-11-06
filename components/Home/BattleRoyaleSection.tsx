@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FiChevronRight } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import { SectionTitle } from "@/components/common";
 
 const brGames = [

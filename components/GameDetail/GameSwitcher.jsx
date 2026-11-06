@@ -28,8 +28,17 @@ export default function GameSwitcher() {
                 if (!mounted) return;
 
                 let fetchedGames = json?.data?.games || [];
+                const oosSlugs = json?.data?.outOfStockSlugs || [];
 
-                const weeklyPassSource = fetchedGames.find(
+                // Filter out any out-of-stock games
+                fetchedGames = fetchedGames.filter((g) => !oosSlugs.includes(g.gameSlug));
+
+                const isWeeklyPassOOS =
+                    oosSlugs.includes(WEEKLY_PASS_SLUG) ||
+                    oosSlugs.includes("weekly-pass816") ||
+                    oosSlugs.includes("flash-weekly621");
+
+                const weeklyPassSource = isWeeklyPassOOS ? null : fetchedGames.find(
                     (g) => g.gameSlug === WEEKLY_PASS_SLUG
                 );
 
@@ -93,6 +102,8 @@ export default function GameSwitcher() {
             router.push(`/games/${game.gameSlug}`);
         }
     };
+
+    if (!loading && games.length === 0) return null;
 
     if (loading) return (
         <div className="w-full flex gap-2.5 overflow-hidden mb-3">

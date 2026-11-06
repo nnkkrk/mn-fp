@@ -66,17 +66,33 @@ function GameDetailContent() {
           return;
         }
 
+        if (data.data.isOutOfStock || data.data.gameAvailablity === false) {
+          setError("This game is currently out of stock. Please check back later or explore other games.");
+          setLoading(false);
+          return;
+        }
+
         const sortedItems = [...data.data.itemId].sort(
           (a, b) => a.sellingPrice - b.sellingPrice
         );
+
+        const inStockItems = sortedItems.filter(
+          (i: any) => !i.isOutOfStock && i.itemAvailablity !== false
+        );
+
+        if (inStockItems.length === 0) {
+          setError("All items for this product are currently out of stock. Please check back later.");
+          setLoading(false);
+          return;
+        }
 
         setGame({
           ...data.data,
           allItems: sortedItems,
         });
 
-        /** ✅ default active item */
-        setActiveItem(sortedItems[0]);
+        /** ✅ default active item to first in-stock item */
+        setActiveItem(inStockItems[0]);
         setLoading(false);
       })
       .catch((err) => {
@@ -121,7 +137,7 @@ function GameDetailContent() {
 
           {/* Title */}
           <h2 className="text-2xl sm:text-3xl font-extrabold mb-2 bg-gradient-to-r from-[var(--accent)] to-purple-400 bg-clip-text text-transparent">
-            Game Not Found
+            {error?.includes("out of stock") ? "Product Out of Stock" : "Game Not Found"}
           </h2>
 
           {/* Message */}
@@ -156,8 +172,8 @@ function GameDetailContent() {
   /* ================= ITEMS ================= */
   const items = game.allItems;
 
-  /** ✅ SHOW ALL ITEMS ALWAYS */
-  const visibleItems = items;
+  /** ✅ HIDE OUT OF STOCK ITEMS */
+  const visibleItems = items.filter((item: any) => !item.isOutOfStock && item.itemAvailablity !== false);
 
   /* ================= HELPERS ================= */
   const calculateDiscount = (selling: number, dummy: number) => {

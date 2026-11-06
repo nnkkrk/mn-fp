@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import FlashSaleConfig from "@/models/FlashSaleConfig";
+import PricingConfig from "@/models/PricingConfig";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const DEFAULT_FLASH_SALE_ITEMS = [
   {

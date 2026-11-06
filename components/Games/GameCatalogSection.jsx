@@ -73,7 +73,8 @@ function GameCatalogContent() {
           (g) => g.gameSlug === WEEKLY_PASS_SLUG
         );
 
-        if (weeklyPassSource) {
+        const isWeeklyPassOOS = oos.includes(WEEKLY_PASS_SLUG) || oos.includes("weekly-pass816") || oos.includes("flash-weekly621");
+        if (weeklyPassSource && !isWeeklyPassOOS) {
           const alreadyExists = fetchedGames.some(
             (g) =>
               g.gameSlug === WEEKLY_PASS_SLUG &&
