@@ -76,19 +76,24 @@ const MENU_CATEGORIES = [
     ]
   },
   {
-    category: "Commerce & Finance",
+    category: "Orders & Finance",
     items: [
       { id: "orders", label: "Orders", icon: FiShoppingCart },
       { id: "transactions", label: "Transactions", icon: FiRepeat },
-      { id: "catalog", label: "Product Catalog", icon: FiPackage },
-      { id: "pricing", label: "Pricing & Margins", icon: FiTag },
-      { id: "flash-sale", label: "Flash Sale & Deals", icon: FiZap },
       { id: "wallet", label: "Wallet Balances", icon: FiPocket },
       { id: "usdt", label: "USDT Crypto", icon: FiDatabase },
     ]
   },
   {
-    category: "Customers & Support",
+    category: "Products & Pricing",
+    items: [
+      { id: "catalog", label: "Product Catalog", icon: FiPackage },
+      { id: "pricing", label: "Pricing & Margins", icon: FiTag },
+      { id: "flash-sale", label: "Flash Sale & Deals", icon: FiZap },
+    ]
+  },
+  {
+    category: "Users & Support",
     items: [
       { id: "users", label: "User Accounts", icon: FiUsers },
       { id: "memberships", label: "Memberships & VIP", icon: FiShield },
@@ -97,17 +102,22 @@ const MENU_CATEGORIES = [
     ]
   },
   {
-    category: "Marketing & Growth",
+    category: "Marketing & Rewards",
     items: [
       { id: "promotional", label: "Promotions & Offers", icon: FiStar },
-      { id: "redeem", label: "Redeem Codes", icon: FiGift },
       { id: "coins", label: "Coin Rewards", icon: FiZap },
-      { id: "ads", label: "Ads & Monetization", icon: FiTv },
-      { id: "banners", label: "Store Banners", icon: FiImage },
+      { id: "redeem", label: "Redeem Codes", icon: FiGift },
       { id: "giveaway", label: "Giveaways", icon: FiGift },
-      { id: "events", label: "Events Calendar", icon: FiCalendar },
       { id: "tournaments", label: "Tournaments", icon: FiAward },
+      { id: "events", label: "Events Calendar", icon: FiCalendar },
+    ]
+  },
+  {
+    category: "Content & Storefront",
+    items: [
+      { id: "banners", label: "Store Banners", icon: FiImage },
       { id: "blogs", label: "Blogs & Articles", icon: FiFileText },
+      { id: "ads", label: "Ads & Monetization", icon: FiTv },
     ]
   },
   {
