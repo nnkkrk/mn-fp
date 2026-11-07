@@ -742,35 +742,68 @@ export default function AdminPanalPage() {
             <div className="flex-1 overflow-y-auto custom-scrollbar pb-6">
               {/* DUAL BALANCE WIDGET INSIDE SIDEBAR (Hidden during search for quick access) */}
               {!menuSearch.trim() && (
-                <div className="p-3 border-b border-[var(--border)] bg-[var(--card)]/30 space-y-2">
+                <div className="px-2.5 py-1.5 border-b border-[var(--border)] bg-[var(--card)]/20 space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] uppercase tracking-widest text-[var(--muted)] font-black">API Provider Balances</span>
-                    <span className="text-[9px] font-bold text-emerald-500 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live
+                    <span className="text-[7.5px] uppercase tracking-[0.14em] text-[var(--muted)] font-black">
+                      API Provider Balances
+                    </span>
+                    <span className="text-[7px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded-full flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" /> Live
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className={`p-2 rounded-lg border ${providerBalances.activeProvider === '1game' ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-[var(--foreground)]/[0.02] border-[var(--border)]'}`}>
+
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {/* 1Game Card */}
+                    <div
+                      className={`px-2 py-1 rounded-lg border transition-all ${
+                        providerBalances.activeProvider === "1game"
+                          ? "bg-emerald-500/[0.08] border-emerald-500/35 shadow-[0_0_8px_rgba(16,185,129,0.08)]"
+                          : "bg-[var(--foreground)]/[0.02] border-[var(--border)]/60"
+                      }`}
+                    >
                       <div className="flex items-center justify-between">
-                        <span className="text-[9.5px] font-bold text-[var(--muted)]">1Game</span>
-                        {providerBalances.activeProvider === '1game' && (
-                          <span className="text-[7.5px] font-bold text-emerald-500 bg-emerald-500/15 px-1 py-0.2 rounded">ACTIVE</span>
+                        <span className="text-[8.5px] font-bold text-[var(--muted)]">1Game</span>
+                        {providerBalances.activeProvider === "1game" ? (
+                          <span className="text-[6.5px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/20 border border-emerald-500/30 px-1 py-0.2 rounded-full">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-[6.5px] font-bold uppercase text-[var(--muted)]/40">
+                            Backup
+                          </span>
                         )}
                       </div>
-                      <div className="text-sm font-black text-[var(--foreground)] mt-0.5 tabular-nums">
-                        {providerBalances.oneGame?.balance !== undefined ? `$${providerBalances.oneGame.balance.toFixed(2)}` : '---'}
+                      <div className="text-[11.5px] font-black text-[var(--foreground)] mt-0.5 tabular-nums tracking-tight">
+                        {providerBalances.oneGame?.balance !== undefined
+                          ? `${providerBalances.oneGame.balance.toFixed(2)}`
+                          : "---"}
                       </div>
                     </div>
 
-                    <div className={`p-2 rounded-lg border ${providerBalances.activeProvider === 'bluebuff' ? 'bg-cyan-500/10 border-cyan-500/30' : 'bg-[var(--foreground)]/[0.02] border-[var(--border)]'}`}>
+                    {/* Bluebuff Card */}
+                    <div
+                      className={`px-2 py-1 rounded-lg border transition-all ${
+                        providerBalances.activeProvider === "bluebuff"
+                          ? "bg-cyan-500/[0.08] border-cyan-500/35 shadow-[0_0_8px_rgba(6,182,212,0.08)]"
+                          : "bg-[var(--foreground)]/[0.02] border-[var(--border)]/60"
+                      }`}
+                    >
                       <div className="flex items-center justify-between">
-                        <span className="text-[9.5px] font-bold text-[var(--muted)]">Bluebuff</span>
-                        {providerBalances.activeProvider === 'bluebuff' && (
-                          <span className="text-[7.5px] font-bold text-cyan-400 bg-cyan-500/15 px-1 py-0.2 rounded">ACTIVE</span>
+                        <span className="text-[8.5px] font-bold text-[var(--muted)]">Bluebuff</span>
+                        {providerBalances.activeProvider === "bluebuff" ? (
+                          <span className="text-[6.5px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/20 border border-cyan-500/30 px-1 py-0.2 rounded-full">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-[6.5px] font-bold uppercase text-[var(--muted)]/40">
+                            Backup
+                          </span>
                         )}
                       </div>
-                      <div className="text-sm font-black text-[var(--foreground)] mt-0.5 tabular-nums">
-                        {providerBalances.bluebuff?.balance !== undefined ? `$${providerBalances.bluebuff.balance.toFixed(2)}` : '---'}
+                      <div className="text-[11.5px] font-black text-[var(--foreground)] mt-0.5 tabular-nums tracking-tight">
+                        {providerBalances.bluebuff?.balance !== undefined
+                          ? `${providerBalances.bluebuff.balance.toFixed(2)}`
+                          : "---"}
                       </div>
                     </div>
                   </div>
