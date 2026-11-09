@@ -47,7 +47,17 @@ function GameCatalogContent() {
   const WEEKLY_PASS_SLUG = "mobile-legends114";
 
   const outOfStockGames = [
-    "mobile-legends-backup826"
+    "mobile-legends-backup826",
+    "silver-membership",
+    "reseller-membership",
+    "unipin-voucher",
+    "rank-boost",
+    "starlight-card-manual",
+    "Membership",
+    "Reseller",
+    "UniPin Voucher",
+    "MLBB Rank Boost",
+    "Starlight Card",
   ];
 
   const outOfStockSet = useMemo(
@@ -337,6 +347,7 @@ function GameCatalogContent() {
                     total={processedMemberships.length}
                     items={processedMemberships}
                     hrefPrefix="/games/membership"
+                    isOutOfStock={isOutOfStock}
                   />
                 </div>
               )}
@@ -355,6 +366,7 @@ function GameCatalogContent() {
                     total={processedVouchers.length}
                     items={processedVouchers}
                     hrefPrefix="/games"
+                    isOutOfStock={isOutOfStock}
                   />
                 </div>
               )}
@@ -373,6 +385,7 @@ function GameCatalogContent() {
                     total={processedServices.length}
                     items={processedServices}
                     hrefPrefix="/games"
+                    isOutOfStock={isOutOfStock}
                   />
                 </div>
               )}

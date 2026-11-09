@@ -278,6 +278,14 @@ export async function GET() {
       oosSet.add("bgmi-manual");
       oosSet.add("bgmi");
     }
+    const manualOosList = [
+      "silver-membership",
+      "reseller-membership",
+      "unipin-voucher",
+      "rank-boost",
+      "starlight-card-manual",
+    ];
+    manualOosList.forEach((slug) => oosSet.add(slug));
     const outOfStockSlugs = Array.from(oosSet);
 
     const filteredGames =
@@ -373,22 +381,34 @@ export async function GET() {
         // 🔥 MEMBERSHIP SECTION
         memberships: {
           title: "Memberships & Passes",
-          items: MEMBERSHIPS.filter((m) => m.available && !outOfStockSlugs.includes(m.slug)),
-          total: MEMBERSHIPS.filter((m) => m.available && !outOfStockSlugs.includes(m.slug)).length,
+          items: MEMBERSHIPS.map((m) => ({
+            ...m,
+            available: !manualOosList.includes(m.slug),
+            isOutOfStock: manualOosList.includes(m.slug),
+          })),
+          total: MEMBERSHIPS.length,
         },
 
         // 🔥 VOUCHER SECTION
         vouchers: {
           title: "Premium Vouchers",
-          items: VOUCHERS.filter((v) => v.available && !outOfStockSlugs.includes(v.slug)),
-          total: VOUCHERS.filter((v) => v.available && !outOfStockSlugs.includes(v.slug)).length,
+          items: VOUCHERS.map((v) => ({
+            ...v,
+            available: !manualOosList.includes(v.slug),
+            isOutOfStock: manualOosList.includes(v.slug),
+          })),
+          total: VOUCHERS.length,
         },
 
         // 🔥 SERVICE SECTION
         services: {
           title: "Premium Services",
-          items: SERVICES.filter((s) => s.available && !outOfStockSlugs.includes(s.slug)),
-          total: SERVICES.filter((s) => s.available && !outOfStockSlugs.includes(s.slug)).length,
+          items: SERVICES.map((s) => ({
+            ...s,
+            available: !manualOosList.includes(s.slug),
+            isOutOfStock: manualOosList.includes(s.slug),
+          })),
+          total: SERVICES.length,
         },
 
       },
