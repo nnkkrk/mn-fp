@@ -76,24 +76,24 @@ const storyData = [
     link: "/games/honor-of-kings57",
     slug: "honor-of-kings57",
   },
-  {
-    id: 7,
-    title: "Membership",
-    badge: "VIP",
-    color: "#db2777", // Pink
-    image: "/membership/silver-m.webp",
-    link: "/games/membership/silver-membership",
-    slug: "silver-membership",
-  },
-  {
-    id: 8,
-    title: "Reseller",
-    badge: "B2B",
-    color: "#ca8a04", // Yellow/Gold
-    image: "/membership/reseller-m.webp",
-    link: "/games/membership/reseller-membership",
-    slug: "reseller-membership",
-  },
+  // {
+  //   id: 7,
+  //   title: "Membership",
+  //   badge: "VIP",
+  //   color: "#db2777", // Pink
+  //   image: "/membership/silver-m.webp",
+  //   link: "/games/membership/silver-membership",
+  //   slug: "silver-membership",
+  // },
+  // {
+  //   id: 8,
+  //   title: "Reseller",
+  //   badge: "B2B",
+  //   color: "#ca8a04", // Yellow/Gold
+  //   image: "/membership/reseller-m.webp",
+  //   link: "/games/membership/reseller-membership",
+  //   slug: "reseller-membership",
+  // },
 ];
 
 export default function StorySlider() {
