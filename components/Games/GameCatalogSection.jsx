@@ -24,6 +24,7 @@ function GameCatalogContent() {
   /* ================= STATE ================= */
   const [category, setCategory] = useState([]);
   const [games, setGames] = useState([]);
+  const [outOfStockSlugs, setOutOfStockSlugs] = useState([]);
 
   const [mlbbVeriant, setMlbbVeriant] = useState([]);
 
@@ -49,10 +50,18 @@ function GameCatalogContent() {
     "mobile-legends-backup826"
   ];
 
-  const outOfStockSet = useMemo(() => new Set(outOfStockGames), []);
+  const outOfStockSet = useMemo(
+    () => new Set([...outOfStockGames, ...outOfStockSlugs]),
+    [outOfStockSlugs]
+  );
 
   const isOutOfStock = useCallback(
-    (name) => outOfStockSet.has(name),
+    (item) => {
+      if (!item) return false;
+      const slug = typeof item === "string" ? item : (item.gameSlug || item.slug || "");
+      const name = typeof item === "string" ? item : (item.gameName || item.name || "");
+      return outOfStockSet.has(slug) || outOfStockSet.has(name);
+    },
     [outOfStockSet]
   );
 
@@ -67,6 +76,8 @@ function GameCatalogContent() {
 
         let fetchedGames = json?.data?.games || [];
         let fetchedMlbbVariant = json?.data?.mlbbVariants || [];
+        const oos = json?.data?.outOfStockSlugs || [];
+        setOutOfStockSlugs(oos);
 
         // Duplicate Weekly Pass (same slug)
         const weeklyPassSource = fetchedGames.find(
@@ -125,7 +136,7 @@ function GameCatalogContent() {
       });
     }
     if (hideOOS) {
-      result = result.filter((g) => !isOutOfStock(g.gameName));
+      result = result.filter((g) => !isOutOfStock(g));
     }
     if (sort === "az") {
       result.sort((a, b) => (a.gameName || "").localeCompare(b.gameName || ""));

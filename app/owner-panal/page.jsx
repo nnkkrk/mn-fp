@@ -3,6 +3,7 @@
 // Fresh HMR invalidation
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { Icons } from "@/components/icons";
 import { LoadingSpinner, SectionTitle, SearchInput } from "@/components/common";
 import {
@@ -33,6 +34,12 @@ import {
   FiCalendar,
   FiTv,
   FiPackage,
+  FiLock,
+  FiUnlock,
+  FiEye,
+  FiEyeOff,
+  FiArrowLeft,
+  FiAlertCircle,
 } from "react-icons/fi";
 import ProductCatalogTab from "@/components/admin/ProductCatalogTab";
 
@@ -263,6 +270,43 @@ export default function AdminPanalPage() {
     return result;
   };
 
+  const handlePinSubmit = async (e, pinToVerify) => {
+    if (e) e.preventDefault();
+    const currentPin = pinToVerify || pinDigits.join("");
+    if (currentPin.length !== 6) return;
+
+    setVerifyingPin(true);
+    setPinError("");
+
+    try {
+      const res = await fetch("/api/admin-auth/verify-pin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: currentPin }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setPinError(data.message || "Invalid PIN. Please try again.");
+        setPinDigits(["", "", "", "", "", ""]);
+        pinInputRefs.current[0]?.focus();
+        return;
+      }
+
+      // Valid PIN
+      const expiresAt = new Date().getTime() + (12 * 60 * 60 * 1000); // 12 hours
+      const authData = encryptData(JSON.stringify({ pin: currentPin, expiresAt }));
+      localStorage.setItem("adminAuth", authData);
+      sessionStorage.setItem("adminPin", currentPin);
+      setPinPrompt(false);
+      window.location.reload();
+    } catch (err) {
+      setPinError("Connection error. Please try again.");
+    } finally {
+      setVerifyingPin(false);
+    }
+  };
+
   const handleDigitChange = (index, value) => {
     if (pinError) setPinError("");
     // Strictly numeric
@@ -279,9 +323,11 @@ export default function AdminPanalPage() {
     newDigits[index] = lastChar;
     setPinDigits(newDigits);
 
-    // Auto-focus next box
+    // Auto-focus next box or submit if complete
     if (index < 5) {
       pinInputRefs.current[index + 1]?.focus();
+    } else if (index === 5 && newDigits.every((d) => d !== "")) {
+      handlePinSubmit(null, newDigits.join(""));
     }
   };
 
@@ -324,8 +370,12 @@ export default function AdminPanalPage() {
     }
     setPinDigits(newDigits);
 
-    const nextIndex = Math.min(pastedData.length, 5);
-    pinInputRefs.current[nextIndex]?.focus();
+    if (pastedData.length >= 6) {
+      handlePinSubmit(null, pastedData.slice(0, 6));
+    } else {
+      const nextIndex = Math.min(pastedData.length, 5);
+      pinInputRefs.current[nextIndex]?.focus();
+    }
   };
 
   useEffect(() => {
@@ -367,42 +417,6 @@ export default function AdminPanalPage() {
     };
   }, []);
 
-  const handlePinSubmit = async (e) => {
-    if (e) e.preventDefault();
-    const currentPin = pinDigits.join("");
-    if (currentPin.length !== 6) return;
-
-    setVerifyingPin(true);
-    setPinError("");
-
-    try {
-      const res = await fetch("/api/admin-auth/verify-pin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: currentPin }),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        setPinError(data.message || "Wrong PIN. Please try again.");
-        setPinDigits(["", "", "", "", "", ""]);
-        pinInputRefs.current[0]?.focus();
-        return;
-      }
-
-      // Valid PIN
-      const expiresAt = new Date().getTime() + (12 * 60 * 60 * 1000); // 12 hours
-      const authData = encryptData(JSON.stringify({ pin: currentPin, expiresAt }));
-      localStorage.setItem("adminAuth", authData);
-      sessionStorage.setItem("adminPin", currentPin);
-      setPinPrompt(false);
-      window.location.reload();
-    } catch (err) {
-      setPinError("Connection error. Please try again.");
-    } finally {
-      setVerifyingPin(false);
-    }
-  };
 
   useEffect(() => {
     const role = localStorage.getItem("userType");
@@ -566,107 +580,162 @@ export default function AdminPanalPage() {
   if (pinPrompt) {
     const isComplete = pinDigits.every((d) => d !== "");
     return (
-      <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 text-white p-4">
-        <form
-          onSubmit={handlePinSubmit}
-          className="w-full max-w-[380px] bg-neutral-900 border border-neutral-800 p-7 sm:p-8 rounded-2xl flex flex-col items-center gap-6"
+      <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 transition-colors">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 350 }}
+          className="relative w-full max-w-[400px]"
         >
-          {/* Key Icon */}
-          <div className="w-12 h-12 rounded-xl bg-neutral-800 border border-neutral-700 flex items-center justify-center text-sky-400">
-            <Icons.key size={22} className="stroke-[2.2]" />
-          </div>
+          {/* Card */}
+          <form
+            onSubmit={(e) => handlePinSubmit(e)}
+            className="relative w-full bg-[var(--card)] border border-[var(--border)] p-6 sm:p-8 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] flex flex-col items-center gap-5 sm:gap-6 overflow-hidden"
+          >
+            {/* Top ambient theme gradient & glow */}
+            <div className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-[var(--accent)]/15 via-[var(--accent)]/5 to-transparent pointer-events-none" />
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-44 h-44 bg-[var(--accent)]/20 blur-3xl pointer-events-none rounded-full" />
 
-          {/* Header */}
-          <SectionTitle
-            align="center"
-            size="md"
-            subtitle="Secure Verification"
-            title="Admin"
-            highlight="PIN"
-            description="Enter your 6-digit PIN"
-          />
+            {/* Back to Home / Close Button */}
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              aria-label="Back to home"
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer z-20"
+            >
+              <FiX size={16} />
+            </button>
 
-          {/* Error Banner */}
-          {pinError && (
-            <div className="w-full py-2 px-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs text-center font-medium">
-              {pinError}
-            </div>
-          )}
-
-          {/* 6 Digit Inputs */}
-          <div className="space-y-4 w-full">
-            <div className="flex items-center justify-center gap-2.5 sm:gap-3" onPaste={handlePinPaste}>
-              {pinDigits.map((digit, idx) => {
-                const isFilled = Boolean(digit);
-                return (
-                  <input
-                    key={idx}
-                    ref={(el) => (pinInputRefs.current[idx] = el)}
-                    type={showPin ? "text" : "password"}
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    autoComplete="one-time-code"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleDigitChange(idx, e.target.value)}
-                    onKeyDown={(e) => handleDigitKeyDown(idx, e)}
-                    autoFocus={idx === 0}
-                    className={`w-11 h-14 sm:w-12 sm:h-14 text-center text-xl font-bold rounded-xl outline-none select-none transition-colors ${
-                      pinError
-                        ? "bg-neutral-950 border-2 border-red-500 text-red-400"
-                        : isFilled
-                        ? "bg-neutral-950 border-2 border-sky-400 text-sky-400"
-                        : "bg-neutral-950 border border-neutral-800 text-white hover:border-neutral-700 focus:border-sky-400 focus:bg-neutral-900"
-                    }`}
-                  />
-                );
-              })}
+            {/* Security Icon Badge */}
+            <div className="relative z-10 mt-1">
+              <div className="w-14 h-14 rounded-2xl bg-[var(--accent)]/10 border border-[var(--accent)]/25 flex items-center justify-center text-[var(--accent)] shadow-[0_0_24px_rgba(var(--accent-rgb),0.15)]">
+                <FiShield size={26} className="stroke-[2.2]" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shadow-md border-2 border-[var(--card)]">
+                <FiKey size={11} strokeWidth={2.5} />
+              </div>
             </div>
 
-            {/* Quick Actions (Show/Hide & Clear) */}
-            <div className="flex items-center justify-between text-xs text-neutral-400 px-1 pt-1">
-              <button
-                type="button"
-                onClick={() => setShowPin(!showPin)}
-                className="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors cursor-pointer select-none font-medium"
-              >
-                {showPin ? <Icons.eyeOff size={14} /> : <Icons.eye size={14} />}
-                <span>{showPin ? "Hide PIN" : "Show PIN"}</span>
-              </button>
+            {/* Header */}
+            <div className="relative z-10 w-full text-center">
+              <SectionTitle
+                align="center"
+                size="md"
+                subtitle="SECURE VERIFICATION"
+                title="Admin"
+                highlight="PIN"
+                glow
+                description="Enter your 6-digit PIN to access the console"
+              />
+            </div>
 
-              {pinDigits.some((d) => d !== "") && (
+            {/* Error Banner */}
+            <AnimatePresence>
+              {pinError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, x: [-6, 6, -4, 4, -2, 2, 0] }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.35 }}
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-red-500/10 border border-red-500/25 text-red-500 text-xs text-center font-bold flex items-center justify-center gap-2 relative z-10"
+                >
+                  <FiAlertCircle size={15} className="shrink-0" />
+                  <span>{pinError}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* 6 Digit Inputs */}
+            <div className="space-y-3.5 w-full relative z-10">
+              <div className="grid grid-cols-6 gap-2 sm:gap-2.5 w-full" onPaste={handlePinPaste}>
+                {pinDigits.map((digit, idx) => {
+                  const isFilled = Boolean(digit);
+                  return (
+                    <input
+                      key={idx}
+                      ref={(el) => (pinInputRefs.current[idx] = el)}
+                      type={showPin ? "text" : "password"}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      autoComplete="one-time-code"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleDigitChange(idx, e.target.value)}
+                      onKeyDown={(e) => handleDigitKeyDown(idx, e)}
+                      autoFocus={idx === 0}
+                      className={`w-full h-12 sm:h-14 text-center text-xl sm:text-2xl font-black rounded-xl outline-none select-none transition-all duration-200 ${
+                        pinError
+                          ? "bg-red-500/5 border-2 border-red-500 text-red-500 shadow-[0_0_12px_rgba(239,68,68,0.25)]"
+                          : isFilled
+                          ? "bg-[var(--accent)]/10 border-2 border-[var(--accent)] text-[var(--accent)] shadow-[0_0_14px_rgba(var(--accent-rgb),0.2)] scale-[1.02]"
+                          : "bg-[var(--background)]/80 border border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/40 focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/15 focus:bg-[var(--background)]"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Quick Actions (Show/Hide & Clear) */}
+              <div className="flex items-center justify-between text-xs px-1">
                 <button
                   type="button"
-                  onClick={() => {
-                    setPinDigits(["", "", "", "", "", ""]);
-                    setPinError("");
-                    pinInputRefs.current[0]?.focus();
-                  }}
-                  className="text-neutral-400 hover:text-red-400 transition-colors cursor-pointer select-none font-medium"
+                  onClick={() => setShowPin(!showPin)}
+                  className="flex items-center gap-1.5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer select-none font-semibold px-2 py-1 rounded-lg hover:bg-[var(--foreground)]/[0.04]"
                 >
-                  Clear
+                  {showPin ? <FiEyeOff size={14} /> : <FiEye size={14} />}
+                  <span>{showPin ? "Hide PIN" : "Show PIN"}</span>
                 </button>
-              )}
-            </div>
-          </div>
 
-          {/* Action Button */}
-          <button
-            aria-label="Unlock Admin Panel"
-            type="submit"
-            disabled={!isComplete || verifyingPin}
-            className="w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-neutral-950 font-bold text-sm tracking-wide disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center justify-center gap-2 cursor-pointer mt-1"
-          >
-            {verifyingPin ? (
-              <>
-                <span className="w-4 h-4 border-2 border-neutral-950/40 border-t-neutral-950 rounded-full animate-spin" />
-                <span>Checking...</span>
-              </>
-            ) : (
-              "Unlock"
-            )}
-          </button>
-        </form>
+                {pinDigits.some((d) => d !== "") && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPinDigits(["", "", "", "", "", ""]);
+                      setPinError("");
+                      pinInputRefs.current[0]?.focus();
+                    }}
+                    className="text-[var(--muted)] hover:text-red-500 transition-colors cursor-pointer select-none font-semibold px-2 py-1 rounded-lg hover:bg-red-500/10"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="w-full relative z-10 space-y-3">
+              <button
+                aria-label="Unlock Admin Panel"
+                type="submit"
+                disabled={!isComplete || verifyingPin}
+                className="w-full h-12 relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-wider rounded-xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 shadow-[0_8px_20px_-4px_rgba(var(--accent-rgb),0.35)] text-xs sm:text-sm cursor-pointer"
+              >
+                {verifyingPin ? (
+                  <div className="flex items-center gap-2">
+                    <LoadingSpinner size="sm" color="white" />
+                    <span>Verifying...</span>
+                  </div>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <FiUnlock size={16} />
+                    <span>Unlock Console</span>
+                  </span>
+                )}
+              </button>
+
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => router.push("/")}
+                  className="text-[11px] font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors flex items-center gap-1.5 cursor-pointer py-1"
+                >
+                  <FiArrowLeft size={13} />
+                  <span>Back to Store</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </motion.div>
       </div>
     );
   }
