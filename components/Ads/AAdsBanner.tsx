@@ -11,26 +11,26 @@ export default function AAdsBanner({
   badgePosition = "right",
   badgeLabel = "AD"
 }: AAdsBannerProps) {
-  const badgePositionClass = badgePosition === "left" ? "left-2.5" : "right-2.5";
+  const justifyClass = badgePosition === "left" ? "justify-start" : "justify-end";
 
   return (
-    <div className={`w-full flex justify-center pt-2 pb-0.5 ${className}`}>
+    <div className={`w-full flex justify-center py-2 ${className}`}>
       <div 
-        className="relative border border-[var(--border)] rounded-lg bg-[var(--foreground)]/[0.02] shadow-xs flex items-center justify-center p-1"
-        style={{ width: "100%", maxWidth: "320px" }}
+        className="relative border border-[var(--border)] rounded-xl bg-[var(--foreground)]/[0.02] shadow-xs flex flex-col items-center p-2"
+        style={{ width: "100%", maxWidth: "340px" }}
       >
-        {/* Overlapping Corner Ad Mention Badge */}
-        <div 
-          className={`absolute -top-2 ${badgePositionClass} z-20 px-2 py-0.5 rounded-full bg-[var(--background)]/90 backdrop-blur-sm border border-[var(--border)] shadow-xs flex items-center gap-1.5 pointer-events-none select-none`}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-80 animate-pulse"></span>
-          <span className="text-[8px] font-bold uppercase tracking-wider text-[var(--muted)]">
-            {badgeLabel}
-          </span>
+        {/* Corner Ad Mention Badge - In-flow above iframe so no overlap error */}
+        <div className={`w-full flex ${justifyClass} mb-1.5`}>
+          <div className="px-2 py-0.5 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center gap-1.5 shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-80 animate-pulse"></span>
+            <span className="text-[8px] font-bold uppercase tracking-wider text-[var(--muted)]">
+              {badgeLabel}
+            </span>
+          </div>
         </div>
 
         {/* Ad Iframe Container */}
-        <div className="w-full rounded-md overflow-hidden flex items-center justify-center">
+        <div className="w-full rounded-lg overflow-hidden flex items-center justify-center">
           <iframe
             data-aa="2461867"
             src="https://acceptable.a-ads.com/2461867/?size=Adaptive"
