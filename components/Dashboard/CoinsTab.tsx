@@ -16,7 +16,7 @@ import { formatCoins, formatCurrency, formatNumber, formatDate, formatDateTime }
 import Link from "next/link";
 import NativeBanner from "@/components/Ads/NativeBanner";
 import CustomBanner1 from "@/components/Ads/CustomBanner1";
-import CustomBanner2 from "@/components/Ads/CustomBanner2";
+
 import { TaskSkeleton, TransactionSkeleton } from "../Skeleton/Skeleton";
 import { ADS_CONFIG } from "@/lib/adsConstants";
 import confetti from "canvas-confetti";

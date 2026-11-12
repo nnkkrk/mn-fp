@@ -14,6 +14,7 @@ import { getAppSettings } from "@/lib/settings";
 const SeasonalEffectManager = nextDynamic(() => import("@/components/Seasonal/SeasonalEffectManager"));
 const PWAInstallBanner = nextDynamic(() => import("@/components/Layout/PWAInstallBanner"));
 const BottomNav = nextDynamic(() => import("@/components/Layout/BottomNav"));
+const MonetagVignette = nextDynamic(() => import("@/components/Ads/MonetagVignette"));
 
 
 
@@ -225,6 +226,7 @@ export default async function RootLayout({
         </Script>
 
           <Header />
+          <MonetagVignette />
 
           <SeasonalEffectManager />
 
