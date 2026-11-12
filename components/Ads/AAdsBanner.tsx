@@ -9,28 +9,23 @@ interface AAdsBannerProps {
 export default function AAdsBanner({ 
   className = "",
   badgePosition = "right",
-  badgeLabel = "AD"
+  badgeLabel = "Ad"
 }: AAdsBannerProps) {
   const justifyClass = badgePosition === "left" ? "justify-start" : "justify-end";
 
   return (
-    <div className={`w-full flex justify-center py-2 ${className}`}>
-      <div 
-        className="relative border border-[var(--border)] rounded-xl bg-[var(--foreground)]/[0.02] shadow-xs flex flex-col items-center p-2"
-        style={{ width: "100%", maxWidth: "340px" }}
-      >
-        {/* Corner Ad Mention Badge - In-flow above iframe so no overlap error */}
-        <div className={`w-full flex ${justifyClass} mb-1.5`}>
-          <div className="px-2 py-0.5 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center gap-1.5 shadow-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-80 animate-pulse"></span>
-            <span className="text-[8px] font-bold uppercase tracking-wider text-[var(--muted)]">
-              {badgeLabel}
-            </span>
-          </div>
+    <div className={`w-full flex flex-col items-center py-1 ${className}`}>
+      <div className="w-full max-w-[324px] flex flex-col">
+        {/* Small subtle "Ad" mention on top outside the card */}
+        <div className={`w-full flex items-center ${justifyClass} mb-1 px-1 gap-1`}>
+          <span className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-70"></span>
+          <span className="text-[8px] font-bold uppercase tracking-widest text-[var(--muted)]/70 select-none">
+            {badgeLabel}
+          </span>
         </div>
 
-        {/* Ad Iframe Container */}
-        <div className="w-full rounded-lg overflow-hidden flex items-center justify-center">
+        {/* Slim, snug banner frame without bulky padding */}
+        <div className="w-full rounded-lg overflow-hidden border border-[var(--border)]/60 bg-[var(--foreground)]/[0.02] flex items-center justify-center shadow-xs">
           <iframe
             data-aa="2461867"
             src="https://acceptable.a-ads.com/2461867/?size=Adaptive"
@@ -39,11 +34,11 @@ export default function AAdsBanner({
               padding: 0,
               width: "100%",
               maxWidth: "320px",
-              height: "52px",
+              height: "50px",
               minHeight: "50px",
               overflow: "hidden",
               display: "block",
-              margin: "auto",
+              margin: "0 auto",
             }}
             title="Advertisement"
             scrolling="no"
