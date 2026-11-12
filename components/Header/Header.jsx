@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import CustomWebBanner from "../Home/CustomWebBanner";
+import AAdsBanner from "../Ads/AAdsBanner";
 import api from "@/lib/axios";
 import { FiHeart, FiChevronRight, FiChevronDown, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiUsers, FiKey, FiGift, FiAward, FiDownload, FiBell, FiCalendar } from "react-icons/fi";
 import { CopyButton } from "@/components/common";
@@ -583,10 +584,13 @@ export default function Header() {
                   </div>
 
                   {/* Drawer Footer */}
-                  <div className="relative z-10 py-2.5 px-3 border-t border-[var(--border)] bg-[var(--foreground)]/[0.02] flex flex-col items-center justify-center gap-1.5 shrink-0">
+                  <div className="relative z-10 py-2 px-3 border-t border-[var(--border)] bg-[var(--foreground)]/[0.02] flex flex-col items-center justify-center gap-2 shrink-0">
                     <div className="text-center text-[9px] text-[var(--foreground)] opacity-75 font-mono tracking-wider flex flex-col items-center justify-center">
                       <span>A Product from <a href="https://bluebuff.in" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] font-bold hover:underline">bluebuff.in</a></span>
                     </div>
+
+                    {/* A-Ads Banner Ad */}
+                    <AAdsBanner />
                   </div>
                 </div>
               </>
