@@ -14,7 +14,6 @@ import { getAppSettings } from "@/lib/settings";
 const SeasonalEffectManager = nextDynamic(() => import("@/components/Seasonal/SeasonalEffectManager"));
 const PWAInstallBanner = nextDynamic(() => import("@/components/Layout/PWAInstallBanner"));
 const BottomNav = nextDynamic(() => import("@/components/Layout/BottomNav"));
-const MonetagVignette = nextDynamic(() => import("@/components/Ads/MonetagVignette"));
 
 
 
@@ -116,6 +115,12 @@ export default async function RootLayout({
         <meta name="google-site-verification" content="9-O7krLq_lN5tqYm67n0IO8Adb0XqDNpas3gX4PLvj4" />
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        {/* Monetag Vignette Ad Tag */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='10910115',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+          }}
+        />
         {/* Pre-initialize theme before first paint to prevent layout reflows */}
         <script dangerouslySetInnerHTML={{ __html: `
           try {
@@ -226,7 +231,6 @@ export default async function RootLayout({
         </Script>
 
           <Header />
-          <MonetagVignette />
 
           <SeasonalEffectManager />
 
