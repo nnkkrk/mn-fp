@@ -8,7 +8,7 @@ import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import CustomWebBanner from "../Home/CustomWebBanner";
 import AAdsBanner from "../Ads/AAdsBanner";
 import api from "@/lib/axios";
-import { FiHeart, FiChevronRight, FiChevronDown, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiUsers, FiKey, FiGift, FiAward, FiDownload, FiBell, FiCalendar } from "react-icons/fi";
+import { FiHeart, FiChevronRight, FiChevronDown, FiLogOut, FiCheckCircle, FiShield, FiZap, FiMenu, FiX, FiLayers, FiCompass, FiGrid, FiShoppingBag, FiMessageSquare, FiUser, FiUsers, FiKey, FiGift, FiAward, FiDownload, FiBell, FiCalendar, FiLogIn, FiLock } from "react-icons/fi";
 import { CopyButton } from "@/components/common";
 import { 
   isPushNotificationSupported, 
@@ -405,26 +405,42 @@ export default function Header() {
                           ))}
                         </div>
 
-                        <div className="w-14 h-14 rounded-2xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                          <FiZap size={28} />
-                        </div>
-                        <div className="space-y-1">
-                          <h3 className="text-base font-bold text-[var(--foreground)]">Sign in required</h3>
-                          <p className="text-xs text-[var(--muted)]">Login to access your personalized squad dashboard</p>
-                        </div>
-                        <Link 
-                          href="/login" 
-                          onClick={() => setUserMenuOpen(false)} 
-                          className="w-full py-3 px-4 rounded-xl bg-[var(--accent)] hover:opacity-95 active:scale-[0.98] transition-all text-center shadow-lg flex items-center justify-center gap-2 group cursor-pointer !text-black"
-                          style={{ color: '#000000' }}
-                        >
-                          <FiUser className="w-4 h-4 text-black stroke-[2.5]" style={{ color: '#000000' }} />
-                          <span className="text-black font-black text-xs uppercase tracking-wider" style={{ color: '#000000' }}>
-                            Login / Sign In
-                          </span>
-                        </Link>
+                        {/* Guest Account Card */}
+                        <div className="w-full rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-md p-5 flex flex-col items-center justify-center text-center space-y-3.5 shadow-sm relative overflow-hidden">
+                          {/* Ambient glow accent behind icon */}
+                          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-20 bg-[var(--accent)]/10 rounded-full blur-2xl pointer-events-none" />
 
-                        <div className="w-full pt-3 border-t border-[var(--border)]/40 flex flex-col gap-1">
+                          {/* Premium Layered Icon */}
+                          <div className="relative flex items-center justify-center">
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[var(--accent)]/20 via-[var(--accent)]/10 to-transparent border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)] shadow-md shadow-[var(--accent)]/10">
+                              <FiShield size={26} className="stroke-[2.2]" />
+                            </div>
+                            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[var(--card)] border border-[var(--border)] shadow-sm flex items-center justify-center text-[var(--accent)]">
+                              <FiLock size={12} className="stroke-[2.5]" />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <h3 className="text-sm font-black tracking-wide uppercase text-[var(--foreground)]">Sign In Required</h3>
+                            <p className="text-[11px] text-[var(--muted)] leading-relaxed max-w-[240px]">
+                              Login to access your wallet, order history, and exclusive squad discounts
+                            </p>
+                          </div>
+
+                          <Link 
+                            href="/login" 
+                            onClick={() => setUserMenuOpen(false)} 
+                            className="w-full py-2.5 px-4 rounded-xl bg-[var(--accent)] hover:opacity-95 active:scale-[0.98] transition-all text-center shadow-lg shadow-[var(--accent)]/15 flex items-center justify-center gap-2 group cursor-pointer"
+                            style={{ color: '#000000' }}
+                          >
+                            <FiLogIn className="w-4 h-4 text-black stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
+                            <span className="text-black font-black text-xs uppercase tracking-wider">
+                              Login / Sign In
+                            </span>
+                          </Link>
+                        </div>
+
+                        <div className="w-full pt-1 flex flex-col gap-1">
                           <Link
                             href="/dashboard/support"
                             onClick={() => setUserMenuOpen(false)}
