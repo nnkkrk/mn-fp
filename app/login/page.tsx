@@ -343,25 +343,25 @@ function AuthContent() {
                 {/* Mobile Logo Only */}
                 <motion.div
                   variants={itemVariants}
-                  className="relative mb-3 sm:mb-4 md:hidden"
+                  className="relative -mt-4 sm:-mt-5 mb-2 sm:mb-2.5 md:hidden"
                 >
                   <div className="absolute inset-0 bg-[var(--accent)] blur-2xl opacity-10" />
                   <div className="relative flex justify-center">
                     <Image
                       src="/logo.png"
                       alt="Logo"
-                      width={100}
-                      height={100}
+                      width={160}
+                      height={160}
                       priority
-                      className="relative z-10 w-auto h-14 sm:h-16 object-contain logo-light-theme"
+                      className="relative z-10 w-auto h-[74px] sm:h-[84px] object-contain logo-light-theme"
                     />
                     <Image
                       src="/logo-dark.png"
                       alt="Logo"
-                      width={100}
-                      height={100}
+                      width={160}
+                      height={160}
                       priority
-                      className="relative z-10 w-auto h-14 sm:h-16 object-contain logo-dark-theme"
+                      className="relative z-10 w-auto h-[74px] sm:h-[84px] object-contain logo-dark-theme"
                     />
                   </div>
                 </motion.div>
