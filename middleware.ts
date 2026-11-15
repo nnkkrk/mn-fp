@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { HTTP_STATUS, API_MESSAGES } from '@/lib/apiConfig';
 
 export function middleware(request: NextRequest) {
   // Protect all /api/admin/* routes
@@ -11,8 +12,8 @@ export function middleware(request: NextRequest) {
     
     if (adminPin !== expectedPin) {
       return NextResponse.json(
-        { success: false, message: 'Forbidden: Invalid Admin PIN' },
-        { status: 403 }
+        { success: false, message: API_MESSAGES.AUTH.ADMIN_PIN_INVALID },
+        { status: HTTP_STATUS.FORBIDDEN }
       );
     }
   }

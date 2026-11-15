@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import { validateApiKey } from "@/lib/apiKeyAuth";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function GET(req, { params }) {
     try {
         const auth = await validateApiKey(req);
         if (!auth.success) {
-            return NextResponse.json({ success: false, message: auth.message }, { status: 401 });
+            return NextResponse.json({ success: false, message: auth.message }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         const { orderId } = await params;
@@ -21,7 +22,7 @@ export async function GET(req, { params }) {
         });
 
         if (!order) {
-            return NextResponse.json({ success: false, message: "Order not found or access denied" }, { status: 404 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.ORDER.ORDER_ACCESS_DENIED }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
         return NextResponse.json({
@@ -39,6 +40,6 @@ export async function GET(req, { params }) {
 
     } catch (error) {
         console.error("Status API Error:", error);
-        return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

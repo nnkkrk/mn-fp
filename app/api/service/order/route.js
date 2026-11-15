@@ -8,12 +8,13 @@ import { validateApiKey } from "@/lib/apiKeyAuth";
 import { ensureDailyReset } from "@/lib/apiKeyUtils";
 import { calculateItemPrice } from "@/lib/pricingUtils";
 import { getAppSettings } from "@/lib/settings";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function POST(req) {
     try {
         const auth = await validateApiKey(req);
         if (!auth.success) {
-            return NextResponse.json({ success: false, status: "failed", message: auth.message }, { status: 401 });
+            return NextResponse.json({ success: false, status: "failed", message: auth.message }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         // 🛡️ API Spend Limit Calculation (Non-blocking)
@@ -26,7 +27,7 @@ export async function POST(req) {
         const { gameSlug, itemSlug, playerId, zoneId } = body;
 
         if (!gameSlug || !itemSlug || !playerId) {
-            return NextResponse.json({ success: false, status: "failed", message: "Missing required fields (gameSlug, itemSlug, playerId)" }, { status: 400 });
+            return NextResponse.json({ success: false, status: "failed", message: API_MESSAGES.ORDER.MISSING_FIELDS }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         // ⚡ REGION RESTRICTION CHECK for mobile-legends114 and mlbb-double332
@@ -47,8 +48,8 @@ export async function POST(req) {
                     return NextResponse.json({
                         success: false,
                         status: "failed",
-                        message: "Invalid Player ID or Server ID."
-                    }, { status: 400 });
+                        message: API_MESSAGES.ORDER.INVALID_PLAYER
+                    }, { status: HTTP_STATUS.BAD_REQUEST });
                 }
 
                 const playerRegion = regionData?.data?.region?.toUpperCase();
@@ -59,7 +60,7 @@ export async function POST(req) {
                         success: false,
                         status: "failed",
                         message: `Orders from ${playerRegion} region are not allowed for this product.`
-                    }, { status: 400 });
+                    }, { status: HTTP_STATUS.BAD_REQUEST });
                 }
             } catch (regionErr) {
                 console.error("Region check failed during order:", regionErr);
@@ -80,8 +81,8 @@ export async function POST(req) {
             return NextResponse.json({
                 success: false,
                 status: "failed",
-                message: "Invalid game or item slug"
-            }, { status: 404 });
+                message: API_MESSAGES.ORDER.INVALID_SLUG
+            }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
         const { price, itemName } = priceData;
@@ -100,7 +101,7 @@ export async function POST(req) {
                 success: false,
                 status: "failed",
                 message: `Insufficient wallet balance. Required: ₹${price}`
-            }, { status: 403 });
+            }, { status: HTTP_STATUS.FORBIDDEN });
         }
 
         // 🛡️ Record Wallet Transaction (Debit)
@@ -303,7 +304,7 @@ export async function POST(req) {
                 status: "failed",
                 message: "A technical error occurred. Your wallet balance has been automatically restored.",
                 error: error.message
-            }, { status: 500 });
+            }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
         }
 
     } catch (outerError) {
@@ -311,7 +312,7 @@ export async function POST(req) {
         return NextResponse.json({
             success: false,
             status: "failed",
-            message: "Internal Server Error"
-        }, { status: 500 });
+            message: API_MESSAGES.SERVER_ERROR
+        }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

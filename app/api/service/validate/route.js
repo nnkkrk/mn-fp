@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/apiKeyAuth";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function POST(req) {
     try {
         const auth = await validateApiKey(req);
         if (!auth.success) {
-            return NextResponse.json({ success: false, message: auth.message }, { status: 401 });
+            return NextResponse.json({ success: false, message: auth.message }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         const body = await req.json();
@@ -27,7 +28,7 @@ export async function POST(req) {
             return NextResponse.json({
                 success: false,
                 message: "Validation failed: Invalid Player ID or Server ID."
-            }, { status: 400 });
+            }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         // ⚡ REGION RESTRICTION CHECK for mobile-legends114 via Service API
@@ -39,7 +40,7 @@ export async function POST(req) {
                 return NextResponse.json({
                     success: false,
                     message: `Validation failed: Orders from ${playerRegion} region are not allowed for this product.`
-                }, { status: 400 });
+                }, { status: HTTP_STATUS.BAD_REQUEST });
             }
         }
 
@@ -48,6 +49,6 @@ export async function POST(req) {
 
     } catch (error) {
         console.error("Service Region Check API Error:", error);
-        return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

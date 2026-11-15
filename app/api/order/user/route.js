@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function POST(req) {
   try {
@@ -12,8 +13,8 @@ export async function POST(req) {
 
     if (!authHeader?.startsWith("Bearer ")) {
       return Response.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
+        { success: false, message: API_MESSAGES.AUTH.UNAUTHORIZED },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
 
@@ -24,8 +25,8 @@ export async function POST(req) {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch {
       return Response.json(
-        { success: false, message: "Invalid or expired token" },
-        { status: 401 }
+        { success: false, message: API_MESSAGES.AUTH.INVALID_TOKEN },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
 
@@ -35,7 +36,7 @@ export async function POST(req) {
     if (!user || !user.email) {
       return Response.json(
         { success: false, message: "User email not found" },
-        { status: 404 }
+        { status: HTTP_STATUS.NOT_FOUND }
       );
     }
 
@@ -118,13 +119,13 @@ export async function POST(req) {
         count: orders.length,
         totalCount,
       },
-      { status: 200 }
+      { status: HTTP_STATUS.OK }
     );
   } catch (error) {
     console.error("Fetch Orders Error:", error);
     return Response.json(
-      { success: false, message: "Server error" },
-      { status: 500 }
+      { success: false, message: API_MESSAGES.SERVER_ERROR },
+      { status: HTTP_STATUS.INTERNAL_SERVER_ERROR }
     );
   }
 }

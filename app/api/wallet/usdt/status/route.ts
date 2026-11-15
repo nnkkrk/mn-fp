@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import UsdtDeposit from "@/models/UsdtDeposit";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function GET(req: Request) {
     try {
@@ -10,31 +11,31 @@ export async function GET(req: Request) {
         // ============ AUTH ============
         const authHeader = req.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.AUTH.UNAUTHORIZED }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         let decoded: any;
         try {
             decoded = jwt.verify(authHeader.split(" ")[1], process.env.JWT_SECRET!);
         } catch {
-            return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.AUTH.INVALID_TOKEN }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         const url = new URL(req.url);
         const depositId = url.searchParams.get("depositId");
 
         if (!depositId) {
-            return NextResponse.json({ success: false, message: "depositId required" }, { status: 400 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.WALLET.DEPOSIT_ID_REQUIRED }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         const deposit = await UsdtDeposit.findOne({ depositId });
         if (!deposit) {
-            return NextResponse.json({ success: false, message: "Deposit not found" }, { status: 404 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.WALLET.DEPOSIT_NOT_FOUND }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
         // Verify ownership
         if (deposit.userId !== decoded.userId && deposit.userObjectId?.toString() !== decoded.userId) {
-            return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.FORBIDDEN }, { status: HTTP_STATUS.FORBIDDEN });
         }
 
         const now = new Date();
@@ -62,6 +63,6 @@ export async function GET(req: Request) {
 
     } catch (err) {
         console.error("USDT status error:", err);
-        return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

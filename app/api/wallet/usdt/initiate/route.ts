@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import UsdtDeposit from "@/models/UsdtDeposit";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 // Conversion rate: 1 USDT = 98 coins (wallet balance points)
 const USDT_TO_COINS = 98;
@@ -14,37 +15,37 @@ export async function POST(req: Request) {
         // ============ AUTH ============
         const authHeader = req.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.AUTH.UNAUTHORIZED }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         let decoded: any;
         try {
             decoded = jwt.verify(authHeader.split(" ")[1], process.env.JWT_SECRET!);
         } catch {
-            return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.AUTH.INVALID_TOKEN }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         // ============ GET USER ============
         let user = await User.findById(decoded.userId);
         if (!user) user = await User.findOne({ userId: decoded.userId });
         if (!user) {
-            return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.USER.NOT_FOUND }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
         // ============ BODY ============
         const { usdtAmount, network = "BEP20" } = await req.json();
 
         if (!usdtAmount || isNaN(Number(usdtAmount)) || Number(usdtAmount) <= 0) {
-            return NextResponse.json({ success: false, message: "Invalid USDT amount" }, { status: 400 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.WALLET.INVALID_AMOUNT }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         const numUsdt = Math.round(Number(usdtAmount) * 100) / 100; // round to 2 decimals
         if (numUsdt < 1) {
-            return NextResponse.json({ success: false, message: "Minimum deposit is 1 USDT" }, { status: 400 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.WALLET.MIN_DEPOSIT(1) }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         if (network !== "BEP20") {
-            return NextResponse.json({ success: false, message: "Invalid network. Only BEP20 is supported at this time." }, { status: 400 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.WALLET.INVALID_NETWORK }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         // ============ WALLET ADDRESS ============
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
             return NextResponse.json({
                 success: false,
                 message: `USDT ${network} address not configured. Please contact support.`,
-            }, { status: 503 });
+            }, { status: HTTP_STATUS.SERVICE_UNAVAILABLE });
         }
 
         const coinsToCredit = Math.floor(numUsdt * USDT_TO_COINS);
@@ -86,6 +87,6 @@ export async function POST(req: Request) {
 
     } catch (err) {
         console.error("USDT initiate error:", err);
-        return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

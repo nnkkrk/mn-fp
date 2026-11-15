@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function POST(req) {
   try {
@@ -7,19 +8,19 @@ export async function POST(req) {
 
     if (!pin || String(pin).trim() !== String(expectedPin).trim()) {
       return NextResponse.json(
-        { success: false, message: "Wrong PIN. Please try again." },
-        { status: 401 }
+        { success: false, message: API_MESSAGES.AUTH.WRONG_PIN },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "PIN verified.",
+      message: API_MESSAGES.AUTH.PIN_VERIFIED,
     });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: "Something went wrong. Please try again." },
-      { status: 500 }
+      { success: false, message: API_MESSAGES.SOMETHING_WENT_WRONG },
+      { status: HTTP_STATUS.INTERNAL_SERVER_ERROR }
     );
   }
 }

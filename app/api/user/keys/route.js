@@ -5,6 +5,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import ApiKey from "@/models/ApiKey";
 import { ensureDailyReset } from "@/lib/apiKeyUtils";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 // Helper to get user from token
 async function getUser(req) {
@@ -25,7 +26,7 @@ export async function GET(req) {
         const user = await getUser(req);
 
         if (!user) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.AUTH.UNAUTHORIZED }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         const keys = await ApiKey.find({ userId: user._id }).sort({ createdAt: -1 });
@@ -36,7 +37,7 @@ export async function GET(req) {
         return NextResponse.json({ success: true, keys: processedKeys });
     } catch (error) {
         console.error("GET Keys Error:", error);
-        return NextResponse.json({ success: false, message: "Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }
 
@@ -46,7 +47,7 @@ export async function POST(req) {
         const user = await getUser(req);
 
         if (!user || (user.userType !== "member" && user.userType !== "owner")) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ success: false, message: API_MESSAGES.AUTH.UNAUTHORIZED }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         // 🛡️ Limit to 2 keys per user
@@ -54,13 +55,13 @@ export async function POST(req) {
         if (existingKeysCount >= 2) {
             return NextResponse.json({
                 success: false,
-                message: "Maximum limit reached. You can only have 2 active API keys."
-            }, { status: 400 });
+                message: API_MESSAGES.USER.MAX_KEYS_REACHED
+            }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         const { name, allowedIps } = await req.json();
         if (!name) {
-            return NextResponse.json({ success: false, message: "Name is required" }, { status: 400 });
+            return NextResponse.json({ success: false, message: "Name is required" }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
         // Validate allowedIps if provided
@@ -96,6 +97,6 @@ export async function POST(req) {
         });
     } catch (error) {
         console.error("POST Key Error:", error);
-        return NextResponse.json({ success: false, message: "Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

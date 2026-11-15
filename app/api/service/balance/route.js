@@ -4,12 +4,13 @@ import User from "@/models/User";
 import ApiKey from "@/models/ApiKey";
 import { validateApiKey } from "@/lib/apiKeyAuth";
 import { ensureDailyReset } from "@/lib/apiKeyUtils";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function GET(req) {
     try {
         const auth = await validateApiKey(req);
         if (!auth.success) {
-            return NextResponse.json({ success: false, message: auth.message }, { status: 401 });
+            return NextResponse.json({ success: false, message: auth.message }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         await connectDB();
@@ -37,6 +38,6 @@ export async function GET(req) {
 
     } catch (error) {
         console.error("Balance API Error:", error);
-        return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

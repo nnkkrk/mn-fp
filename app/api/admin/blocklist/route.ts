@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import Blocklist from "@/models/Blocklist";
 import User from "@/models/User";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 // Helper to authenticate admin
 async function requireAdmin(req: Request) {
@@ -39,7 +40,7 @@ export async function GET(req: Request) {
   try {
     const admin = await requireAdmin(req);
     if (!admin) {
-      return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.FORBIDDEN }, { status: HTTP_STATUS.FORBIDDEN });
     }
 
     const { searchParams } = new URL(req.url);
@@ -53,7 +54,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ success: true, data: items });
   } catch (error: any) {
     console.error("[admin/blocklist GET] Error:", error);
-    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
   }
 }
 
@@ -62,18 +63,18 @@ export async function POST(req: Request) {
   try {
     const admin = await requireAdmin(req);
     if (!admin) {
-      return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.FORBIDDEN }, { status: HTTP_STATUS.FORBIDDEN });
     }
 
     const body = await req.json();
     const { type, value, reason } = body;
 
     if (!type || !value) {
-      return NextResponse.json({ success: false, message: "Type and value are required" }, { status: 400 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.BLOCKLIST.TYPE_VALUE_REQUIRED }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     if (!["ip", "email", "gameId"].includes(type)) {
-      return NextResponse.json({ success: false, message: "Invalid type" }, { status: 400 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.BLOCKLIST.INVALID_TYPE }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     await connectDB();
@@ -81,7 +82,7 @@ export async function POST(req: Request) {
     // Check if it already exists
     const existing = await Blocklist.findOne({ type, value: value.toLowerCase().trim() });
     if (existing) {
-      return NextResponse.json({ success: false, message: "This item is already blocklisted" }, { status: 400 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.BLOCKLIST.ALREADY_EXISTS }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     const newItem = await Blocklist.create({
@@ -91,10 +92,10 @@ export async function POST(req: Request) {
       addedBy: admin.adminUserId,
     });
 
-    return NextResponse.json({ success: true, message: "Added to blocklist successfully", data: newItem });
+    return NextResponse.json({ success: true, message: API_MESSAGES.BLOCKLIST.ADDED, data: newItem });
   } catch (error: any) {
     console.error("[admin/blocklist POST] Error:", error);
-    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
   }
 }
 
@@ -103,26 +104,26 @@ export async function DELETE(req: Request) {
   try {
     const admin = await requireAdmin(req);
     if (!admin) {
-      return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.FORBIDDEN }, { status: HTTP_STATUS.FORBIDDEN });
     }
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ success: false, message: "ID is required" }, { status: 400 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.BLOCKLIST.ID_REQUIRED }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     await connectDB();
     
     const deleted = await Blocklist.findByIdAndDelete(id);
     if (!deleted) {
-      return NextResponse.json({ success: false, message: "Item not found" }, { status: 404 });
+      return NextResponse.json({ success: false, message: API_MESSAGES.BLOCKLIST.ITEM_NOT_FOUND }, { status: HTTP_STATUS.NOT_FOUND });
     }
 
-    return NextResponse.json({ success: true, message: "Removed from blocklist successfully" });
+    return NextResponse.json({ success: true, message: API_MESSAGES.BLOCKLIST.REMOVED });
   } catch (error: any) {
     console.error("[admin/blocklist DELETE] Error:", error);
-    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
   }
 }

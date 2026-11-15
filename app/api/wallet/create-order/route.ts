@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import WalletTransaction from "@/models/WalletTransaction";
 import { generateTxId } from "@/utils/formatters";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function POST(req: Request) {
   try {
@@ -13,8 +14,8 @@ export async function POST(req: Request) {
     const authHeader = req.headers.get("authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
+        { success: false, message: API_MESSAGES.AUTH.UNAUTHORIZED },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
 
@@ -23,8 +24,8 @@ export async function POST(req: Request) {
       decoded = jwt.verify(authHeader.split(" ")[1], process.env.JWT_SECRET!);
     } catch {
       return NextResponse.json(
-        { success: false, message: "Invalid token" },
-        { status: 401 }
+        { success: false, message: API_MESSAGES.AUTH.INVALID_TOKEN },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
 
@@ -40,14 +41,14 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         { success: false, message: `User not found for ID: ${userId}` },
-        { status: 404 }
+        { status: HTTP_STATUS.NOT_FOUND }
       );
     }
 
     if (!user.email) {
       return NextResponse.json(
         { success: false, message: "Email not found. Please update your profile." },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       );
     }
 
@@ -58,8 +59,8 @@ export async function POST(req: Request) {
     // Validate amount is provided
     if (!amount) {
       return NextResponse.json(
-        { success: false, message: "Amount is required" },
-        { status: 400 }
+        { success: false, message: API_MESSAGES.WALLET.AMOUNT_REQUIRED },
+        { status: HTTP_STATUS.BAD_REQUEST }
       );
     }
 
@@ -68,7 +69,7 @@ export async function POST(req: Request) {
     if (isNaN(numAmount)) {
       return NextResponse.json(
         { success: false, message: "Amount must be a valid number" },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       );
     }
 
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
     if (numAmount < 15) {
       return NextResponse.json(
         { success: false, message: "Minimum top-up amount is ₹15" },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       );
     }
 
@@ -84,7 +85,7 @@ export async function POST(req: Request) {
     if (numAmount > 5000) {
       return NextResponse.json(
         { success: false, message: "Maximum top-up amount is ₹5,000" },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       );
     }
 
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
     if (!Number.isInteger(numAmount)) {
       return NextResponse.json(
         { success: false, message: "Amount must be a whole number" },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       );
     }
 
@@ -153,8 +154,8 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Wallet create-order error:", error);
     return NextResponse.json(
-      { success: false, message: "Server error" },
-      { status: 500 }
+      { success: false, message: API_MESSAGES.SERVER_ERROR },
+      { status: HTTP_STATUS.INTERNAL_SERVER_ERROR }
     );
   }
 }

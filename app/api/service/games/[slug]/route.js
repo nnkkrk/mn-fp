@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/apiKeyAuth";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export const dynamic = 'force-dynamic';
 import { calculateItemPrice } from "@/lib/pricingUtils";
@@ -11,7 +12,7 @@ export async function GET(req, { params }) {
         const { slug } = await params;
         const auth = await validateApiKey(req);
         if (!auth.success) {
-            return NextResponse.json({ success: false, message: auth.message }, { status: 401 });
+            return NextResponse.json({ success: false, message: auth.message }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         await connectDB();
@@ -29,7 +30,7 @@ export async function GET(req, { params }) {
         const data = await response.json();
 
         if (!data.success) {
-            return NextResponse.json({ success: false, message: "Game not found" }, { status: 404 });
+            return NextResponse.json({ success: false, message: "Game not found" }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
         // Apply membership pricing to each item so the API user knows what they pay
@@ -59,6 +60,6 @@ export async function GET(req, { params }) {
 
     } catch (error) {
         console.error("Service Game Details API Error:", error);
-        return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }

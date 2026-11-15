@@ -3,11 +3,12 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import AdsConfig from "@/models/AdsConfig";
 import { DEFAULT_ADS_CONFIG } from "@/lib/adsConfig";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 function checkAdminAuth(req: Request) {
   const authHeader = req.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
-    return { error: "Unauthorized", status: 401 };
+    return { error: API_MESSAGES.AUTH.UNAUTHORIZED, status: HTTP_STATUS.UNAUTHORIZED };
   }
 
   try {
@@ -15,12 +16,12 @@ function checkAdminAuth(req: Request) {
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
 
     if (!["admin", "owner"].includes(decoded.userType)) {
-      return { error: "Forbidden: Admin or Owner access required", status: 403 };
+      return { error: "Forbidden: Admin or Owner access required", status: HTTP_STATUS.FORBIDDEN };
     }
 
     return { decoded };
   } catch {
-    return { error: "Invalid or expired token", status: 401 };
+    return { error: API_MESSAGES.AUTH.INVALID_TOKEN, status: HTTP_STATUS.UNAUTHORIZED };
   }
 }
 
@@ -61,7 +62,7 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     console.error("[api/admin/ads-config] GET Error:", error);
-    return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+    return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
   }
 }
 
@@ -185,6 +186,6 @@ export async function PATCH(req: Request) {
     });
   } catch (error) {
     console.error("[api/admin/ads-config] PATCH Error:", error);
-    return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+    return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
   }
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import WalletTransaction from "@/models/WalletTransaction";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export const config = {
   api: {
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
     // If you configure a secret in your payment dashboard webhook URL (e.g. ?secret=xyz), enable this.
     const secret = req.nextUrl.searchParams.get("secret");
     if (process.env.WEBHOOK_SECRET && secret !== process.env.WEBHOOK_SECRET) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: API_MESSAGES.AUTH.UNAUTHORIZED }, { status: HTTP_STATUS.UNAUTHORIZED });
     }
 
     /* ============ 2. PARSE & VALIDATE INPUT ============ */
@@ -29,14 +30,14 @@ export async function POST(req: NextRequest) {
     try {
       json = JSON.parse(rawBody);
     } catch (err) {
-      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+      return NextResponse.json({ error: API_MESSAGES.INVALID_JSON }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     const { status, order_id, txnStatus } = json;
 
     // 🔒 Sanitization: Ensure order_id looks safe (alphanumeric)
     if (!order_id || !/^[A-Z0-9]+$/i.test(order_id)) {
-      return NextResponse.json({ error: "Invalid Order ID format" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid Order ID format" }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     await connectDB();
@@ -49,11 +50,11 @@ export async function POST(req: NextRequest) {
     if (!transaction) {
       // Don't leak that it doesn't exist, just return generic
       console.warn(`Webhook: Transaction not found for ${order_id}`);
-      return NextResponse.json({ message: "Order processed" }, { status: 200 });
+      return NextResponse.json({ message: "Order processed" }, { status: HTTP_STATUS.OK });
     }
 
     if (transaction.status === "success") {
-      return NextResponse.json({ message: "Already success" }, { status: 200 });
+      return NextResponse.json({ message: "Already success" }, { status: HTTP_STATUS.OK });
     }
 
     /* ============ 4. ANALYZE WEBHOOK STATUS ============ */
@@ -92,7 +93,7 @@ export async function POST(req: NextRequest) {
 
     if (!isGatewaySuccess) {
       console.error(`Security Alert: Webhook claimed success but Gateway denied for ${order_id}`);
-      return NextResponse.json({ message: "Gateway verification failed" }, { status: 400 });
+      return NextResponse.json({ message: "Gateway verification failed" }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     /* ============ 6. SECURITY: AMOUNT INTEGRITY ============ */
@@ -100,7 +101,7 @@ export async function POST(req: NextRequest) {
     const expectedAmount = transaction.amount;
 
     if (verifiedAmount <= 0) {
-      return NextResponse.json({ error: "Invalid amount from gateway" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid amount from gateway" }, { status: HTTP_STATUS.BAD_REQUEST });
     }
 
     // Flag mismatches (e.g. User tried to pay 1000 but manipulated to pay 1)
@@ -142,21 +143,21 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { message: "Securely Credited" },
-      { status: 200 }
+      { status: HTTP_STATUS.OK }
     );
 
   } catch (error) {
     console.error("Webhook Error:", error);
     return NextResponse.json(
-      { error: "Server Error" },
-      { status: 500 }
+      { error: API_MESSAGES.SERVER_ERROR },
+      { status: HTTP_STATUS.INTERNAL_SERVER_ERROR }
     );
   }
 }
 
 export async function GET() {
   return NextResponse.json(
-    { error: "Method not allowed" },
-    { status: 405 }
+    { error: API_MESSAGES.METHOD_NOT_ALLOWED },
+    { status: HTTP_STATUS.METHOD_NOT_ALLOWED }
   );
 }

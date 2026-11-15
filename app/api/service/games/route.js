@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/apiKeyAuth";
+import { HTTP_STATUS, API_MESSAGES } from "@/lib/apiConfig";
 
 export async function GET(req) {
     try {
         const auth = await validateApiKey(req);
         if (!auth.success) {
-            return NextResponse.json({ success: false, message: auth.message }, { status: 401 });
+            return NextResponse.json({ success: false, message: auth.message }, { status: HTTP_STATUS.UNAUTHORIZED });
         }
 
         // Fetching games directly from the external source as requested
@@ -20,7 +21,7 @@ export async function GET(req) {
         const data = await response.json();
 
         if (!data.success) {
-            return NextResponse.json({ success: false, message: "Failed to fetch source games" }, { status: 500 });
+            return NextResponse.json({ success: false, message: "Failed to fetch source games" }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
         }
 
         // Normalize and send the games list
@@ -44,6 +45,6 @@ export async function GET(req) {
 
     } catch (error) {
         console.error("Service Games API Error:", error);
-        return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: API_MESSAGES.SERVER_ERROR }, { status: HTTP_STATUS.INTERNAL_SERVER_ERROR });
     }
 }
