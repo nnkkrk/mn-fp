@@ -40,13 +40,18 @@ const HEADER_CONFIG = {
       { label: "Events Calendar", href: "#", icon: <FiCalendar size={20} />, desc: "Tournaments & Schedule", colorClass: "text-blue-400", isHighlight: true, comingSoon: true },
       { label: "My Orders", href: "/dashboard/orders", icon: <FiShoppingBag size={20} />, desc: "Track your top-ups", colorClass: "text-cyan-400" },
       { label: "My Wallet", href: "/dashboard/wallet", icon: <FiLayers size={20} />, desc: "Balance & Recharge", colorClass: "text-pink-400" },
-      { label: "Earn BBC", href: "/dashboard/coins", icon: <FiZap size={18} />, desc: "FREE Tasks, Check-in & Games", colorClass: "text-yellow-400" },
-      { label: "Redeem Code", href: "/dashboard/redeem", icon: <FiGift size={18} />, desc: "Claim gift credits", colorClass: "text-emerald-400" },
-      { label: "Refer & Earn", href: "/dashboard/referral", icon: <FiUsers size={18} />, desc: "Earn rewards", colorClass: "text-indigo-400" },
-      { label: "My Tournaments", href: "/dashboard/tournaments", icon: <FiAward size={18} />, desc: "View your joined scrims", colorClass: "text-rose-400" },
 
+      // Row 1 (3 items): Earn BBC, Redeem Code, Refer & Earn
+      { label: "Earn BBC", href: "/dashboard/coins", icon: <FiZap size={16} />, desc: "Tasks & Coins", colorClass: "text-yellow-400" },
+      { label: "Redeem Code", href: "/dashboard/redeem", icon: <FiGift size={16} />, desc: "Gift Credits", colorClass: "text-emerald-400" },
+      { label: "Refer & Earn", href: "/dashboard/referral", icon: <FiUsers size={16} />, desc: "Earn Rewards", colorClass: "text-indigo-400" },
+
+      // Row 2 (2 items): Tournaments & API
+      { label: "My Tournaments", href: "/dashboard/tournaments", icon: <FiAward size={16} />, desc: "Joined Scrims", colorClass: "text-rose-400" },
+      { label: "API Setup", href: "https://api.bluebuff.in", icon: <FiKey size={16} />, desc: "Developer API", colorClass: "text-slate-400" },
+
+      // Remaining list
       { label: "My Profile", href: "/dashboard/me", icon: <FiUser size={18} />, desc: "View & Edit Profile", colorClass: "text-[var(--foreground)]/80" },
-      { label: "API Setup", href: "https://api.bluebuff.in", icon: <FiKey size={18} />, desc: "Developer API Access", colorClass: "text-slate-400" },
       { label: "Support", href: "/dashboard/support", icon: <FiMessageSquare size={18} />, desc: "Get help 24/7", colorClass: "text-sky-400" },
     ],
     roles: {
@@ -546,23 +551,59 @@ export default function Header() {
                             })}
                           </div>
 
-                          {/* 4 Items in 2x2 Grid */}
-                          <div className="grid grid-cols-2 gap-1.5 mb-1.5">
-                            {HEADER_CONFIG.userMenu.common.slice(3, 7).map((item) => (
-                              <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)} className="relative flex items-center p-2.5 rounded-2xl bg-[var(--card)] shadow-sm border border-transparent hover:border-[var(--accent)]/30 hover:shadow-md transition-all group overflow-hidden gap-2.5">
+                          {/* Row 1: 3 Items in 1 Row (Earn BBC, Redeem Code, Refer & Earn) */}
+                          <div className="grid grid-cols-3 gap-1.5 mb-1.5">
+                            {HEADER_CONFIG.userMenu.common.slice(3, 6).map((item) => (
+                              <Link
+                                key={item.label}
+                                href={item.href}
+                                onClick={() => setUserMenuOpen(false)}
+                                className="relative flex flex-col items-center justify-center py-2 px-1 rounded-2xl bg-[var(--card)] shadow-sm border border-transparent hover:border-[var(--accent)]/30 hover:shadow-md transition-all group overflow-hidden text-center"
+                              >
                                 <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className={`shrink-0 transition-transform group-hover:scale-110 relative z-10 ${item.colorClass || "text-[var(--foreground)]"}`}>{item.icon}</div>
+                                <div className={`shrink-0 transition-transform group-hover:scale-110 relative z-10 mb-1 ${item.colorClass || "text-[var(--foreground)]"}`}>
+                                  {item.icon}
+                                </div>
+                                <p className="text-[8px] sm:text-[8.5px] font-black text-[var(--foreground)] leading-tight uppercase tracking-tight truncate w-full relative z-10">
+                                  {item.label}
+                                </p>
+                                <p className="text-[6.5px] sm:text-[7px] text-[var(--muted)] font-bold uppercase tracking-tight truncate leading-none w-full relative z-10 mt-0.5">
+                                  {item.desc}
+                                </p>
+                              </Link>
+                            ))}
+                          </div>
+
+                          {/* Row 2: 2 Items in 1 Row (Tournaments and API) */}
+                          <div className="grid grid-cols-2 gap-1.5 mb-1.5">
+                            {HEADER_CONFIG.userMenu.common.slice(6, 8).map((item) => (
+                              <Link
+                                key={item.label}
+                                href={item.href}
+                                target={item.href.startsWith('http') ? '_blank' : undefined}
+                                rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                onClick={() => setUserMenuOpen(false)}
+                                className="relative flex items-center p-2 rounded-2xl bg-[var(--card)] shadow-sm border border-transparent hover:border-[var(--accent)]/30 hover:shadow-md transition-all group overflow-hidden gap-2"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className={`shrink-0 transition-transform group-hover:scale-110 relative z-10 ${item.colorClass || "text-[var(--foreground)]"}`}>
+                                  {item.icon}
+                                </div>
                                 <div className="flex flex-col min-w-0 relative z-10">
-                                  <p className="text-[9px] font-black text-[var(--foreground)] leading-none uppercase tracking-widest truncate mb-0.5">{item.label}</p>
-                                  <p className="text-[7px] text-[var(--muted)] font-bold uppercase tracking-widest truncate leading-none">{item.desc}</p>
+                                  <p className="text-[8.5px] sm:text-[9px] font-black text-[var(--foreground)] leading-none uppercase tracking-tight truncate mb-0.5">
+                                    {item.label}
+                                  </p>
+                                  <p className="text-[7px] sm:text-[7.5px] text-[var(--muted)] font-bold uppercase tracking-tight truncate leading-none">
+                                    {item.desc}
+                                  </p>
                                 </div>
                               </Link>
                             ))}
                           </div>
 
-                          {/* Remaining items list */}
+                          {/* Remaining items list: Profile & Support */}
                           <div className="flex flex-col gap-0.5">
-                            {HEADER_CONFIG.userMenu.common.slice(7).map((item) => (
+                            {HEADER_CONFIG.userMenu.common.slice(8).map((item) => (
                               <Link key={item.label} href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined} onClick={() => setUserMenuOpen(false)} className="flex items-center justify-between py-2 px-3 rounded-2xl bg-transparent hover:bg-[var(--card)] hover:shadow-sm transition-all group">
                                 <div className="flex items-center gap-2.5">
                                   <div className={`shrink-0 transition-transform group-hover:scale-110 ${item.colorClass || "text-[var(--muted)] group-hover:text-[var(--accent)]"}`}>{item.icon}</div>

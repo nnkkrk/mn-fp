@@ -38,7 +38,7 @@ const idsOnSellData = [
     },
     "tags": [
       "Mythic Glory",
-      "2 Collector Skins",
+
       "Epic Recall",
       "India Server"
     ],

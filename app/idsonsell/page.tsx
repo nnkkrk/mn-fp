@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import ids from "@/data/idsOnSell";
 import IdCard from "@/components/IdsOnSell/IdCard";
 import IdsFilterModal, { SortOption } from "@/components/IdsOnSell/IdsFilterModal";
@@ -8,14 +8,24 @@ import SellAccountBanner from "@/components/IdsOnSell/SellAccountBanner";
 import { EmptyState, SectionTitle } from "@/components/common";
 import { Icons } from "@/components/icons";
 import { FiSearch, FiX, FiSliders } from "react-icons/fi";
+import { IdsMarketplaceSkeleton } from "@/components/Skeleton/Skeleton";
 
-export default function IdsOnSellPage() {
+function IdsOnSellContent() {
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showFilter, setShowFilter] = useState(false);
 
   // Filters & Sorting
   const [rentOnly, setRentOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("default");
+
+  useEffect(() => {
+    // Show smooth skeleton transition on initial mount/navigation
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, []);
 
   const hasActiveFilter = rentOnly || sortBy !== "default";
 
@@ -55,6 +65,10 @@ export default function IdsOnSellPage() {
 
     return result;
   }, [search, rentOnly, sortBy]);
+
+  if (loading) {
+    return <IdsMarketplaceSkeleton />;
+  }
 
   return (
     <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5">
@@ -190,5 +204,13 @@ export default function IdsOnSellPage() {
         />
       )}
     </main>
+  );
+}
+
+export default function IdsOnSellPage() {
+  return (
+    <Suspense fallback={<IdsMarketplaceSkeleton />}>
+      <IdsOnSellContent />
+    </Suspense>
   );
 }
