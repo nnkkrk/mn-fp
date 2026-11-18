@@ -401,7 +401,7 @@ export function SectionTitle({
   if (action) {
     const layoutClasses =
       actionLayout === "row"
-        ? "flex flex-row items-center justify-between gap-2.5 sm:gap-3"
+        ? "flex flex-row items-end justify-between gap-2.5 sm:gap-3"
         : "flex flex-col md:flex-row md:items-end justify-between gap-3";
 
     return (

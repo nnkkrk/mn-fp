@@ -144,11 +144,12 @@ export default function FlashSale() {
             icon={<FiZap size={10} className="text-amber-500 fill-amber-500" />}
             title={saleConfig.title.split(" ")[0]}
             highlight={saleConfig.title.split(" ").slice(1).join(" ") || "Sale"}
+            actionLayout="row"
             action={
-              <div className="flex items-center gap-1.5 bg-[var(--foreground)]/5 border border-[var(--border)] px-2 py-1 rounded-lg">
-                <FiClock className="text-amber-500 hidden sm:block" size={11} />
-                <div className="flex items-center gap-1.5 font-bold text-[9.5px] tabular-nums text-amber-500">
-                  <span className="opacity-60 text-[7.5px] uppercase tracking-widest text-[var(--foreground)] mr-0.5 hidden md:block">
+              <div className="flex items-center gap-1.5 bg-[var(--card)] border border-amber-500/25 px-2.5 py-1 rounded-full shadow-xs">
+                <FiClock className="text-amber-500 shrink-0" size={11} />
+                <div className="flex items-center gap-1 font-bold text-[9.5px] sm:text-[10.5px] tabular-nums text-amber-500">
+                  <span className="opacity-60 text-[7.5px] uppercase tracking-wider text-[var(--foreground)] mr-0.5 hidden min-[360px]:inline">
                     Ends In
                   </span>
                   <span>{String(timeLeft.hours).padStart(2, "0")}</span>

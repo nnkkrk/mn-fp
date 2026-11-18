@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Globe,
+  Gift,
   Inbox,
   LifeBuoy,
   Wallet,
@@ -14,7 +14,7 @@ import {
 /* ===================== CONFIG ===================== */
 
 const quickActions = [
-  { title: "Region", href: "/region", icon: Globe, color: "#3b82f6" },
+  { title: "Giveaway", href: "/giveaways", icon: Gift, color: "#f43f5e" },
   { title: "Orders", href: "/dashboard/orders", icon: Inbox, color: "#64748b" },
   { title: "Support", href: "/dashboard/support", icon: LifeBuoy, color: "#06b6d4" },
   { title: "Wallet", href: "/dashboard/wallet", icon: Wallet, color: "#10b981" },
