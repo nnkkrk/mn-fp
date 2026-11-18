@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import ids from "@/data/idsOnSell";
 import IdCard from "@/components/IdsOnSell/IdCard";
 import IdsFilterModal, { SortOption } from "@/components/IdsOnSell/IdsFilterModal";
+import SellAccountBanner from "@/components/IdsOnSell/SellAccountBanner";
 import { EmptyState, SectionTitle } from "@/components/common";
 import { Icons } from "@/components/icons";
 import { FiSearch, FiX, FiSliders } from "react-icons/fi";
@@ -56,7 +57,10 @@ export default function IdsOnSellPage() {
   }, [search, rentOnly, sortBy]);
 
   return (
-    <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-5">
+    <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5">
+      {/* ================= SELL ACCOUNT BANNER ================= */}
+      <SellAccountBanner />
+
       <SectionTitle
         subtitle="VERIFIED MARKETPLACE"
         title="IDS ON SALE"

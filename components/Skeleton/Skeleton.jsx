@@ -321,7 +321,10 @@ export const IdCardSkeleton = () => (
 
 // 13. IDS MARKETPLACE PAGE SKELETON
 export const IdsMarketplaceSkeleton = () => (
-  <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-5 animate-in fade-in duration-200">
+  <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5 animate-in fade-in duration-200">
+    {/* Sell Account Top Banner Shimmer */}
+    <SkeletonBase className="w-full h-11 sm:h-12 rounded-[2rem]" />
+
     <div className="space-y-1.5">
       <SkeletonText width="w-28" height="h-3" />
       <SkeletonText width="w-44" height="h-7" />
