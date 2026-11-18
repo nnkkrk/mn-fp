@@ -3,12 +3,12 @@ const idsOnSellData = [
     "id": "MLBB-1001",
     "slug": "mlbb-mega-collector-1001",
     "title": "Premium MLBB Account – Mega Collector Skins",
-    "price": 10999,
+    "price": 12999,
     "currency": "INR",
     "rent": {
       "available": true,
       "durationHours": 24,
-      "price": 99,
+      "price": 299,
       "conditions": [
         "No email / Moonton rebind",
         "Login only, no changes allowed",
@@ -56,7 +56,11 @@ const idsOnSellData = [
       }
     },
     "media": {
-      "images": [],
+      "images": [
+        "/logo.png",
+        "/logoBB.png",
+        "/logo-dark.png"
+      ],
       "fallbackImage": "/logo.png"
     },
     "meta": {
