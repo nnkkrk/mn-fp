@@ -295,3 +295,109 @@ export const SkeletonGrid = ({ children, count = 3, cols = "grid-cols-1 md:grid-
     ))}
   </div>
 );
+
+// 12. ID ON SELL CARD SKELETON
+export const IdCardSkeleton = () => (
+  <div className="rounded-2xl overflow-hidden bg-[var(--card)] border border-[var(--border)] flex flex-col space-y-3">
+    <div className="relative h-40 w-full bg-[var(--foreground)]/[0.06] shimmer-overlay" />
+    <div className="p-3.5 space-y-3">
+      <div className="space-y-1.5">
+        <SkeletonText width="w-4/5" height="h-4" />
+        <div className="flex items-center gap-2 pt-0.5">
+          <SkeletonText width="w-20" height="h-3" />
+          <SkeletonText width="w-20" height="h-3" />
+        </div>
+      </div>
+      <div className="pt-2 border-t border-[var(--border)]/60 flex items-end justify-between">
+        <div className="space-y-1">
+          <SkeletonText width="w-12" height="h-2.5" />
+          <SkeletonText width="w-20" height="h-5" />
+        </div>
+        <SkeletonCircle size="w-6 h-6" />
+      </div>
+    </div>
+  </div>
+);
+
+// 13. IDS MARKETPLACE PAGE SKELETON
+export const IdsMarketplaceSkeleton = () => (
+  <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-5 animate-in fade-in duration-200">
+    <div className="space-y-1.5">
+      <SkeletonText width="w-28" height="h-3" />
+      <SkeletonText width="w-44" height="h-7" />
+    </div>
+
+    <SkeletonBase className="w-full h-9 sm:h-9.5 rounded-full" />
+
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <IdCardSkeleton key={i} />
+      ))}
+    </div>
+  </main>
+);
+
+// 14. ID DETAIL PAGE SKELETON
+export const IdDetailSkeleton = () => (
+  <main className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-16 space-y-3.5 animate-in fade-in duration-200">
+    <div className="flex items-center justify-between">
+      <SkeletonBase className="w-28 h-7 rounded-full" />
+      <SkeletonBase className="w-16 h-7 rounded-full" />
+    </div>
+
+    <div className="lg:hidden space-y-1.5">
+      <SkeletonText width="w-20" height="h-2.5" />
+      <SkeletonText width="w-3/4" height="h-6" />
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-start">
+      <div className="lg:col-span-7 space-y-4">
+        <div className="aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl bg-[var(--foreground)]/[0.06] shimmer-overlay border border-[var(--border)]" />
+
+        <div className="lg:hidden p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-3">
+          <SkeletonBase className="w-full h-8 rounded-full" />
+          <div className="flex justify-between items-center">
+            <SkeletonText width="w-24" height="h-6" />
+            <SkeletonBase className="w-28 h-5 rounded-full" />
+          </div>
+          <SkeletonBase className="w-full h-9 rounded-xl" />
+        </div>
+
+        <div className="p-4 sm:p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-1">
+                <SkeletonText width="w-12" height="h-2.5" />
+                <SkeletonText width="w-16" height="h-4" />
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2 pt-2 border-t border-[var(--border)]/60">
+            <SkeletonBase className="w-24 h-6 rounded-full" />
+            <SkeletonBase className="w-28 h-6 rounded-full" />
+            <SkeletonBase className="w-20 h-6 rounded-full" />
+          </div>
+          <div className="space-y-1.5 pt-2 border-t border-[var(--border)]/60">
+            <SkeletonText width="w-full" height="h-3" />
+            <SkeletonText width="w-4/5" height="h-3" />
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden lg:block lg:col-span-5 space-y-4">
+        <div className="space-y-1.5">
+          <SkeletonText width="w-20" height="h-2.5" />
+          <SkeletonText width="w-full" height="h-7" />
+        </div>
+        <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-3">
+          <SkeletonBase className="w-full h-8 rounded-full" />
+          <div className="flex justify-between items-center">
+            <SkeletonText width="w-24" height="h-6" />
+            <SkeletonBase className="w-28 h-5 rounded-full" />
+          </div>
+          <SkeletonBase className="w-full h-10 rounded-xl" />
+        </div>
+      </div>
+    </div>
+  </main>
+);
