@@ -367,11 +367,14 @@ export const IdDetailSkeleton = () => (
         </div>
 
         <div className="p-4 sm:p-5 rounded-2xl border border-white/10 bg-neutral-900/60 dark:bg-neutral-900/80 space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="space-y-1">
-                <SkeletonText width="w-12" height="h-2.5" />
-                <SkeletonText width="w-16" height="h-4" />
+              <div key={i} className="p-2.5 rounded-xl border border-white/5 flex items-center gap-2.5">
+                <SkeletonBase className="w-8 h-8 rounded-lg shrink-0" />
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <SkeletonText width="w-10" height="h-2" />
+                  <SkeletonText width="w-14" height="h-3" />
+                </div>
               </div>
             ))}
           </div>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Swords, Sparkles, Crown } from "lucide-react";
 
 interface IdCardProps {
   item: any;
@@ -49,8 +49,9 @@ export default function IdCard({ item }: IdCardProps) {
 
         {/* COLLECTION BADGE (ON IMAGE BOTTOM) */}
         {collectionTier && (
-          <div className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold bg-black/60 backdrop-blur-md border border-white/10 text-amber-400">
-            🏆 {collectionTier}
+          <div className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/70 backdrop-blur-md border border-amber-500/30 text-amber-400 flex items-center gap-1.5 shadow-sm">
+            <Crown size={11} className="text-amber-400" />
+            <span>{collectionTier}</span>
           </div>
         )}
       </div>
@@ -66,14 +67,16 @@ export default function IdCard({ item }: IdCardProps) {
           {/* KEY STATS (HEROES & SKINS) */}
           <div className="flex items-center gap-3 text-[11px] font-semibold text-[var(--muted)]">
             {totalHeroes !== undefined && totalHeroes !== null && (
-              <span className="flex items-center gap-1">
-                <span>🎭</span> {totalHeroes}+ Heroes
+              <span className="flex items-center gap-1.5">
+                <Swords size={12} className="text-sky-400 shrink-0" />
+                <span>{totalHeroes}+ Heroes</span>
               </span>
             )}
             <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
             {totalSkins !== undefined && totalSkins !== null && (
-              <span className="flex items-center gap-1">
-                <span>🎨</span> {totalSkins}+ Skins
+              <span className="flex items-center gap-1.5">
+                <Sparkles size={12} className="text-pink-400 shrink-0" />
+                <span>{totalSkins}+ Skins</span>
               </span>
             )}
           </div>
