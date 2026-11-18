@@ -18,13 +18,16 @@ export default function IdsOnSellPage() {
   /* ================= FILTER LOGIC ================= */
   const filteredIds = ids.filter((item: any) => {
     const matchSearch =
-      item.title.toLowerCase().includes(search.toLowerCase());
+      item.title.toLowerCase().includes(search.toLowerCase()) ||
+      item.tags?.some((t: string) => t.toLowerCase().includes(search.toLowerCase()));
 
     const matchRent =
       !rentOnly || item.rent?.available === true;
 
     const matchGlobal =
-      !globalOnly || item.heroTitles?.global?.length > 0;
+      !globalOnly ||
+      item.tags?.some((t: string) => t.toLowerCase().includes("global")) ||
+      (item.heroTitles?.global?.length ?? 0) > 0;
 
     return matchSearch && matchRent && matchGlobal;
   });

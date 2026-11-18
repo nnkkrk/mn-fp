@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import GameBannerCarousel from "./GameBannerCarousel";
 import TopNoticeBanner from "./TopNoticeBanner";
@@ -14,6 +14,7 @@ import AAdsBanner from "@/components/Ads/AAdsBanner";
 import CustomWebBanner from "./CustomWebBanner";
 import GamesWebBanner from "./GamesWebBanner";
 import GiveawayBanner from "./GiveawayBanner";
+import HomeTabSwitcher, { HomeTabType } from "./HomeTabSwitcher";
 
 // Lazy-load below-fold & heavy components to reduce initial bundle
 const FlashSale = dynamic(() => import("./FlashSale"), { ssr: false });
@@ -22,8 +23,47 @@ const GameCatalogSection = dynamic(() => import("@/components/Games/GameCatalogS
   ssr: false,
   loading: () => <div className="min-h-screen w-full animate-pulse bg-[var(--background)]"></div>
 });
+const HomeMarketplaceSection = dynamic(() => import("./HomeMarketplaceSection"), {
+  ssr: false,
+  loading: () => <div className="min-h-[400px] w-full animate-pulse bg-[var(--background)]"></div>
+});
 
 export default function HeroSection({ bannerSettings, initialBanners }: { bannerSettings?: any; initialBanners?: any[] }) {
+  const [activeTab, setActiveTab] = useState<HomeTabType>("topup");
+
+  // Sync tab with URL query parameter or window events
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab");
+    if (tabParam === "marketplace" || tabParam === "topup") {
+      setActiveTab(tabParam as HomeTabType);
+    }
+
+    const handleTabEvent = (e: any) => {
+      const targetTab = e.detail?.tab;
+      if (targetTab === "topup" || targetTab === "marketplace") {
+        setActiveTab(targetTab);
+      }
+    };
+
+    window.addEventListener("home-tab-change" as any, handleTabEvent);
+    return () => window.removeEventListener("home-tab-change" as any, handleTabEvent);
+  }, []);
+
+  const handleTabChange = useCallback((newTab: HomeTabType) => {
+    setActiveTab(newTab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (newTab === "topup") {
+        url.searchParams.delete("tab");
+      } else {
+        url.searchParams.set("tab", newTab);
+      }
+      window.history.replaceState(null, "", url.toString());
+      window.dispatchEvent(new CustomEvent("home-tab-change", { detail: { tab: newTab } }));
+    }
+  }, []);
 
   // If bannerSettings isn't passed (e.g. client navigation before cache warms up), default to showing GiveawayBanner only
   const bs = bannerSettings || { 
@@ -76,31 +116,37 @@ export default function HeroSection({ bannerSettings, initialBanners }: { banner
         </div>
       )}
      
-
       {bs.showGameBannerCarousel !== false && <GameBannerCarousel initialBanners={initialBanners} />}
 
-      <div className="space-y-1 mt-2">
-        {bs.showStorySlider !== false && <StorySlider />}
-        {bs.showBattleRoyaleSection !== false && <BattleRoyaleSection />}
+      {/* ── STORE MODE TABS (Game Topup / ID Marketplace) ── */}
+      <HomeTabSwitcher activeTab={activeTab} onChange={handleTabChange} />
 
-        {bs.showFlashSale !== false && <FlashSale />}
-      </div>
+      {activeTab === "topup" ? (
+        <>
+          <div className="space-y-1 mt-2">
+            {bs.showStorySlider !== false && <StorySlider />}
+            {bs.showBattleRoyaleSection !== false && <BattleRoyaleSection />}
+            {bs.showFlashSale !== false && <FlashSale />}
+          </div>
 
+          {bs.showHomeQuickActions !== false && (
+            <div className="space-y-1">
+              <HomeQuickActions />
+            </div>
+          )}
 
-        {bs.showHomeQuickActions !== false && (
-        <div className="space-y-1">
-          <HomeQuickActions />
-        </div>
+          <GameCatalogSection />
+        </>
+      ) : (
+        <HomeMarketplaceSection />
       )}
 
-      <GameCatalogSection />
       <SupportBanner />
     
       <SEOContent />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center py-2">
         <AAdsBanner />
       </div>
     </>
-
   );
 }
