@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import StoreModeToggle from "./StoreModeToggle";
 import CustomWebBanner from "../Home/CustomWebBanner";
 import AAdsBanner from "../Ads/AAdsBanner";
 import api from "@/lib/axios";
@@ -217,7 +218,7 @@ export default function Header() {
       <div className={`absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)]/30 to-transparent transition-opacity duration-500 ${scrolled ? "opacity-100" : "opacity-0"}`} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-14">
+        <div className="relative flex items-center justify-between h-14">
 
           {/* Left section */}
           <div className="flex items-center xl:flex-1 justify-start">
@@ -250,7 +251,12 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Center section */}
+          {/* Mobile/Tablet Centered Mode Switcher (Game Topup <-> Trade) */}
+          <div className="xl:hidden absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-auto z-20">
+            <StoreModeToggle />
+          </div>
+
+          {/* Desktop Navigation Links (XL screens) */}
           <nav className="hidden xl:flex items-center space-x-1 shrink-0 justify-center">
             {HEADER_CONFIG.nav.map((item) => (
               <Link
@@ -270,7 +276,12 @@ export default function Header() {
           </nav>
 
           {/* Right section */}
-          <div className="flex items-center justify-end gap-1.5 sm:gap-2 xl:flex-1">
+          <div className="flex items-center justify-end gap-2 sm:gap-3 xl:flex-1">
+            {/* Desktop Mode Switcher (Beside Profile Avatar) */}
+            <div className="hidden xl:flex items-center">
+              <StoreModeToggle />
+            </div>
+
             {/* PWA TOAST POPUP */}
             {pwaToastMsg && (
               <div className="fixed top-14 sm:top-16 right-3 sm:right-6 z-[9999] max-w-xs animate-in fade-in slide-in-from-top-2 duration-300 pointer-events-none">

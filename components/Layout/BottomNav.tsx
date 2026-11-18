@@ -80,33 +80,15 @@ export default function BottomNav() {
     return null;
   }
 
-  const isHomeTopupActive = pathname === "/" && activeHomeTab === "topup";
-  const isMarketplaceActive = (pathname === "/" && activeHomeTab === "marketplace") || pathname?.startsWith("/idsonsell");
+  const isHomeTopupActive = pathname === "/";
+  const isMarketplaceActive = pathname?.startsWith("/idsonsell");
 
   const handleHomeClick = () => {
-    if (pathname === "/") {
-      if (activeHomeTab !== "topup") {
-        setActiveHomeTab("topup");
-        const url = new URL(window.location.href);
-        url.searchParams.delete("tab");
-        window.history.replaceState(null, "", url.toString());
-        window.dispatchEvent(new CustomEvent("home-tab-change", { detail: { tab: "topup" } }));
-      }
-    } else {
-      router.push("/");
-    }
+    router.push("/");
   };
 
   const handleMarketplaceClick = () => {
-    if (pathname === "/") {
-      setActiveHomeTab("marketplace");
-      const url = new URL(window.location.href);
-      url.searchParams.set("tab", "marketplace");
-      window.history.replaceState(null, "", url.toString());
-      window.dispatchEvent(new CustomEvent("home-tab-change", { detail: { tab: "marketplace" } }));
-    } else {
-      router.push("/?tab=marketplace");
-    }
+    router.push("/idsonsell");
   };
 
   const navItems = [
