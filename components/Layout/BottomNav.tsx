@@ -7,8 +7,6 @@ import {
   Gamepad2, 
   Store,
   Trophy, 
-  CalendarDays, 
-  ShoppingBag, 
   Headset 
 } from "lucide-react";
 
@@ -105,22 +103,10 @@ export default function BottomNav() {
       action: handleMarketplaceClick 
     },
     { 
-      label: "Events", 
-      icon: CalendarDays, 
-      isActive: pathname === "/events" || pathname.startsWith("/events/"), 
-      action: () => router.push("/events") 
-    },
-    { 
       label: "Tournaments", 
       icon: Trophy, 
       isActive: pathname === "/dashboard/tournaments", 
       action: () => router.push("/dashboard/tournaments") 
-    },
-    { 
-      label: "Orders", 
-      icon: ShoppingBag, 
-      isActive: pathname === "/dashboard/orders", 
-      action: () => router.push("/dashboard/orders") 
     },
     { 
       label: "Support", 

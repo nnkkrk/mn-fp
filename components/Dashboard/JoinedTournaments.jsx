@@ -24,7 +24,7 @@ const GAME_META = {
   honorkings:{ name: "Honor of Kings", logo: "/logoBB.png" },
 };
 
-export default function JoinedTournaments() {
+export default function JoinedTournaments({ hideTitle = false }) {
   const [entries, setEntries] = useState([]);
   const [availableTourneys, setAvailableTourneys] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -135,13 +135,15 @@ export default function JoinedTournaments() {
 
   return (
     <div className="space-y-3.5 sm:space-y-4">
-      <SectionTitle
-        subtitle="COMPETITIVE ARENA"
-        title="MY TOURNAMENTS"
-        icon={<GiTrophy className="text-[var(--accent)]" size={13} />}
-        description="View your enrolled matches, live room credentials, and match history."
-        className="mb-1"
-      />
+      {!hideTitle && (
+        <SectionTitle
+          subtitle="COMPETITIVE ARENA"
+          title="MY TOURNAMENTS"
+          icon={<GiTrophy className="text-[var(--accent)]" size={13} />}
+          description="View your enrolled matches, live room credentials, and match history."
+          className="mb-1"
+        />
+      )}
 
       {/* ── STATS OVERVIEW (COMPACT 4-COL ROW) ── */}
       <div className="grid grid-cols-4 gap-1.5 sm:gap-3">

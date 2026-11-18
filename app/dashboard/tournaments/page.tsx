@@ -36,7 +36,7 @@ export default function MyTournamentsPage() {
         </div>
 
         {/* ── THE LIST COMPONENT ── */}
-        <JoinedTournaments />
+        <JoinedTournaments hideTitle />
       </div>
     </AuthGuard>
   );

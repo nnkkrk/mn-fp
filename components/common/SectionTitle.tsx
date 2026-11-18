@@ -1,6 +1,7 @@
 "use client";
 
 import React, { ReactNode } from "react";
+import InfoTooltip from "./InfoTooltip";
 
 export type SectionTitleSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type SectionTitleAlign = "left" | "center" | "right";
@@ -26,6 +27,10 @@ export interface SectionTitleProps {
   highlightLastWord?: boolean;
   /** Optional descriptive subtext under the title */
   description?: ReactNode;
+  /** Optional tooltip info content rendered in an info (i) icon */
+  info?: ReactNode;
+  /** Placement for the info icon: "title" (next to main title) or "subtitle" (next to subtitle eyebrow). Default: "title" */
+  infoPlacement?: "title" | "subtitle";
   /** Component size scale: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" (default: "lg") */
   size?: SectionTitleSize;
   /** Optional custom font size / class for the title (overrides size's default font size) */
@@ -197,6 +202,8 @@ export function SectionTitle({
   highlight,
   highlightLastWord = true,
   description,
+  info,
+  infoPlacement = "title",
   size = "lg",
   fontSize,
   align = "left",
@@ -341,6 +348,14 @@ export function SectionTitle({
           {icon && <span className="shrink-0">{icon}</span>}
           <div className="flex items-center gap-1.5 whitespace-nowrap">
             {subtitle}
+            {info && infoPlacement === "subtitle" && (
+              <InfoTooltip
+                content={info}
+                position="top"
+                className="not-italic font-normal normal-case ml-1"
+                iconSize={12}
+              />
+            )}
           </div>
           {align === "center" && lineElement}
           {align === "right" && lineElement}
@@ -352,7 +367,17 @@ export function SectionTitle({
         <Component
           className={`${fontSize || sizeConfig.title} text-[var(--foreground)] ${titleClassName}`}
         >
-          {renderTitleContent()}
+          <span className="inline-flex items-center gap-2">
+            <span>{renderTitleContent()}</span>
+            {info && infoPlacement === "title" && (
+              <InfoTooltip
+                content={info}
+                position="top"
+                className="not-italic font-normal normal-case inline-flex align-middle"
+                iconSize={15}
+              />
+            )}
+          </span>
           {pulse && (
             <span
               className={`inline-block w-2 h-2 rounded-full ${colorConfig.bg} animate-pulse ml-2.5 align-middle`}

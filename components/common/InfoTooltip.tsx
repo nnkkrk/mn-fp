@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FiInfo } from "react-icons/fi";
 
 interface InfoTooltipProps {
@@ -8,6 +8,7 @@ interface InfoTooltipProps {
   position?: "top" | "bottom" | "left" | "right";
   className?: string;
   iconClassName?: string;
+  iconSize?: number;
 }
 
 export default function InfoTooltip({
@@ -15,8 +16,25 @@ export default function InfoTooltip({
   position = "top",
   className = "",
   iconClassName = "",
+  iconSize = 13,
 }: InfoTooltipProps) {
   const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [open]);
 
   const positionClasses = {
     top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
@@ -34,17 +52,21 @@ export default function InfoTooltip({
 
   return (
     <div
+      ref={containerRef}
       className={`relative inline-flex items-center ${className}`}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
-      onClick={() => setOpen((prev) => !prev)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen((prev) => !prev);
+      }}
     >
       <button
         type="button"
         aria-label="Info"
-        className={`inline-flex items-center justify-center text-neutral-400 hover:text-[var(--foreground)] transition-colors focus:outline-none cursor-pointer ${iconClassName}`}
+        className={`inline-flex items-center justify-center text-neutral-400 hover:text-[var(--accent)] transition-colors focus:outline-none cursor-pointer ${iconClassName}`}
       >
-        <FiInfo size={13} />
+        <FiInfo size={iconSize} />
       </button>
 
       {open && (

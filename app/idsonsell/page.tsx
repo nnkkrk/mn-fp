@@ -1,73 +1,166 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ids from "@/data/idsOnSell";
 import IdCard from "@/components/IdsOnSell/IdCard";
-import IdsFilterModal from "@/components/IdsOnSell/IdsFilterModal";
-import { SearchInput, EmptyState, SectionTitle } from "@/components/common";
+import IdsFilterModal, { SortOption } from "@/components/IdsOnSell/IdsFilterModal";
+import { EmptyState, SectionTitle } from "@/components/common";
 import { Icons } from "@/components/icons";
+import { FiSearch, FiX, FiSliders } from "react-icons/fi";
 
 export default function IdsOnSellPage() {
   const [search, setSearch] = useState("");
   const [showFilter, setShowFilter] = useState(false);
 
-  // filters (basic for now)
+  // Filters & Sorting
   const [rentOnly, setRentOnly] = useState(false);
-  const [globalOnly, setGlobalOnly] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("default");
 
-  /* ================= FILTER LOGIC ================= */
-  const filteredIds = ids.filter((item: any) => {
-    const matchSearch =
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.tags?.some((t: string) => t.toLowerCase().includes(search.toLowerCase()));
+  const hasActiveFilter = rentOnly || sortBy !== "default";
 
-    const matchRent =
-      !rentOnly || item.rent?.available === true;
+  /* ================= FILTER & SORT LOGIC ================= */
+  const filteredAndSortedIds = useMemo(() => {
+    const q = search.trim().toLowerCase();
 
-    const matchGlobal =
-      !globalOnly ||
-      item.tags?.some((t: string) => t.toLowerCase().includes("global")) ||
-      (item.heroTitles?.global?.length ?? 0) > 0;
+    const result = ids.filter((item: any) => {
+      const matchSearch =
+        !q ||
+        item.title?.toLowerCase().includes(q) ||
+        item.tags?.some((t: string) => t.toLowerCase().includes(q)) ||
+        item.details?.toLowerCase().includes(q);
 
-    return matchSearch && matchRent && matchGlobal;
-  });
+      const matchRent = !rentOnly || item.rent?.available === true;
+
+      return matchSearch && matchRent;
+    });
+
+    if (sortBy === "buy-asc") {
+      result.sort((a: any, b: any) => (a.price ?? 0) - (b.price ?? 0));
+    } else if (sortBy === "buy-desc") {
+      result.sort((a: any, b: any) => (b.price ?? 0) - (a.price ?? 0));
+    } else if (sortBy === "rent-asc") {
+      result.sort((a: any, b: any) => {
+        const pA = a.rent?.available ? (a.rent?.price ?? Infinity) : Infinity;
+        const pB = b.rent?.available ? (b.rent?.price ?? Infinity) : Infinity;
+        return pA - pB;
+      });
+    } else if (sortBy === "rent-desc") {
+      result.sort((a: any, b: any) => {
+        const pA = a.rent?.available ? (a.rent?.price ?? -Infinity) : -Infinity;
+        const pB = b.rent?.available ? (b.rent?.price ?? -Infinity) : -Infinity;
+        return pB - pA;
+      });
+    }
+
+    return result;
+  }, [search, rentOnly, sortBy]);
 
   return (
-    <main className="min-h-screen p-6 max-w-7xl mx-auto space-y-6">
+    <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-5">
       <SectionTitle
         subtitle="VERIFIED MARKETPLACE"
         title="IDS ON SALE"
-        description="Browse verified, competition-ready gaming accounts for sale & rent"
+        info="Browse verified, competition-ready gaming accounts for sale & rent"
       />
 
-      {/* ================= HEADER ================= */}
-      <div className="flex items-center gap-3">
-        {/* SEARCH */}
-        <div className="flex-1 min-w-0">
-          <SearchInput
-            value={search}
-            onChange={setSearch}
-            placeholder="Search MLBB IDs..."
-            size="md"
-          />
-        </div>
+      {/* ================= COMBINED SEARCH & FILTER BAR ================= */}
+      <div className="relative flex items-center w-full h-9 sm:h-9.5 rounded-full bg-[var(--card)] border border-[var(--border)] focus-within:border-[var(--accent)]/60 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs px-3">
+        {/* Search Icon */}
+        <FiSearch className="text-[var(--muted)]/70 shrink-0 text-sm mr-2" />
 
-        {/* FILTER BUTTON */}
-        <button aria-label="button"
+        {/* Search Text Input */}
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search MLBB IDs, skins, tags..."
+          className="w-full bg-transparent text-xs sm:text-[13px] text-[var(--foreground)] placeholder-[var(--muted)]/60 focus:outline-none"
+        />
+
+        {/* Clear Button (if search has value) */}
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] transition-colors mr-1 cursor-pointer"
+            aria-label="Clear search"
+          >
+            <FiX size={12} />
+          </button>
+        )}
+
+        {/* Divider */}
+        <div className="h-4 w-[1px] bg-[var(--border)] shrink-0 mx-1.5" />
+
+        {/* Filter Button */}
+        <button
+          type="button"
           onClick={() => setShowFilter(true)}
-          className="shrink-0 flex items-center gap-2
-            px-4 py-2.5 rounded-xl border bg-[var(--card)]
-            hover:border-[var(--accent)] text-xs font-black uppercase tracking-wider transition-colors"
+          className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+            hasActiveFilter
+              ? "bg-[var(--accent)] text-white shadow-xs"
+              : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5"
+          }`}
+          aria-label="Filter and Sort"
+          title="Filter and Sort"
         >
-          <Icons.filter size={15} />
-          <span className="hidden sm:inline">Filter</span>
+          <FiSliders size={12} />
+          <span className="hidden sm:inline text-[10px]">Filter</span>
+          {hasActiveFilter && (
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          )}
         </button>
       </div>
 
+      {/* ================= ACTIVE FILTER CHIPS (IF ANY) ================= */}
+      {hasActiveFilter && (
+        <div className="flex items-center gap-2 flex-wrap text-[11px]">
+          {rentOnly && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 font-bold">
+              Rent Available
+              <button
+                type="button"
+                onClick={() => setRentOnly(false)}
+                className="hover:opacity-70 ml-0.5"
+              >
+                <FiX size={10} />
+              </button>
+            </span>
+          )}
+
+          {sortBy !== "default" && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-[var(--foreground)] font-bold">
+              {sortBy === "buy-asc" && "Buy: Low → High"}
+              {sortBy === "buy-desc" && "Buy: High → Low"}
+              {sortBy === "rent-asc" && "Rent: Low → High"}
+              {sortBy === "rent-desc" && "Rent: High → Low"}
+              <button
+                type="button"
+                onClick={() => setSortBy("default")}
+                className="hover:opacity-70 ml-0.5"
+              >
+                <FiX size={10} />
+              </button>
+            </span>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              setRentOnly(false);
+              setSortBy("default");
+            }}
+            className="text-[10px] text-[var(--muted)] hover:text-red-500 font-bold uppercase underline tracking-wider ml-1 cursor-pointer"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+
       {/* ================= GRID ================= */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredIds.length > 0 ? (
-          filteredIds.map((item: any) => (
+        {filteredAndSortedIds.length > 0 ? (
+          filteredAndSortedIds.map((item: any) => (
             <IdCard key={item.id} item={item} />
           ))
         ) : (
@@ -88,8 +181,8 @@ export default function IdsOnSellPage() {
           onClose={() => setShowFilter(false)}
           rentOnly={rentOnly}
           setRentOnly={setRentOnly}
-          globalOnly={globalOnly}
-          setGlobalOnly={setGlobalOnly}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
         />
       )}
     </main>
