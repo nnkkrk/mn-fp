@@ -1,10 +1,44 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { FiZap, FiShield, FiCheckCircle } from "react-icons/fi";
+import { FiCheckCircle, FiShare2, FiCheck } from "react-icons/fi";
 
 export default function GameHeader({ game }) {
+  const [copied, setCopied] = useState(false);
+
   if (!game) return null;
+
+  const handleShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const title = `${game.gameName} Top Up | BlueBuff MT Topup`;
+    const text = `Top up ${game.gameName} instantly at best prices on BlueBuff!`;
+
+    // Native Web Share API (Mobile / Modern Browsers)
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        return;
+      } catch (err) {
+        if (err?.name === "AbortError") return;
+      }
+    }
+
+    // Fallback 1: Clipboard Copy with visual feedback
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+        return;
+      } catch {
+        // Fallback to WhatsApp
+      }
+    }
+
+    // Fallback 2: Direct WhatsApp Share
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n${url}`)}`, "_blank");
+  };
 
   return (
     <div className="relative w-full mb-1.5 mt-0.5">
@@ -58,25 +92,26 @@ export default function GameHeader({ game }) {
           </div>
         </div>
 
-        {/* RIGHT: Minimalist Trust Badges */}
-        <div className="flex items-center gap-1.5 relative z-10 shrink-0">
-          {/* Instant/Manual Delivery Badge */}
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-full border
-            ${game.isValidationRequired === false
-              ? "bg-amber-500/10 border-amber-500/25 text-amber-500"
-              : "bg-blue-500/10 border-blue-500/25 text-blue-500"
-            }`}>
-            <FiZap size={11} fill="currentColor" />
-            <span className="hidden sm:inline text-[8px] font-bold uppercase tracking-widest text-[var(--foreground)]">
-              {(game.isValidationRequired === false && game.gameSlug !== 'bgmi-manual') ? "Manual" : "Instant"}
-            </span>
-          </div>
-
-          {/* Secure Badge */}
-          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-500">
-            <FiShield size={11} />
-            <span className="hidden sm:inline text-[8px] font-bold uppercase tracking-widest text-[var(--foreground)]">Secure</span>
-          </div>
+        {/* RIGHT: Share Button */}
+        <div className="flex items-center relative z-10 shrink-0">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--card)] hover:bg-[var(--foreground)]/5 border border-[var(--border)] hover:border-[var(--accent)]/40 text-[var(--foreground)] transition-all cursor-pointer shadow-xs active:scale-95 group"
+            title="Share Game"
+            aria-label="Share Game"
+          >
+            {copied ? (
+              <>
+                <FiCheck size={13} className="text-emerald-400" />
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Copied</span>
+              </>
+            ) : (
+              <>
+                <FiShare2 size={13} className="text-[var(--accent)] group-hover:scale-110 transition-transform" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] group-hover:text-[var(--foreground)]">Share</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>
