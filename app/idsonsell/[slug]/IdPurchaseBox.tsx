@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, CheckCircle2, ShieldCheck, Clock, Zap, ShoppingBag } from "lucide-react";
+import { MessageCircle, ShieldCheck, Zap, ShoppingBag, CheckCircle2 } from "lucide-react";
 
 interface Props {
   item: {
@@ -29,30 +29,30 @@ export default function IdPurchaseBox({ item }: Props) {
   const baseWhatsapp =
     item.dealer?.contact?.whatsapp?.split("?")[0] || "https://wa.me/918118090547";
 
-  const buyMessage = `Hello MT Topup! I want to BUY this MLBB Account:
+  const buyMessage = `Hello MT Topup! I want to BUY MLBB Account:
 • ID: ${item.id}
 • Title: ${item.title}
 • Price: ₹${item.price}
 Please guide me with the payment & instant handover.`;
 
-  const rentMessage = `Hello MT Topup! I want to RENT this MLBB Account:
+  const rentMessage = `Hello MT Topup! I want to RENT MLBB Account:
 • ID: ${item.id}
 • Title: ${item.title}
-• Rent Rate: ₹${item.rent?.price} / ${item.rent?.durationHours || 24}h
+• Rent Rate: ₹${item.rent?.price}/${item.rent?.durationHours || 24}h
 Please share the rental credentials and procedure.`;
 
   const currentMessage = mode === "buy" ? buyMessage : rentMessage;
   const whatsappUrl = `${baseWhatsapp}?text=${encodeURIComponent(currentMessage)}`;
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[var(--card)] to-[var(--accent)]/5 border border-[var(--border)] space-y-4 shadow-sm">
-      {/* ── MODE SWITCHER (BUY vs RENT) ── */}
+    <div className="rounded-2xl bg-[var(--card)] border border-[var(--border)] p-4 sm:p-5 space-y-3.5 shadow-sm">
+      {/* ── MODE SWITCHER ── */}
       {hasRent && (
-        <div className="grid grid-cols-2 p-1 rounded-xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-xs font-black uppercase tracking-wider">
+        <div className="grid grid-cols-2 p-1 rounded-full bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-xs font-black uppercase tracking-wider">
           <button
             type="button"
             onClick={() => setMode("buy")}
-            className={`flex items-center justify-center gap-1.5 py-2 rounded-lg transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-full transition-all cursor-pointer ${
               mode === "buy"
                 ? "bg-[var(--accent)] text-white shadow-xs"
                 : "text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -65,7 +65,7 @@ Please share the rental credentials and procedure.`;
           <button
             type="button"
             onClick={() => setMode("rent")}
-            className={`flex items-center justify-center gap-1.5 py-2 rounded-lg transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-full transition-all cursor-pointer ${
               mode === "rent"
                 ? "bg-emerald-500 text-black shadow-xs"
                 : "text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -77,12 +77,12 @@ Please share the rental credentials and procedure.`;
         </div>
       )}
 
-      {/* ── PRICING HEADER ── */}
-      <div className="flex items-end justify-between pt-1">
+      {/* ── PRICE & GUARANTEE ── */}
+      <div className="flex items-end justify-between pt-0.5">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-            {mode === "buy" ? "Full Ownership Price" : "Rental Rate"}
-          </span>
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
+            {mode === "buy" ? "Account Purchase Price" : "Rental Rate"}
+          </div>
           <div className="flex items-baseline gap-2 mt-0.5">
             <span
               className={`text-2xl sm:text-3xl font-black leading-none ${
@@ -100,67 +100,62 @@ Please share the rental credentials and procedure.`;
         </div>
 
         <div className="text-right">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-            <ShieldCheck size={11} /> Instant Handover
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+            <ShieldCheck size={12} />
+            {mode === "buy" ? "Moonton Safe Rebind" : "Instant 24h Play"}
           </span>
         </div>
       </div>
 
-      {/* ── MODE SPECIFIC TERMS / BENEFITS ── */}
-      {mode === "buy" ? (
-        <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/70 space-y-1.5 text-xs text-[var(--foreground)]/80 font-medium">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
-            <span>100% Full ownership with Moonton email rebind</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
-            <span>Verified clean history — zero bans, zero strikes</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
-            <span>Dedicated agent support until transfer completes</span>
-          </div>
-        </div>
-      ) : (
-        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1.5 text-xs text-emerald-300 font-medium">
-          <div className="flex items-center gap-1 font-bold text-emerald-400">
-            <Clock size={12} /> Rental Conditions:
-          </div>
-          <ul className="list-disc ml-4 space-y-0.5 text-[11px]">
-            {item.rent?.conditions && item.rent.conditions.length > 0 ? (
-              item.rent.conditions.map((c, i) => <li key={i}>{c}</li>)
-            ) : (
-              <>
-                <li>Quick 24h play session, zero security deposits required</li>
-                <li>No email or password modifications permitted</li>
-                <li>Auto-expires after rental duration</li>
-              </>
-            )}
-          </ul>
-        </div>
-      )}
+      {/* ── KEY BENEFITS ── */}
+      <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/60 space-y-1.5 text-xs text-[var(--foreground)]/85 font-medium">
+        {mode === "buy" ? (
+          <>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+              <span>Full ownership transfer with Moonton email change</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+              <span>Clean account history verified by MT Top Up</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+              <span>Instant credentials handover — no security deposit</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+              <span>Play tournaments or test collector skins for 24h</span>
+            </div>
+          </>
+        )}
+      </div>
 
-      {/* ── WHATSAPP CTA ACTION ── */}
+      {/* ── WHATSAPP CTA ── */}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider shadow-md transition-all active:scale-95 cursor-pointer ${
+        className={`w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all active:scale-98 shadow-md cursor-pointer ${
           mode === "buy"
-            ? "bg-[var(--accent)] hover:brightness-110 text-white shadow-[var(--accent)]/20"
-            : "bg-emerald-500 hover:bg-emerald-600 text-black shadow-emerald-500/20"
+            ? "bg-[var(--accent)] hover:brightness-110 text-white shadow-[var(--accent)]/25"
+            : "bg-emerald-500 hover:bg-emerald-600 text-black shadow-emerald-500/25"
         }`}
       >
         <MessageCircle size={18} />
         <span>
-          {mode === "buy" ? `Buy Now for ₹${item.price}` : `Rent for ₹${item.rent?.price}/24h`}
+          {mode === "buy"
+            ? `Buy on WhatsApp • ₹${item.price}`
+            : `Rent on WhatsApp • ₹${item.rent?.price}/24h`}
         </span>
       </a>
 
-      <p className="text-[10px] text-center text-[var(--muted)]">
-        Official MT Safe Trade • WhatsApp Handover Guaranteed
-      </p>
+      <div className="text-[10px] text-center text-[var(--muted)]">
+        🔒 Official MT Topup Escrow • Direct WhatsApp Handover
+      </div>
     </div>
   );
 }

@@ -73,6 +73,7 @@ export default function BottomNav() {
   if (
     sheetOpen ||
     pathname?.startsWith("/games/") ||
+    (pathname?.startsWith("/idsonsell/") && pathname !== "/idsonsell") ||
     hideOnRoutes.some((route) => pathname?.startsWith(route))
   ) {
     return null;
