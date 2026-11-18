@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import ids from "@/data/idsOnSell";
 import ShareButton from "./ShareButton";
 import IdPurchaseBox from "./IdPurchaseBox";
@@ -18,6 +19,42 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const item: any = ids.find((i) => i.slug === slug);
+  if (!item) return { title: "Account Not Found" };
+
+  const rawImage =
+    item.media?.images?.[0] || item.media?.fallbackImage || item.image || "/logoBB.png";
+  const absoluteImageUrl = rawImage.startsWith("http")
+    ? rawImage
+    : `https://mlbbtopup.in${rawImage}`;
+
+  return {
+    title: `${item.title} - ₹${item.price} | MT Marketplace`,
+    description: `Buy or rent ${item.title} for ₹${item.price} on MLBB Top Up India. Verified account with safe Moonton rebind.`,
+    openGraph: {
+      title: `${item.title} - ₹${item.price}`,
+      description: `Price: ₹${item.price} | Verified MLBB Account for Sale`,
+      url: `https://mlbbtopup.in/idsonsell/${item.slug}`,
+      images: [
+        {
+          url: absoluteImageUrl,
+          width: 800,
+          height: 500,
+          alt: item.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${item.title} - ₹${item.price}`,
+      description: `Price: ₹${item.price} | MLBB Account Marketplace`,
+      images: [absoluteImageUrl],
+    },
+  };
+}
+
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
   const item: any = ids.find((i) => i.slug === slug);
@@ -34,10 +71,8 @@ export default async function Page({ params }: PageProps) {
   const tags: string[] = item.tags || item.highlights || [];
   const details = item.details || item.description;
 
-  const shareText = `🔥 MLBB Account For Sale: ${item.title}
-🎭 Heroes: ${totalHeroes ? `${totalHeroes}+` : "N/A"}
-🎨 Skins: ${totalSkins ? `${totalSkins}+` : "N/A"}
-${collectionTier ? `🏆 Collection: ${collectionTier}\n` : ""}Price: ₹${item.price}`;
+  const itemImage =
+    item.media?.images?.[0] || item.media?.fallbackImage || item.image || "/logoBB.png";
 
   return (
     <main className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-16 space-y-4 text-[var(--foreground)]">
@@ -51,9 +86,12 @@ ${collectionTier ? `🏆 Collection: ${collectionTier}\n` : ""}Price: ₹${item.
           <span>Marketplace</span>
         </Link>
 
+        {/* SHARE: JUST NAME, PRICE, LINK & IMAGE */}
         <ShareButton
-          text={shareText}
+          title={item.title}
+          price={item.price}
           url={`${siteUrl}/idsonsell/${item.slug}`}
+          imageUrl={itemImage}
         />
       </div>
 
@@ -79,7 +117,7 @@ ${collectionTier ? `🏆 Collection: ${collectionTier}\n` : ""}Price: ₹${item.
           {/* IMAGE BANNER */}
           <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-black/20 border border-[var(--border)] shadow-xs">
             <Image
-              src={item.media?.images?.[0] || item.media?.fallbackImage || item.image || "/logo.png"}
+              src={itemImage}
               alt={item.title}
               fill
               className="object-cover"
