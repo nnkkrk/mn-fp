@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "framer-motion";
 import GameBannerCarousel from "./GameBannerCarousel";
 import TopNoticeBanner from "./TopNoticeBanner";
 import StorySlider from "./StorySlider";
@@ -121,25 +122,44 @@ export default function HeroSection({ bannerSettings, initialBanners }: { banner
       {/* ── STORE MODE TABS (Game Topup / ID Marketplace) ── */}
       <HomeTabSwitcher activeTab={activeTab} onChange={handleTabChange} />
 
-      {activeTab === "topup" ? (
-        <>
-          <div className="space-y-1 mt-2">
-            {bs.showStorySlider !== false && <StorySlider />}
-            {bs.showBattleRoyaleSection !== false && <BattleRoyaleSection />}
-            {bs.showFlashSale !== false && <FlashSale />}
-          </div>
-
-          {bs.showHomeQuickActions !== false && (
-            <div className="space-y-1">
-              <HomeQuickActions />
+      {/* ── SMOOTH TRANSITION FOR TAB CONTENT BELOW ── */}
+      <AnimatePresence mode="wait" initial={false}>
+        {activeTab === "topup" ? (
+          <motion.div
+            key="home-topup-tab"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="w-full"
+          >
+            <div className="space-y-1 mt-2">
+              {bs.showStorySlider !== false && <StorySlider />}
+              {bs.showBattleRoyaleSection !== false && <BattleRoyaleSection />}
+              {bs.showFlashSale !== false && <FlashSale />}
             </div>
-          )}
 
-          <GameCatalogSection />
-        </>
-      ) : (
-        <HomeMarketplaceSection />
-      )}
+            {bs.showHomeQuickActions !== false && (
+              <div className="space-y-1">
+                <HomeQuickActions />
+              </div>
+            )}
+
+            <GameCatalogSection />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="home-marketplace-tab"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="w-full"
+          >
+            <HomeMarketplaceSection />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <SupportBanner />
     

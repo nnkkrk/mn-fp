@@ -23,15 +23,15 @@ export default function IdCard({ item }: IdCardProps) {
   return (
     <Link
       href={`/idsonsell/${item.slug}`}
-      className="group relative rounded-2xl overflow-hidden
+      className="group relative rounded-xl sm:rounded-2xl overflow-hidden
                  bg-[var(--card)] border border-[var(--border)]
                  transition-all duration-300 flex flex-col
                  hover:-translate-y-1
                  hover:border-[var(--accent)]
-                 hover:shadow-[0_16px_36px_-12px_rgba(0,0,0,0.5)]"
+                 hover:shadow-[0_12px_28px_-10px_rgba(0,0,0,0.5)]"
     >
-      {/* ── IMAGE ── */}
-      <div className="relative h-44 w-full overflow-hidden bg-black/10 shrink-0">
+      {/* ── IMAGE (COMPACT) ── */}
+      <div className="relative h-36 w-full overflow-hidden bg-black/10 shrink-0">
         <Image
           src={item.media?.images?.[0] || item.image || "/logo.png"}
           alt={item.title || "Gaming ID"}
@@ -44,22 +44,22 @@ export default function IdCard({ item }: IdCardProps) {
 
         {/* RENT BADGE ON IMAGE */}
         {rentAvailable && (
-          <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-500 text-black shadow-md">
+          <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-black shadow-md">
             Rent ₹{rentPrice} / {rentDuration}h
           </span>
         )}
       </div>
 
-      {/* ── CONTENT ── */}
-      <div className="p-4 flex-1 flex flex-col justify-between space-y-3 text-[var(--foreground)]">
-        <div className="space-y-2.5">
+      {/* ── CONTENT (COMPACT PADDING & SPACING) ── */}
+      <div className="p-3 flex-1 flex flex-col justify-between space-y-2 text-[var(--foreground)]">
+        <div className="space-y-1.5">
           {/* TITLE */}
-          <h2 className="font-bold text-base leading-snug line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
+          <h2 className="font-bold text-sm leading-snug line-clamp-1 group-hover:text-[var(--accent)] transition-colors">
             {item.title}
           </h2>
 
           {/* HEROES & SKINS */}
-          <div className="flex items-center justify-between text-xs font-semibold text-[var(--muted)]">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-[var(--muted)]">
             {totalHeroes !== undefined && totalHeroes !== null && (
               <span>🎭 {totalHeroes}+ Heroes</span>
             )}
@@ -70,25 +70,25 @@ export default function IdCard({ item }: IdCardProps) {
 
           {/* COLLECTION LEVEL */}
           {collectionTier && (
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">
+            <div className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
               <span>🏆 Collection: {collectionTier}</span>
             </div>
           )}
 
-          {/* OPTIONAL DETAILS (show only if available) */}
+          {/* OPTIONAL DETAILS (COMPACT) */}
           {details && (
-            <p className="text-xs text-[var(--muted)] line-clamp-2 leading-relaxed">
+            <p className="text-[11px] text-[var(--muted)] line-clamp-1 leading-snug">
               {details}
             </p>
           )}
 
-          {/* TAGS (show only if available) */}
+          {/* TAGS (COMPACT PILLS) */}
           {tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-0.5">
+            <div className="flex flex-wrap gap-1 pt-0.5">
               {tags.map((tag: string, idx: number) => (
                 <span
                   key={idx}
-                  className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[var(--foreground)]/5 text-[var(--foreground)]/80 border border-[var(--border)] group-hover:border-[var(--accent)]/30 transition-colors"
+                  className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[var(--foreground)]/5 text-[var(--foreground)]/80 border border-[var(--border)] group-hover:border-[var(--accent)]/30 transition-colors"
                 >
                   {tag}
                 </span>
@@ -97,19 +97,19 @@ export default function IdCard({ item }: IdCardProps) {
           )}
         </div>
 
-        {/* PRICE & RENT FOOTER */}
-        <div className="pt-2.5 border-t border-[var(--border)]/60 flex items-end justify-between">
+        {/* PRICE & RENT FOOTER (COMPACT) */}
+        <div className="pt-2 border-t border-[var(--border)]/60 flex items-end justify-between">
           <div>
-            <div className="text-[10px] uppercase font-bold text-[var(--muted)]">Price</div>
-            <div className="text-xl font-black text-[var(--accent)] leading-tight">
+            <div className="text-[9px] uppercase font-bold text-[var(--muted)]">Price</div>
+            <div className="text-lg font-black text-[var(--accent)] leading-none">
               ₹{item.price}
             </div>
           </div>
 
           {rentAvailable && (
             <div className="text-right">
-              <div className="text-[10px] uppercase font-bold text-[var(--muted)]">Rental</div>
-              <div className="text-xs font-black text-emerald-500">
+              <div className="text-[9px] uppercase font-bold text-[var(--muted)]">Rental</div>
+              <div className="text-[11px] font-bold text-emerald-500 leading-none">
                 Rent ₹{rentPrice}/day
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function IdCard({ item }: IdCardProps) {
       </div>
 
       {/* HOVER GLOW */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none rounded-2xl ring-1 ring-[var(--accent)]/30 transition" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none rounded-xl sm:rounded-2xl ring-1 ring-[var(--accent)]/30 transition" />
     </Link>
   );
 }

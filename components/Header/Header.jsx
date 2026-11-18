@@ -271,51 +271,16 @@ export default function Header() {
 
           {/* Right section */}
           <div className="flex items-center justify-end gap-1.5 sm:gap-2 xl:flex-1">
-            <div className="relative">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleInstallPWA}
-                className={`relative flex items-center justify-center w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full border transition-all duration-200 group backdrop-blur-md ${
-                  isStandalone || isPwaInstalled
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                    : "bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] border-[var(--border)]/60 text-[var(--foreground)]/60 hover:text-[var(--accent)] hover:border-[var(--accent)]/40"
-                }`}
-                aria-label={isStandalone ? "App Running" : isPwaInstalled ? "App Installed" : "Install App"}
-                title={isStandalone ? "App Running (Standalone Mode)" : isPwaInstalled ? "App Installed" : "Install App"}
-              >
-                {isStandalone || isPwaInstalled ? (
-                  <FiCheckCircle size={14} className="z-10 text-emerald-400" />
-                ) : (
-                  <FiDownload size={14} className="z-10 group-hover:translate-y-[1px] transition-transform" />
-                )}
-                
-                {/* SPINNING ORBIT RING */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                  className={`absolute inset-0 rounded-full border border-dashed pointer-events-none ${
-                    isStandalone || isPwaInstalled ? "border-emerald-500/30" : "border-[var(--foreground)]/20"
-                  }`}
-                />
-              </motion.button>
-
-              {/* TOAST POPUP */}
-              {pwaToastMsg && (
-                <div className="fixed top-14 sm:top-16 right-3 sm:right-6 z-[9999] max-w-xs animate-in fade-in slide-in-from-top-2 duration-300 pointer-events-none">
-                  <div className="px-3.5 py-2 rounded-xl bg-[var(--card)] border border-emerald-500/30 shadow-2xl text-[11px] font-bold text-[var(--foreground)] backdrop-blur-xl flex items-center gap-2">
-                    <span>{pwaToastMsg}</span>
-                  </div>
+            {/* PWA TOAST POPUP */}
+            {pwaToastMsg && (
+              <div className="fixed top-14 sm:top-16 right-3 sm:right-6 z-[9999] max-w-xs animate-in fade-in slide-in-from-top-2 duration-300 pointer-events-none">
+                <div className="px-3.5 py-2 rounded-xl bg-[var(--card)] border border-emerald-500/30 shadow-2xl text-[11px] font-bold text-[var(--foreground)] backdrop-blur-xl flex items-center gap-2">
+                  <span>{pwaToastMsg}</span>
                 </div>
-              )}
-            </div>
-
-            {/* NOTIFICATION TOGGLE */}
-            <NotificationToggle user={user} />
+              </div>
+            )}
 
             <div className="flex items-center gap-1.5 sm:gap-2" ref={dropdownRef}>
-              <ThemeToggle />
-
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -383,6 +348,43 @@ export default function Header() {
                         <button onClick={handleLogout} className="w-7 h-7 rounded-full hover:bg-red-500/10 flex items-center justify-center text-red-500 transition-colors" title="Logout"><FiLogOut size={14} /></button>
                       )}
                       <button onClick={() => setUserMenuOpen(false)} className="w-7 h-7 rounded-full hover:bg-[var(--foreground)]/5 flex items-center justify-center text-[var(--muted)] transition-colors" aria-label="Close User Menu"><FiX size={18} /></button>
+                    </div>
+                  </div>
+
+                  {/* Quick Controls inside Sidebar (Download App, Notifications, Theme) */}
+                  <div className="relative z-10 px-3.5 py-1.5 border-b border-[var(--border)] bg-[var(--foreground)]/[0.02]">
+                    <div className="flex items-center justify-between gap-2 p-1 px-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] shadow-xs">
+                      {/* PWA Download Button */}
+                      <button
+                        onClick={handleInstallPWA}
+                        className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isStandalone || isPwaInstalled
+                            ? "bg-emerald-500/10 text-emerald-400"
+                            : "bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)]"
+                        }`}
+                        title={isStandalone ? "App Running" : isPwaInstalled ? "App Installed" : "Install App"}
+                      >
+                        {isStandalone || isPwaInstalled ? (
+                          <FiCheckCircle size={13} className="text-emerald-400" />
+                        ) : (
+                          <FiDownload size={13} />
+                        )}
+                        <span className="text-[9px] font-black uppercase tracking-wider">
+                          {isStandalone ? "Active" : isPwaInstalled ? "Installed" : "Install App"}
+                        </span>
+                      </button>
+
+                      <div className="flex items-center gap-1">
+                        {/* Notification Bell */}
+                        <div className="scale-[0.88] origin-center flex items-center">
+                          <NotificationToggle user={user} />
+                        </div>
+
+                        {/* Theme Toggle */}
+                        <div className="scale-[0.88] origin-center flex items-center">
+                          <ThemeToggle />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
