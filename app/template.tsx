@@ -29,8 +29,8 @@ export default function Template({ children }: { children: React.ReactNode }) {
       key={pathname}
       initial={{
         opacity: 0,
-        x: slideDir === 1 ? 36 : slideDir === -1 ? -36 : 0,
-        y: slideDir === 0 ? 6 : 0,
+        x: slideDir === 1 ? 20 : slideDir === -1 ? -20 : 0,
+        y: slideDir === 0 ? 4 : 0,
       }}
       animate={{
         opacity: 1,
@@ -38,9 +38,10 @@ export default function Template({ children }: { children: React.ReactNode }) {
         y: 0,
       }}
       transition={{
-        duration: 0.26,
-        ease: [0.22, 1, 0.36, 1], // Google Material FastOutSlowIn
+        duration: 0.22,
+        ease: [0.16, 1, 0.3, 1], // Apple fluid easing: instant, snappy & smooth
       }}
+      style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
       className="w-full"
     >
       {children}

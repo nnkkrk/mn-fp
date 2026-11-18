@@ -26,6 +26,31 @@
   --color-card: var(--card);
 }
 
+/* ⚡ Global Smooth Engine & Hardware Acceleration */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+button, a, input, select, textarea {
+  touch-action: manipulation;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
 /* 🌟 Smooth Global Theme Transition */
 html, body {
   transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);

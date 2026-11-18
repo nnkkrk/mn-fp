@@ -24,9 +24,10 @@ export default function IdCard({ item }: IdCardProps) {
       className="group relative rounded-2xl overflow-hidden
                  bg-[var(--card)] border border-[var(--border)]
                  transition-all duration-300 flex flex-col
-                 hover:-translate-y-1
+                 hover:-translate-y-1 active:scale-[0.985]
                  hover:border-[var(--accent)]/60
-                 hover:shadow-[0_12px_28px_-8px_rgba(0,0,0,0.4)]"
+                 hover:shadow-[0_12px_28px_-8px_rgba(0,0,0,0.4)]
+                 will-change-transform"
     >
       {/* ── IMAGE THUMBNAIL ── */}
       <div className="relative h-40 w-full overflow-hidden bg-black/20 shrink-0">

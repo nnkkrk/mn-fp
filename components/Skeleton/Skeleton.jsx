@@ -342,7 +342,7 @@ export const IdsMarketplaceSkeleton = () => (
 
 // 14. ID DETAIL PAGE SKELETON
 export const IdDetailSkeleton = () => (
-  <main className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-16 space-y-3.5 animate-in fade-in duration-200">
+  <main className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-28 sm:pb-16 space-y-3.5 animate-in fade-in duration-200">
     <div className="flex items-center justify-between">
       <SkeletonBase className="w-28 h-7 rounded-full" />
       <SkeletonBase className="w-16 h-7 rounded-full" />

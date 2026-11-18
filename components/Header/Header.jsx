@@ -47,7 +47,7 @@ const HEADER_CONFIG = {
       { label: "Refer & Earn", href: "/dashboard/referral", icon: <FiUsers size={16} />, desc: "Earn Rewards", colorClass: "text-indigo-400" },
 
       // Row 2 (2 items): Tournaments & API
-      { label: "My Tournaments", href: "/dashboard/tournaments", icon: <FiAward size={16} />, desc: "Joined Scrims", colorClass: "text-rose-400" },
+      { label: "Tournaments", href: "/dashboard/tournaments", icon: <FiAward size={16} />, desc: "Joined Scrims", colorClass: "text-rose-400" },
       { label: "API Setup", href: "https://api.bluebuff.in", icon: <FiKey size={16} />, desc: "Developer API", colorClass: "text-slate-400" },
 
       // Remaining list

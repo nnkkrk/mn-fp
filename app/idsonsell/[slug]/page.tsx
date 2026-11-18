@@ -80,7 +80,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <IdDetailClient>
-      <main className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-16 space-y-3.5 text-[var(--foreground)]">
+      <main className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-28 sm:pb-16 space-y-3.5 text-[var(--foreground)]">
         {/* ── TOP NAV BAR ── */}
         <div className="flex items-center justify-between">
           <Link

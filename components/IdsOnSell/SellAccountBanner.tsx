@@ -19,25 +19,26 @@ export default function SellAccountBanner() {
 
           <div className="relative z-10 flex items-center gap-2 sm:gap-3.5 min-w-0 flex-1">
             {/* Overlapping Badges/Icons (Compact) */}
-            <div className="flex items-center -space-x-1.5 sm:-space-x-2 shrink-0 ml-0.5">
-              <div className="w-6 h-6 sm:w-7.5 sm:h-7.5 rounded-full bg-[var(--background)] flex items-center justify-center border-[2px] border-[var(--card)] text-emerald-400 z-30 shadow-xs transition-transform group-hover:scale-105">
-                <FiDollarSign size={11} className="sm:w-3 sm:h-3" />
+            <div className="flex items-center -space-x-2 shrink-0 ml-0.5">
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-full bg-[var(--background)] flex items-center justify-center border-[2px] border-[var(--card)] text-emerald-400 z-30 shadow-xs transition-transform group-hover:scale-105">
+                <FiDollarSign size={10} className="sm:w-3 sm:h-3" />
               </div>
-              <div className="w-6 h-6 sm:w-7.5 sm:h-7.5 rounded-full bg-[var(--background)] flex items-center justify-center border-[2px] border-[var(--card)] text-amber-400 z-20 shadow-xs transition-transform group-hover:scale-105 delay-75">
-                <FiZap size={11} className="sm:w-3 sm:h-3" />
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-full bg-[var(--background)] flex items-center justify-center border-[2px] border-[var(--card)] text-amber-400 z-20 shadow-xs transition-transform group-hover:scale-105 delay-75">
+                <FiZap size={10} className="sm:w-3 sm:h-3" />
               </div>
-              <div className="w-6 h-6 sm:w-7.5 sm:h-7.5 rounded-full bg-[var(--background)] flex items-center justify-center border-[2px] border-[var(--card)] text-[var(--accent)] z-10 shadow-xs transition-transform group-hover:scale-105 delay-150">
-                <FiShield size={11} className="sm:w-3 sm:h-3" />
+              <div className="w-5.5 h-5.5 sm:w-7 sm:h-7 rounded-full bg-[var(--background)] flex items-center justify-center border-[2px] border-[var(--card)] text-[var(--accent)] z-10 shadow-xs transition-transform group-hover:scale-105 delay-150">
+                <FiShield size={10} className="sm:w-3 sm:h-3" />
               </div>
             </div>
 
-            {/* Text Content (Lower Font Size to prevent truncation) */}
+            {/* Text Content (Responsive Font Size - Never truncates) */}
             <div className="flex flex-col justify-center min-w-0 flex-1">
-              <h3 className="text-[10px] sm:text-[13px] font-black italic tracking-tight sm:tracking-wide text-[var(--foreground)] leading-tight uppercase drop-shadow-xs whitespace-nowrap overflow-hidden text-ellipsis">
-                Want to sell your account? Contact Us
+              <h3 className="text-[9.5px] min-[390px]:text-[10.5px] sm:text-[13px] font-black italic tracking-tight sm:tracking-wide text-[var(--foreground)] leading-tight uppercase drop-shadow-xs truncate">
+                <span className="hidden min-[360px]:inline">Want to sell your account? Contact Us</span>
+                <span className="min-[360px]:hidden">Sell Account? Contact Us</span>
               </h3>
-              <p className="text-[7.5px] sm:text-[9.5px] font-bold text-[var(--muted)] mt-0.5 tracking-tight sm:tracking-[0.06em] uppercase flex items-center gap-1 whitespace-nowrap overflow-hidden text-ellipsis">
-                Instant Valuation <span className="text-[var(--muted)]/50 text-[5px]">●</span> Fast Payout <span className="text-[var(--muted)]/50 text-[5px]">●</span> Safe Escrow
+              <p className="text-[7px] min-[390px]:text-[8px] sm:text-[9.5px] font-bold text-[var(--muted)] mt-0.5 tracking-tight uppercase flex items-center gap-1 truncate">
+                Instant Valuation <span className="text-[var(--muted)]/50 text-[4px] sm:text-[5px]">●</span> Fast Payout <span className="text-[var(--muted)]/50 text-[4px] sm:text-[5px]">●</span> Safe Escrow
               </p>
             </div>
           </div>
