@@ -357,24 +357,16 @@ export const IdDetailSkeleton = () => (
       <div className="lg:col-span-7 space-y-4">
         <div className="aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl bg-neutral-200/80 dark:bg-neutral-800/80 shimmer-overlay border border-white/10" />
 
-        <div className="lg:hidden p-4 rounded-2xl border border-white/10 bg-neutral-900/60 dark:bg-neutral-900/80 space-y-3">
-          <SkeletonBase className="w-full h-8 rounded-full" />
-          <div className="flex justify-between items-center">
-            <SkeletonText width="w-24" height="h-6" />
-            <SkeletonBase className="w-28 h-5 rounded-full" />
-          </div>
-          <SkeletonBase className="w-full h-9 rounded-xl" />
-        </div>
-
-        <div className="p-4 sm:p-5 rounded-2xl border border-white/10 bg-neutral-900/60 dark:bg-neutral-900/80 space-y-4">
+        <div className="p-4 sm:p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="p-2.5 rounded-xl border border-white/5 flex items-center gap-2.5">
-                <SkeletonBase className="w-8 h-8 rounded-lg shrink-0" />
-                <div className="space-y-1.5 flex-1 min-w-0">
-                  <SkeletonText width="w-10" height="h-2" />
-                  <SkeletonText width="w-14" height="h-3" />
+              <div key={i} className="p-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] space-y-2">
+                <div className="flex items-center justify-between">
+                  <SkeletonText width="w-12" height="h-2" />
+                  <SkeletonBase className="w-4 h-4 rounded-md" />
                 </div>
+                <SkeletonText width="w-16" height="h-4" />
+                <SkeletonText width="w-20" height="h-2" className="opacity-60" />
               </div>
             ))}
           </div>
@@ -387,6 +379,15 @@ export const IdDetailSkeleton = () => (
             <SkeletonText width="w-full" height="h-3" />
             <SkeletonText width="w-4/5" height="h-3" />
           </div>
+        </div>
+
+        <div className="lg:hidden p-4 rounded-2xl border border-white/10 bg-neutral-900/60 dark:bg-neutral-900/80 space-y-3">
+          <SkeletonBase className="w-full h-8 rounded-full" />
+          <div className="flex justify-between items-center">
+            <SkeletonText width="w-24" height="h-6" />
+            <SkeletonBase className="w-28 h-5 rounded-full" />
+          </div>
+          <SkeletonBase className="w-full h-9 rounded-xl" />
         </div>
       </div>
 

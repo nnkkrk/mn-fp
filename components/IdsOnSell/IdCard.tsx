@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Swords, Sparkles, Crown } from "lucide-react";
+import { ArrowUpRight, Swords, Shirt, Crown } from "lucide-react";
 
 interface IdCardProps {
   item: any;
@@ -75,7 +75,7 @@ export default function IdCard({ item }: IdCardProps) {
             <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
             {totalSkins !== undefined && totalSkins !== null && (
               <span className="flex items-center gap-1.5">
-                <Sparkles size={12} className="text-pink-400 shrink-0" />
+                <Shirt size={12} className="text-purple-400 shrink-0" />
                 <span>{totalSkins}+ Skins</span>
               </span>
             )}

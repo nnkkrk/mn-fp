@@ -84,7 +84,7 @@ export default function IdImageSlider({
 
   return (
     <div
-      className="relative aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-black/20 border border-[var(--border)] shadow-xs select-none"
+      className="group relative aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 dark:bg-black/40 border border-[var(--border)] shadow-sm select-none"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -113,7 +113,7 @@ export default function IdImageSlider({
         </AnimatePresence>
 
         {/* Subtle Gradient for Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
       </div>
 
       {/* ── OVERLAY: TOP RIGHT BADGES ── */}
@@ -141,7 +141,7 @@ export default function IdImageSlider({
               paginate(-1);
             }}
             aria-label="Previous Image"
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/55 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md border border-white/15 transition-all active:scale-95 cursor-pointer shadow-md"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-md border border-white/10 transition-all active:scale-95 cursor-pointer shadow-md opacity-70 md:opacity-0 md:group-hover:opacity-100"
           >
             <ChevronLeft size={16} />
           </button>
@@ -153,7 +153,7 @@ export default function IdImageSlider({
               paginate(1);
             }}
             aria-label="Next Image"
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/55 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md border border-white/15 transition-all active:scale-95 cursor-pointer shadow-md"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-md border border-white/10 transition-all active:scale-95 cursor-pointer shadow-md opacity-70 md:opacity-0 md:group-hover:opacity-100"
           >
             <ChevronRight size={16} />
           </button>
@@ -162,23 +162,25 @@ export default function IdImageSlider({
 
       {/* ── SLIDER DOTS (IF MULTIPLE SLIDES) ── */}
       {totalSlides > 1 && (
-        <div className="absolute bottom-2.5 sm:bottom-3 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
-          {slideImages.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => {
-                setDirection(idx > currentIndex ? 1 : -1);
-                setCurrentIndex(idx);
-              }}
-              aria-label={`Go to image ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                currentIndex === idx
-                  ? "w-5 bg-[var(--accent)] shadow-xs"
-                  : "w-1.5 bg-white/50 hover:bg-white/80"
-              }`}
-            />
-          ))}
+        <div className="absolute bottom-2.5 sm:bottom-3 left-0 right-0 flex items-center justify-center z-10">
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-xs">
+            {slideImages.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  setDirection(idx > currentIndex ? 1 : -1);
+                  setCurrentIndex(idx);
+                }}
+                aria-label={`Go to image ${idx + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  currentIndex === idx
+                    ? "w-4 bg-[var(--accent)] shadow-xs"
+                    : "w-1.5 bg-white/40 hover:bg-white/70"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
