@@ -560,7 +560,7 @@ export default function CoinsTab() {
         title="BBC COINS"
         accentColor="amber"
         icon={<FiStar className="text-amber-400" size={13} />}
-        description="Daily check-ins, rewarded videos, and tasks to earn BBC Coins"
+        info="Daily check-ins, rewarded videos, and tasks to earn BBC Coins"
         className="mb-1"
       />
 
