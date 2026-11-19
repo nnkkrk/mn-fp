@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
@@ -61,6 +62,7 @@ const HEADER_CONFIG = {
 };
 
 export default function Header() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -211,6 +213,10 @@ export default function Header() {
       document.body.style.overflow = "";
     };
   }, [userMenuOpen]);
+
+  if (pathname?.startsWith("/owner-panal")) {
+    return null;
+  }
 
   return (
     <header

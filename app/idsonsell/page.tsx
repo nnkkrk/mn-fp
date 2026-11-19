@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, Suspense } from "react";
-import ids from "@/data/idsOnSell";
+import staticIds from "@/data/idsOnSell";
 import IdCard from "@/components/IdsOnSell/IdCard";
 import IdsFilterModal, { SortOption } from "@/components/IdsOnSell/IdsFilterModal";
 import SellAccountBanner from "@/components/IdsOnSell/SellAccountBanner";
@@ -14,17 +14,35 @@ function IdsOnSellContent() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showFilter, setShowFilter] = useState(false);
+  const [idsList, setIdsList] = useState<any[]>(staticIds || []);
 
   // Filters & Sorting
+  const [selectedGame, setSelectedGame] = useState<string>("all");
   const [rentOnly, setRentOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("default");
 
   useEffect(() => {
-    // Show smooth skeleton transition on initial mount/navigation
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 280);
-    return () => clearTimeout(timer);
+    let isMounted = true;
+
+    async function loadAccounts() {
+      try {
+        const res = await fetch("/api/trade-ids");
+        const data = await res.json();
+        if (isMounted && data.success && Array.isArray(data.data) && data.data.length > 0) {
+          setIdsList(data.data);
+        }
+      } catch (err) {
+        console.error("Error fetching marketplace IDs:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadAccounts();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const hasActiveFilter = rentOnly || sortBy !== "default";
@@ -33,11 +51,19 @@ function IdsOnSellContent() {
   const filteredAndSortedIds = useMemo(() => {
     const q = search.trim().toLowerCase();
 
-    const result = ids.filter((item: any) => {
+    const result = idsList.filter((item: any) => {
+      // Game Filter
+      if (selectedGame !== "all" && (item.game || "mlbb") !== selectedGame) {
+        return false;
+      }
+
       const matchSearch =
         !q ||
+        item.id?.toLowerCase().includes(q) ||
         item.title?.toLowerCase().includes(q) ||
+        item.gameName?.toLowerCase().includes(q) ||
         item.tags?.some((t: string) => t.toLowerCase().includes(q)) ||
+        item.specs?.some((s: any) => s.label?.toLowerCase().includes(q) || s.value?.toLowerCase().includes(q)) ||
         item.details?.toLowerCase().includes(q);
 
       const matchRent = !rentOnly || item.rent?.available === true;
@@ -61,14 +87,30 @@ function IdsOnSellContent() {
         const pB = b.rent?.available ? (b.rent?.price ?? -Infinity) : -Infinity;
         return pB - pA;
       });
+    } else {
+      // Default: In stock first, then unstocked
+      result.sort((a: any, b: any) => {
+        const aStock = a.stockStatus !== "unstocked" ? 1 : 0;
+        const bStock = b.stockStatus !== "unstocked" ? 1 : 0;
+        return bStock - aStock;
+      });
     }
 
     return result;
-  }, [search, rentOnly, sortBy]);
+  }, [idsList, search, selectedGame, rentOnly, sortBy]);
 
   if (loading) {
     return <IdsMarketplaceSkeleton />;
   }
+
+  const GAME_CATEGORIES = [
+    { id: "all", label: "All Games", icon: "🎮" },
+    { id: "coc", label: "Clash of Clans", icon: "⚔️" },
+    { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
+    { id: "mlbb", label: "Mobile Legends", icon: "🛡️" },
+    { id: "freefire", label: "Free Fire", icon: "🔥" },
+    { id: "valorant", label: "Valorant", icon: "⚡" },
+  ];
 
   return (
     <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5">
@@ -80,6 +122,27 @@ function IdsOnSellContent() {
         title="IDS ON SALE"
         info="Browse verified, competition-ready gaming accounts for sale & rent"
       />
+
+      {/* ================= GAME SELECTOR PILLS ================= */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        {GAME_CATEGORIES.map((g) => {
+          const isActive = selectedGame === g.id;
+          return (
+            <button
+              key={g.id}
+              onClick={() => setSelectedGame(g.id)}
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                isActive
+                  ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] shadow-xs"
+                  : "bg-[var(--card)] text-[var(--muted)] hover:text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--foreground)]/5"
+              }`}
+            >
+              <span>{g.icon}</span>
+              <span>{g.label}</span>
+            </button>
+          );
+        })}
+      </div>
 
       {/* ================= COMBINED SEARCH & FILTER BAR ================= */}
       <div className="relative flex items-center w-full h-9 sm:h-9.5 rounded-full bg-[var(--card)] border border-[var(--border)] focus-within:border-[var(--accent)]/60 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs px-3">
@@ -179,7 +242,7 @@ function IdsOnSellContent() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredAndSortedIds.length > 0 ? (
           filteredAndSortedIds.map((item: any) => (
-            <IdCard key={item.id} item={item} />
+            <IdCard key={item._id || item.id} item={item} />
           ))
         ) : (
           <div className="col-span-full py-8">

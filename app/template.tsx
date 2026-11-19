@@ -24,6 +24,10 @@ export default function Template({ children }: { children: React.ReactNode }) {
     }
   }, [pathname]);
 
+  if (pathname?.startsWith("/owner-panal")) {
+    return <>{children}</>;
+  }
+
   return (
     <motion.div
       key={pathname}
@@ -41,7 +45,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         duration: 0.22,
         ease: [0.16, 1, 0.3, 1], // Apple fluid easing: instant, snappy & smooth
       }}
-      style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
+      style={{ willChange: "transform, opacity" }}
       className="w-full"
     >
       {children}

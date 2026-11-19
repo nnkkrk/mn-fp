@@ -20,6 +20,7 @@ import {
   FiKey,
   FiStar,
   FiShoppingCart,
+  FiShoppingBag,
   FiRepeat,
   FiMessageSquare,
   FiTag,
@@ -71,6 +72,7 @@ import BlocklistTab from "@/components/admin/BlocklistTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import ActivityTab from "@/components/admin/ActivityTab";
 import BlogsTab from "@/components/admin/BlogsTab";
+import TradeIdsTab from "@/components/admin/TradeIdsTab";
 
 
 const MENU_CATEGORIES = [
@@ -97,6 +99,7 @@ const MENU_CATEGORIES = [
       { id: "catalog", label: "Product Catalog", icon: FiPackage },
       { id: "pricing", label: "Pricing & Margins", icon: FiTag },
       { id: "flash-sale", label: "Flash Sale & Deals", icon: FiZap },
+      { id: "trade-ids", label: "Trade IDs & Stock", icon: FiShoppingBag },
     ]
   },
   {
@@ -139,7 +142,7 @@ const MENU_CATEGORIES = [
 
 const VALID_TABS = [
   "analytics", "activity", "pwa-stats",
-  "orders", "transactions", "catalog", "pricing", "flash-sale", "wallet", "usdt",
+  "orders", "transactions", "catalog", "pricing", "flash-sale", "trade-ids", "wallet", "usdt",
   "users", "memberships", "queries", "blocklist",
   "promotional", "redeem", "coins", "ads", "banners", "giveaway", "events", "tournaments", "blogs",
   "ui-settings", "api-keys", "settings"
@@ -580,39 +583,42 @@ export default function AdminPanalPage() {
   if (pinPrompt) {
     const isComplete = pinDigits.every((d) => d !== "");
     return (
-      <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 transition-colors">
+      <div
+        className="fixed inset-0 z-[9999999] w-full h-full overflow-y-auto flex flex-col items-center px-4"
+        style={{ backgroundColor: "var(--background)" }}
+      >
         <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 16 }}
+          initial={{ opacity: 0, scale: 0.96, y: 8 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 350 }}
-          className="relative w-full max-w-[400px]"
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="relative w-full max-w-[380px] m-auto py-8"
         >
           {/* Card */}
           <form
             onSubmit={(e) => handlePinSubmit(e)}
-            className="relative w-full bg-[var(--card)] border border-[var(--border)] p-6 sm:p-8 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] flex flex-col items-center gap-5 sm:gap-6 overflow-hidden"
+            className="relative w-full bg-[var(--card)] border border-[var(--border)] p-5 sm:p-6 rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.35)] flex flex-col items-center gap-3.5 sm:gap-4 overflow-hidden"
           >
             {/* Top ambient theme gradient & glow */}
-            <div className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-[var(--accent)]/15 via-[var(--accent)]/5 to-transparent pointer-events-none" />
-            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-44 h-44 bg-[var(--accent)]/20 blur-3xl pointer-events-none rounded-full" />
+            <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-[var(--accent)]/15 via-[var(--accent)]/5 to-transparent pointer-events-none" />
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-32 h-32 bg-[var(--accent)]/20 blur-3xl pointer-events-none rounded-full" />
 
             {/* Back to Home / Close Button */}
             <button
               type="button"
               onClick={() => router.push("/")}
               aria-label="Back to home"
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer z-20"
+              className="absolute top-3.5 right-3.5 w-7 h-7 flex items-center justify-center rounded-lg bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer z-20"
             >
-              <FiX size={16} />
+              <FiX size={15} />
             </button>
 
             {/* Security Icon Badge */}
             <div className="relative z-10 mt-1">
-              <div className="w-14 h-14 rounded-2xl bg-[var(--accent)]/10 border border-[var(--accent)]/25 flex items-center justify-center text-[var(--accent)] shadow-[0_0_24px_rgba(var(--accent-rgb),0.15)]">
-                <FiShield size={26} className="stroke-[2.2]" />
+              <div className="w-11 h-11 rounded-2xl bg-[var(--accent)]/10 border border-[var(--accent)]/25 flex items-center justify-center text-[var(--accent)] shadow-[0_0_20px_rgba(var(--accent-rgb),0.15)]">
+                <FiShield size={20} className="stroke-[2.2]" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shadow-md border-2 border-[var(--card)]">
-                <FiKey size={11} strokeWidth={2.5} />
+              <div className="absolute -bottom-1 -right-1 w-4.5 h-4.5 rounded-md bg-[var(--accent)] text-white flex items-center justify-center shadow-md border-2 border-[var(--card)]">
+                <FiKey size={9} strokeWidth={2.5} />
               </div>
             </div>
 
@@ -620,7 +626,7 @@ export default function AdminPanalPage() {
             <div className="relative z-10 w-full text-center">
               <SectionTitle
                 align="center"
-                size="md"
+                size="sm"
                 subtitle="SECURE VERIFICATION"
                 title="Admin"
                 highlight="PIN"
@@ -637,17 +643,17 @@ export default function AdminPanalPage() {
                   animate={{ opacity: 1, y: 0, scale: 1, x: [-6, 6, -4, 4, -2, 2, 0] }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.35 }}
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-red-500/10 border border-red-500/25 text-red-500 text-xs text-center font-bold flex items-center justify-center gap-2 relative z-10"
+                  className="w-full py-2 px-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-500 text-xs text-center font-bold flex items-center justify-center gap-2 relative z-10"
                 >
-                  <FiAlertCircle size={15} className="shrink-0" />
+                  <FiAlertCircle size={14} className="shrink-0" />
                   <span>{pinError}</span>
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* 6 Digit Inputs */}
-            <div className="space-y-3.5 w-full relative z-10">
-              <div className="grid grid-cols-6 gap-2 sm:gap-2.5 w-full" onPaste={handlePinPaste}>
+            <div className="space-y-2.5 w-full relative z-10">
+              <div className="grid grid-cols-6 gap-1.5 sm:gap-2 w-full" onPaste={handlePinPaste}>
                 {pinDigits.map((digit, idx) => {
                   const isFilled = Boolean(digit);
                   return (
@@ -663,7 +669,7 @@ export default function AdminPanalPage() {
                       onChange={(e) => handleDigitChange(idx, e.target.value)}
                       onKeyDown={(e) => handleDigitKeyDown(idx, e)}
                       autoFocus={idx === 0}
-                      className={`w-full h-12 sm:h-14 text-center text-xl sm:text-2xl font-black rounded-xl outline-none select-none transition-all duration-200 ${
+                      className={`w-full h-11 sm:h-12 text-center text-lg sm:text-xl font-black rounded-xl outline-none select-none transition-all duration-200 ${
                         pinError
                           ? "bg-red-500/5 border-2 border-red-500 text-red-500 shadow-[0_0_12px_rgba(239,68,68,0.25)]"
                           : isFilled
@@ -680,9 +686,9 @@ export default function AdminPanalPage() {
                 <button
                   type="button"
                   onClick={() => setShowPin(!showPin)}
-                  className="flex items-center gap-1.5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer select-none font-semibold px-2 py-1 rounded-lg hover:bg-[var(--foreground)]/[0.04]"
+                  className="flex items-center gap-1.5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer select-none font-semibold px-2 py-0.5 rounded-lg hover:bg-[var(--foreground)]/[0.04]"
                 >
-                  {showPin ? <FiEyeOff size={14} /> : <FiEye size={14} />}
+                  {showPin ? <FiEyeOff size={13} /> : <FiEye size={13} />}
                   <span>{showPin ? "Hide PIN" : "Show PIN"}</span>
                 </button>
 
@@ -694,7 +700,7 @@ export default function AdminPanalPage() {
                       setPinError("");
                       pinInputRefs.current[0]?.focus();
                     }}
-                    className="text-[var(--muted)] hover:text-red-500 transition-colors cursor-pointer select-none font-semibold px-2 py-1 rounded-lg hover:bg-red-500/10"
+                    className="text-[var(--muted)] hover:text-red-500 transition-colors cursor-pointer select-none font-semibold px-2 py-0.5 rounded-lg hover:bg-red-500/10"
                   >
                     Clear
                   </button>
@@ -703,12 +709,12 @@ export default function AdminPanalPage() {
             </div>
 
             {/* Action Button */}
-            <div className="w-full relative z-10 space-y-3">
+            <div className="w-full relative z-10 space-y-2.5">
               <button
                 aria-label="Unlock Admin Panel"
                 type="submit"
                 disabled={!isComplete || verifyingPin}
-                className="w-full h-12 relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-wider rounded-xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 shadow-[0_8px_20px_-4px_rgba(var(--accent-rgb),0.35)] text-xs sm:text-sm cursor-pointer"
+                className="w-full h-11 relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-wider rounded-xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 shadow-[0_8px_20px_-4px_rgba(var(--accent-rgb),0.35)] text-xs sm:text-sm cursor-pointer"
               >
                 {verifyingPin ? (
                   <div className="flex items-center gap-2">
@@ -717,7 +723,7 @@ export default function AdminPanalPage() {
                   </div>
                 ) : (
                   <span className="flex items-center gap-2">
-                    <FiUnlock size={16} />
+                    <FiUnlock size={15} />
                     <span>Unlock Console</span>
                   </span>
                 )}
@@ -727,9 +733,9 @@ export default function AdminPanalPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/")}
-                  className="text-[11px] font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors flex items-center gap-1.5 cursor-pointer py-1"
+                  className="text-[11px] font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors flex items-center gap-1.5 cursor-pointer py-0.5"
                 >
-                  <FiArrowLeft size={13} />
+                  <FiArrowLeft size={12} />
                   <span>Back to Store</span>
                 </button>
               </div>
@@ -752,7 +758,10 @@ export default function AdminPanalPage() {
 
   return (
     <AuthGuard>
-      <section className="min-h-screen bg-[var(--background)] px-2 sm:px-6 py-3">
+      <section
+        className="min-h-screen -mt-14 pt-4 bg-[var(--background)] px-2 sm:px-6 pb-6"
+        style={{ backgroundColor: "var(--background)" }}
+      >
         <div className="w-full max-w-[1600px] mx-auto">
           {/* HEADER (HIGHLIGHTED & CLEAN) */}
           <header className="mb-2.5 pb-2.5 border-b border-[var(--border)]/70">
@@ -764,15 +773,26 @@ export default function AdminPanalPage() {
               pulse
               actionLayout="row"
               action={
-                <button
-                  type="button"
-                  aria-label="Open Admin Menu"
-                  onClick={() => setIsSidebarOpen(true)}
-                  className="px-2 py-1 rounded-lg hover:bg-[var(--foreground)]/[0.06] text-[var(--foreground)] hover:text-[var(--accent)] transition-all flex items-center gap-1.5 group shrink-0 cursor-pointer"
-                >
-                  <FiMenu size={16} className="text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold">Menu</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => router.push("/")}
+                    className="px-2.5 py-1 rounded-lg border border-[var(--border)] hover:bg-[var(--foreground)]/[0.06] text-xs font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-all flex items-center gap-1.5 cursor-pointer"
+                    title="Return to Store"
+                  >
+                    <FiArrowLeft size={13} />
+                    <span className="hidden sm:inline">Store</span>
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Open Admin Menu"
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="px-2 py-1 rounded-lg hover:bg-[var(--foreground)]/[0.06] text-[var(--foreground)] hover:text-[var(--accent)] transition-all flex items-center gap-1.5 group shrink-0 cursor-pointer"
+                  >
+                    <FiMenu size={16} className="text-[var(--accent)] group-hover:scale-110 transition-transform" />
+                    <span className="text-xs font-bold">Menu</span>
+                  </button>
+                </div>
               }
             />
           </header>
@@ -1033,6 +1053,9 @@ export default function AdminPanalPage() {
             )}
             {activeTab === "flash-sale" && (
               <FlashSaleTab />
+            )}
+            {activeTab === "trade-ids" && (
+              <TradeIdsTab />
             )}
             {activeTab === "events" && (
               <EventsAdminTab />
