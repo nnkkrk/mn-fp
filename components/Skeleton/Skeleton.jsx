@@ -6,7 +6,7 @@ import React from "react";
  * CORE SKELETON PRIMITIVES
  */
 export const SkeletonBase = ({ className = "" }) => (
-  <div className={`shimmer-overlay bg-neutral-200/80 dark:bg-neutral-800/80 border border-black/5 dark:border-white/5 rounded-lg ${className}`} />
+  <div className={`shimmer-overlay bg-[var(--foreground)]/[0.07] border border-[var(--border)]/40 rounded-lg ${className}`} />
 );
 
 export const SkeletonCircle = ({ size = "w-10 h-10", className = "" }) => (
@@ -298,8 +298,8 @@ export const SkeletonGrid = ({ children, count = 3, cols = "grid-cols-1 md:grid-
 
 // 12. ID ON SELL CARD SKELETON
 export const IdCardSkeleton = () => (
-  <div className="rounded-2xl overflow-hidden bg-neutral-900/60 dark:bg-neutral-900/80 border border-white/10 dark:border-white/10 flex flex-col space-y-3">
-    <div className="relative h-40 w-full bg-neutral-200/80 dark:bg-neutral-800/80 shimmer-overlay" />
+  <div className="rounded-2xl overflow-hidden bg-[var(--card)] border border-[var(--border)] flex flex-col space-y-3">
+    <div className="relative h-40 w-full bg-[var(--foreground)]/[0.06] shimmer-overlay shrink-0" />
     <div className="p-3.5 space-y-3">
       <div className="space-y-1.5">
         <SkeletonText width="w-4/5" height="h-4" />
@@ -308,7 +308,7 @@ export const IdCardSkeleton = () => (
           <SkeletonText width="w-20" height="h-3" />
         </div>
       </div>
-      <div className="pt-2 border-t border-white/10 flex items-end justify-between">
+      <div className="pt-2 border-t border-[var(--border)]/60 flex items-end justify-between">
         <div className="space-y-1">
           <SkeletonText width="w-12" height="h-2.5" />
           <SkeletonText width="w-20" height="h-5" />
@@ -355,7 +355,7 @@ export const IdDetailSkeleton = () => (
 
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-start">
       <div className="lg:col-span-7 space-y-4">
-        <div className="aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl bg-neutral-200/80 dark:bg-neutral-800/80 shimmer-overlay border border-white/10" />
+        <div className="aspect-[16/10] sm:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl bg-[var(--foreground)]/[0.06] shimmer-overlay border border-[var(--border)]" />
 
         <div className="p-4 sm:p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -370,18 +370,18 @@ export const IdDetailSkeleton = () => (
               </div>
             ))}
           </div>
-          <div className="flex gap-2 pt-2 border-t border-white/10">
+          <div className="flex gap-2 pt-2 border-t border-[var(--border)]/60">
             <SkeletonBase className="w-24 h-6 rounded-full" />
             <SkeletonBase className="w-28 h-6 rounded-full" />
             <SkeletonBase className="w-20 h-6 rounded-full" />
           </div>
-          <div className="space-y-1.5 pt-2 border-t border-white/10">
+          <div className="space-y-1.5 pt-2 border-t border-[var(--border)]/60">
             <SkeletonText width="w-full" height="h-3" />
             <SkeletonText width="w-4/5" height="h-3" />
           </div>
         </div>
 
-        <div className="lg:hidden p-4 rounded-2xl border border-white/10 bg-neutral-900/60 dark:bg-neutral-900/80 space-y-3">
+        <div className="lg:hidden p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-3">
           <SkeletonBase className="w-full h-8 rounded-full" />
           <div className="flex justify-between items-center">
             <SkeletonText width="w-24" height="h-6" />
@@ -396,7 +396,7 @@ export const IdDetailSkeleton = () => (
           <SkeletonText width="w-20" height="h-2.5" />
           <SkeletonText width="w-full" height="h-7" />
         </div>
-        <div className="p-4 rounded-2xl border border-white/10 bg-neutral-900/60 dark:bg-neutral-900/80 space-y-3">
+        <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-3">
           <SkeletonBase className="w-full h-8 rounded-full" />
           <div className="flex justify-between items-center">
             <SkeletonText width="w-24" height="h-6" />
