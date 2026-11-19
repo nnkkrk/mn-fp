@@ -877,11 +877,8 @@ export default function TradeIdsTab() {
         {[
           { id: "all", label: "All Games", icon: "🎮" },
           { id: "coc", label: "Clash of Clans (COC)", icon: "⚔️" },
-          { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
           { id: "mlbb", label: "Mobile Legends (MLBB)", icon: "🛡️" },
-          { id: "freefire", label: "Free Fire", icon: "🔥" },
-          { id: "valorant", label: "Valorant", icon: "⚡" },
-          { id: "other", label: "Other Games", icon: "✨" },
+          { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
         ].map((g) => {
           const isActive = filterGame === g.id;
           return (

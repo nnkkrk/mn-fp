@@ -106,10 +106,8 @@ function IdsOnSellContent() {
   const GAME_CATEGORIES = [
     { id: "all", label: "All Games", icon: "🎮" },
     { id: "coc", label: "Clash of Clans", icon: "⚔️" },
-    { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
     { id: "mlbb", label: "Mobile Legends", icon: "🛡️" },
-    { id: "freefire", label: "Free Fire", icon: "🔥" },
-    { id: "valorant", label: "Valorant", icon: "⚡" },
+    { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
   ];
 
   return (
@@ -154,7 +152,15 @@ function IdsOnSellContent() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search MLBB IDs, skins, tags..."
+          placeholder={
+            selectedGame === "coc"
+              ? "Search Clash of Clans IDs, tags..."
+              : selectedGame === "bgmi"
+              ? "Search BGMI IDs, tags..."
+              : selectedGame === "mlbb"
+              ? "Search MLBB IDs, skins, tags..."
+              : "Search IDs, skins, tags..."
+          }
           className="w-full bg-transparent text-xs sm:text-[13px] text-[var(--foreground)] placeholder-[var(--muted)]/60 focus:outline-none"
         />
 
