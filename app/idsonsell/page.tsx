@@ -253,8 +253,8 @@ function IdsOnSellContent() {
       </div>
 
       {/* ================= AD BANNER ================= */}
-      <div className="w-full flex justify-center pt-4 pb-2">
-        <AAdsBanner />
+      <div className="w-full flex justify-center pt-6 pb-20 md:pb-8">
+        <AAdsBanner adId="2462703" />
       </div>
 
       {/* ================= FILTER MODAL ================= */}
