@@ -3,6 +3,7 @@
 interface AAdsBannerProps {
   className?: string;
   adId?: string | number;
+  height?: string | number;
   showBadge?: boolean;
   badgePosition?: "left" | "right";
   badgeLabel?: string;
@@ -13,6 +14,7 @@ interface AAdsBannerProps {
 export default function AAdsBanner({ 
   className = "",
   adId = "2461867",
+  height = "50px",
   showBadge = false,
   badgePosition = "right",
   badgeLabel = "Ad",
@@ -21,9 +23,10 @@ export default function AAdsBanner({
 }: AAdsBannerProps) {
   const currentAdId = String(adId);
   const justifyClass = badgePosition === "left" ? "justify-start" : "justify-end";
+  const formattedHeight = typeof height === "number" ? `${height}px` : height;
 
   return (
-    <div className={`w-full flex flex-col items-center justify-center my-3 px-2 ${className}`}>
+    <div className={`w-full flex flex-col items-center justify-center my-1.5 px-2 ${className}`}>
       {/* Small subtle "Ad" mention (hidden by default) */}
       {showBadge && (
         <div className="w-full max-w-[340px] flex flex-col mb-1">
@@ -56,8 +59,9 @@ export default function AAdsBanner({
             width: "70%",
             minWidth: "280px",
             maxWidth: "100%",
-            height: "auto",
-            minHeight: "50px",
+            height: formattedHeight,
+            maxHeight: formattedHeight,
+            minHeight: "45px",
             overflow: "hidden",
             display: "block",
             margin: "auto",

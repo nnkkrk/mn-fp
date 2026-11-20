@@ -109,7 +109,7 @@ export default function TradeLandingPage() {
                 <div className="h-[1px] w-8 md:w-10 bg-current" />
             </div>
 
-            <div className="w-full flex justify-center py-4 mb-16 md:mb-6">
+            <div className="w-full flex justify-center py-2 mb-10 md:mb-4">
               <AAdsBanner adId="2462703" />
             </div>
         </div>
