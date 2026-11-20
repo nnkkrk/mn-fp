@@ -2,6 +2,7 @@
 
 import { Icons } from "@/components/icons";
 import { SectionTitle } from "@/components/common";
+import AAdsBanner from "@/components/Ads/AAdsBanner";
 
 const SECTIONS = [
   {
@@ -106,6 +107,10 @@ export default function TradeLandingPage() {
                     Blue Buff Core Marketplace
                 </p>
                 <div className="h-[1px] w-8 md:w-10 bg-current" />
+            </div>
+
+            <div className="w-full flex justify-center py-2">
+              <AAdsBanner />
             </div>
         </div>
       </div>

@@ -130,14 +130,14 @@ export async function PATCH(
     if (body.stockStatus !== undefined) {
       existing.stockStatus = body.stockStatus;
       existing.availability = {
-        ...existing.availability,
+        holdAllowed: existing.availability?.holdAllowed ?? true,
         status: body.stockStatus === "in_stock" ? "available" : "unavailable",
       };
     }
 
     // Update rent object
     if (body.rent !== undefined) {
-      const currentRent = existing.rent || {};
+      const currentRent: any = existing.rent || {};
       const newRent = body.rent;
 
       const updatedRent = {
@@ -243,10 +243,10 @@ export async function PATCH(
 
     // Update Collection
     if (body.collection !== undefined) {
-      existing.collection = {
-        tier: body.collection.tier ?? existing.collection?.tier ?? "",
-        points: body.collection.points !== undefined ? Number(body.collection.points) : existing.collection?.points ?? 0,
-      };
+      existing.set("collection", {
+        tier: body.collection.tier ?? (existing.get("collection") as any)?.tier ?? "",
+        points: body.collection.points !== undefined ? Number(body.collection.points) : (existing.get("collection") as any)?.points ?? 0,
+      });
     }
 
     // Update Tags

@@ -9,6 +9,7 @@ import { EmptyState, SectionTitle } from "@/components/common";
 import { Icons } from "@/components/icons";
 import { FiSearch, FiX, FiSliders } from "react-icons/fi";
 import { IdsMarketplaceSkeleton } from "@/components/Skeleton/Skeleton";
+import AAdsBanner from "@/components/Ads/AAdsBanner";
 
 function IdsOnSellContent() {
   const [loading, setLoading] = useState(true);
@@ -249,6 +250,11 @@ function IdsOnSellContent() {
             />
           </div>
         )}
+      </div>
+
+      {/* ================= AD BANNER ================= */}
+      <div className="w-full flex justify-center pt-4 pb-2">
+        <AAdsBanner />
       </div>
 
       {/* ================= FILTER MODAL ================= */}

@@ -200,7 +200,7 @@ export async function POST(req: NextRequest) {
 
     const bulletList = normalizeBulletSpecs(specs.length > 0 ? specs : body.bulletPoints);
 
-    const newTradeId = await TradeId.create({
+    const newTradeId = await (TradeId as any).create({
       id: id.trim(),
       slug: finalSlug,
       title: title.trim(),
