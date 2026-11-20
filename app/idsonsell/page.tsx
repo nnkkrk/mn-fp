@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import staticIds from "@/data/idsOnSell";
 import IdCard from "@/components/IdsOnSell/IdCard";
-import IdsFilterModal, { SortOption } from "@/components/IdsOnSell/IdsFilterModal";
+import IdsFilterModal, { SortOption, GAME_CATEGORIES } from "@/components/IdsOnSell/IdsFilterModal";
 import SellAccountBanner from "@/components/IdsOnSell/SellAccountBanner";
 import { EmptyState, SectionTitle } from "@/components/common";
 import { Icons } from "@/components/icons";
@@ -45,7 +45,7 @@ function IdsOnSellContent() {
     };
   }, []);
 
-  const hasActiveFilter = rentOnly || sortBy !== "default";
+  const hasActiveFilter = rentOnly || sortBy !== "default" || selectedGame !== "all";
 
   /* ================= FILTER & SORT LOGIC ================= */
   const filteredAndSortedIds = useMemo(() => {
@@ -103,13 +103,6 @@ function IdsOnSellContent() {
     return <IdsMarketplaceSkeleton />;
   }
 
-  const GAME_CATEGORIES = [
-    { id: "all", label: "All Games", icon: "🎮" },
-    { id: "coc", label: "Clash of Clans", icon: "⚔️" },
-    { id: "mlbb", label: "Mobile Legends", icon: "🛡️" },
-    { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
-  ];
-
   return (
     <main className="min-h-screen p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5">
       {/* ================= SELL ACCOUNT BANNER ================= */}
@@ -120,27 +113,6 @@ function IdsOnSellContent() {
         title="IDS ON SALE"
         info="Browse verified, competition-ready gaming accounts for sale & rent"
       />
-
-      {/* ================= GAME SELECTOR PILLS ================= */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-        {GAME_CATEGORIES.map((g) => {
-          const isActive = selectedGame === g.id;
-          return (
-            <button
-              key={g.id}
-              onClick={() => setSelectedGame(g.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
-                isActive
-                  ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] shadow-xs"
-                  : "bg-[var(--card)] text-[var(--muted)] hover:text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--foreground)]/5"
-              }`}
-            >
-              <span>{g.icon}</span>
-              <span>{g.label}</span>
-            </button>
-          );
-        })}
-      </div>
 
       {/* ================= COMBINED SEARCH & FILTER BAR ================= */}
       <div className="relative flex items-center w-full h-9 sm:h-9.5 rounded-full bg-[var(--card)] border border-[var(--border)] focus-within:border-[var(--accent)]/60 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs px-3">
@@ -202,13 +174,29 @@ function IdsOnSellContent() {
       {/* ================= ACTIVE FILTER CHIPS (IF ANY) ================= */}
       {hasActiveFilter && (
         <div className="flex items-center gap-2 flex-wrap text-[11px]">
+          {selectedGame !== "all" && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 font-bold">
+              <span>{GAME_CATEGORIES.find((g) => g.id === selectedGame)?.icon}</span>
+              <span>{GAME_CATEGORIES.find((g) => g.id === selectedGame)?.label}</span>
+              <button
+                type="button"
+                onClick={() => setSelectedGame("all")}
+                className="hover:opacity-70 ml-0.5 cursor-pointer"
+                aria-label="Remove game filter"
+              >
+                <FiX size={10} />
+              </button>
+            </span>
+          )}
+
           {rentOnly && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 font-bold">
               Rent Available
               <button
                 type="button"
                 onClick={() => setRentOnly(false)}
-                className="hover:opacity-70 ml-0.5"
+                className="hover:opacity-70 ml-0.5 cursor-pointer"
+                aria-label="Remove rent filter"
               >
                 <FiX size={10} />
               </button>
@@ -224,7 +212,8 @@ function IdsOnSellContent() {
               <button
                 type="button"
                 onClick={() => setSortBy("default")}
-                className="hover:opacity-70 ml-0.5"
+                className="hover:opacity-70 ml-0.5 cursor-pointer"
+                aria-label="Reset sort"
               >
                 <FiX size={10} />
               </button>
@@ -234,6 +223,7 @@ function IdsOnSellContent() {
           <button
             type="button"
             onClick={() => {
+              setSelectedGame("all");
               setRentOnly(false);
               setSortBy("default");
             }}
@@ -254,7 +244,7 @@ function IdsOnSellContent() {
           <div className="col-span-full py-8">
             <EmptyState
               icon={Icons.search}
-              title="No MLBB IDs Found"
+              title="No Accounts Found"
               description="Try adjusting your search terms or clearing active filters."
             />
           </div>
@@ -266,6 +256,8 @@ function IdsOnSellContent() {
         <IdsFilterModal
           open={showFilter}
           onClose={() => setShowFilter(false)}
+          selectedGame={selectedGame}
+          setSelectedGame={setSelectedGame}
           rentOnly={rentOnly}
           setRentOnly={setRentOnly}
           sortBy={sortBy}

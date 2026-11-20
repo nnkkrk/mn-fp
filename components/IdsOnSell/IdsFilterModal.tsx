@@ -5,9 +5,24 @@ import { Zap } from "lucide-react";
 
 export type SortOption = "default" | "buy-asc" | "buy-desc" | "rent-asc" | "rent-desc";
 
+export interface GameOption {
+  id: string;
+  label: string;
+  icon: string;
+}
+
+export const GAME_CATEGORIES: GameOption[] = [
+  { id: "all", label: "All Games", icon: "🎮" },
+  { id: "coc", label: "Clash of Clans", icon: "⚔️" },
+  { id: "mlbb", label: "Mobile Legends", icon: "🛡️" },
+  { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
+];
+
 interface Props {
   open: boolean;
   onClose: () => void;
+  selectedGame: string;
+  setSelectedGame: (v: string) => void;
   rentOnly: boolean;
   setRentOnly: (v: boolean) => void;
   sortBy: SortOption;
@@ -17,6 +32,8 @@ interface Props {
 export default function IdsFilterModal({
   open,
   onClose,
+  selectedGame,
+  setSelectedGame,
   rentOnly,
   setRentOnly,
   sortBy,
@@ -25,6 +42,7 @@ export default function IdsFilterModal({
   if (!open) return null;
 
   const handleClear = () => {
+    setSelectedGame("all");
     setRentOnly(false);
     setSortBy("default");
   };
@@ -39,13 +57,16 @@ export default function IdsFilterModal({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[99999] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-2xl p-5 space-y-4 animate-in zoom-in-95 duration-200"
+        className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl bg-[var(--card)] border-t sm:border border-[var(--border)] shadow-2xl p-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] sm:pb-5 space-y-4 animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200 max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* MOBILE DRAG HANDLE */}
+        <div className="sm:hidden w-10 h-1 rounded-full bg-[var(--muted)]/30 mx-auto -mt-1 mb-2" />
+
         {/* HEADER */}
         <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
           <div className="flex items-center gap-2">
@@ -58,13 +79,41 @@ export default function IdsFilterModal({
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-colors cursor-pointer"
+            className="p-1.5 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-colors cursor-pointer"
           >
             <FiX size={16} />
           </button>
         </div>
 
-        {/* SECTION 1: AVAILABILITY (RENT) */}
+        {/* SECTION 1: GAME */}
+        <div className="space-y-2">
+          <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">
+            Game
+          </span>
+          <div className="grid grid-cols-2 gap-2">
+            {GAME_CATEGORIES.map((g) => {
+              const isActive = selectedGame === g.id;
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setSelectedGame(g.id)}
+                  className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-xs"
+                      : "bg-[var(--foreground)]/[0.02] border-[var(--border)] text-[var(--foreground)]/80 hover:text-[var(--foreground)] hover:border-[var(--accent)]/40"
+                  }`}
+                >
+                  <span className="text-sm shrink-0">{g.icon}</span>
+                  <span className="truncate">{g.label}</span>
+                  {isActive && <FiCheck className="ml-auto shrink-0" size={13} />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* SECTION 2: AVAILABILITY (RENT) */}
         <div className="space-y-2">
           <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">
             Availability
@@ -182,20 +231,20 @@ export default function IdsFilterModal({
         </div>
 
         {/* ACTIONS */}
-        <div className="flex items-center justify-between gap-2 pt-3 border-t border-[var(--border)]">
+        <div className="flex items-center justify-between gap-3 pt-3 border-t border-[var(--border)]">
           <button
             type="button"
             onClick={handleClear}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted)] hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl text-[var(--muted)] hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
           >
-            <FiRotateCcw size={12} />
+            <FiRotateCcw size={13} />
             <span>Reset</span>
           </button>
 
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 text-xs rounded-lg bg-[var(--accent)] text-white font-bold hover:brightness-110 active:scale-95 transition-all shadow-sm cursor-pointer"
+            className="flex-1 max-w-[130px] py-2 text-xs text-center rounded-xl bg-[var(--accent)] text-white font-bold hover:brightness-110 active:scale-95 transition-all shadow-sm cursor-pointer"
           >
             Apply
           </button>
