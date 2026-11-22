@@ -63,7 +63,7 @@ export default function IdCard({ item }: IdCardProps) {
 
   return (
     <Link
-      href={`/idsonsell/${item.slug || item.id}`}
+      href={`/marketplace/${item.slug || item.id}`}
       className={`group relative rounded-2xl overflow-hidden
                  border transition-all duration-300 flex flex-col
                  hover:-translate-y-1 active:scale-[0.985]

@@ -4,6 +4,20 @@ const nextConfig: NextConfig = {
 
   poweredByHeader: false,
   compress: true,
+  async redirects() {
+    return [
+      {
+        source: '/idsonsell',
+        destination: '/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/idsonsell/:slug',
+        destination: '/marketplace/:slug',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

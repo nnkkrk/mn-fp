@@ -20,7 +20,7 @@ export async function GET() {
         `${baseUrl}/refund-policy`,
         `${baseUrl}/blog`,
         `${baseUrl}/blog/mlbb`,
-        `${baseUrl}/idsonsell`,
+        `${baseUrl}/marketplace`,
         `${baseUrl}/leaderboard`,
         `${baseUrl}/check`,
     ];

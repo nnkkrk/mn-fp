@@ -1183,7 +1183,7 @@ export default function TradeIdsTab() {
                   <div className="flex items-center gap-1.5">
                     {/* View in Store */}
                     <a
-                      href={`/idsonsell/${item.slug || item.id}`}
+                      href={`/marketplace/${item.slug || item.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-colors"

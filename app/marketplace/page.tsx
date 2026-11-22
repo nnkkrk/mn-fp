@@ -274,7 +274,7 @@ function IdsOnSellContent() {
   );
 }
 
-export default function IdsOnSellPage() {
+export default function MarketplacePage() {
   return (
     <Suspense fallback={<IdsMarketplaceSkeleton />}>
       <IdsOnSellContent />

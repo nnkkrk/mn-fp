@@ -55,7 +55,7 @@ export default function IdPurchaseBox({ item, url }: Props) {
     item.dealer?.contact?.whatsapp?.split("?")[0] || "https://wa.me/918118090547";
 
   const productUrl =
-    url || (typeof window !== "undefined" ? window.location.href : `https://mlbbtopup.in/idsonsell/${item.slug || item.id}`);
+    url || (typeof window !== "undefined" ? window.location.href : `https://mlbbtopup.in/marketplace/${item.slug || item.id}`);
 
   // Format messages
   const buyMessage = isUnstocked

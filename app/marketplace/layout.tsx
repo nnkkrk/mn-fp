@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     "mlbb mythic account buy",
   ],
   alternates: {
-    canonical: "https://mlbbtopup.in/idsonsell",
+    canonical: "https://mlbbtopup.in/marketplace",
   },
   openGraph: {
     title: "Buy, Sell & Rent Verified Game IDs | mlbbtopup.in",
     description: "Browse verified MLBB and gaming accounts for sale and rent.",
-    url: "https://mlbbtopup.in/idsonsell",
+    url: "https://mlbbtopup.in/marketplace",
     siteName: "mlbbtopup.in",
     type: "website",
     images: [{ url: "https://mlbbtopup.in/logoBB.png" }],
@@ -30,6 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function IdsOnSellLayout({ children }: { children: React.ReactNode }) {
+export default function MarketplaceLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

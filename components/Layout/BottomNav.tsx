@@ -73,6 +73,7 @@ export default function BottomNav() {
   if (
     sheetOpen ||
     pathname?.startsWith("/games/") ||
+    (pathname?.startsWith("/marketplace/") && pathname !== "/marketplace") ||
     (pathname?.startsWith("/idsonsell/") && pathname !== "/idsonsell") ||
     hideOnRoutes.some((route) => pathname?.startsWith(route))
   ) {
@@ -80,14 +81,14 @@ export default function BottomNav() {
   }
 
   const isHomeTopupActive = pathname === "/";
-  const isMarketplaceActive = pathname?.startsWith("/idsonsell");
+  const isMarketplaceActive = pathname?.startsWith("/marketplace") || pathname?.startsWith("/idsonsell");
 
   const handleHomeClick = () => {
     router.push("/");
   };
 
   const handleMarketplaceClick = () => {
-    router.push("/idsonsell");
+    router.push("/marketplace");
   };
 
   const navItems = [

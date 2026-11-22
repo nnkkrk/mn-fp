@@ -14,14 +14,14 @@ export default function StoreModeToggle() {
     setMounted(true);
   }, []);
 
-  const isTradeActive = Boolean(pathname?.startsWith("/idsonsell"));
+  const isTradeActive = Boolean(pathname?.startsWith("/marketplace") || pathname?.startsWith("/idsonsell"));
   const isTopupActive = !isTradeActive;
 
   const handleToggle = (mode) => {
     if (mode === "topup" && !isTopupActive) {
       router.push("/");
     } else if (mode === "trade" && !isTradeActive) {
-      router.push("/idsonsell");
+      router.push("/marketplace");
     }
   };
 

@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${item.title} - ₹${item.price}`,
       description: `Price: ₹${item.price} | Verified MLBB Account for Sale`,
-      url: `https://mlbbtopup.in/idsonsell/${item.slug}`,
+      url: `https://mlbbtopup.in/marketplace/${item.slug}`,
       images: [
         {
           url: absoluteImageUrl,
@@ -102,7 +102,7 @@ export default async function Page({ params }: PageProps) {
         {/* ── TOP NAV BAR ── */}
         <div className="flex items-center justify-between">
           <Link
-            href="/idsonsell"
+            href="/marketplace"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] text-xs font-bold text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-all"
           >
             <ArrowLeft size={13} />
@@ -113,7 +113,7 @@ export default async function Page({ params }: PageProps) {
           <ShareButton
             title={item.title}
             price={item.price}
-            url={`${siteUrl}/idsonsell/${item.slug}`}
+            url={`${siteUrl}/marketplace/${item.slug}`}
             imageUrl={itemImages[0]}
           />
         </div>
@@ -319,7 +319,7 @@ export default async function Page({ params }: PageProps) {
 
             {/* ON MOBILE: PURCHASE BOX SHOWN UNDER SPECS */}
             <div className="lg:hidden pb-16">
-              <IdPurchaseBox item={item} url={`${siteUrl}/idsonsell/${item.slug}`} />
+              <IdPurchaseBox item={item} url={`${siteUrl}/marketplace/${item.slug}`} />
             </div>
           </div>
 
@@ -342,7 +342,7 @@ export default async function Page({ params }: PageProps) {
             </div>
 
             {/* PURCHASE BOX */}
-            <IdPurchaseBox item={item} url={`${siteUrl}/idsonsell/${item.slug}`} />
+            <IdPurchaseBox item={item} url={`${siteUrl}/marketplace/${item.slug}`} />
           </div>
         </div>
       </main>

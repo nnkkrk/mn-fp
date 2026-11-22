@@ -11,10 +11,10 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (prevPathRef.current !== pathname && pathname) {
-      if (pathname.startsWith("/idsonsell") && prevPathRef.current === "/") {
+      if ((pathname.startsWith("/marketplace") || pathname.startsWith("/idsonsell")) && prevPathRef.current === "/") {
         // Switching to Trade / Marketplace -> slide in from right
         setSlideDir(1);
-      } else if (pathname === "/" && prevPathRef.current?.startsWith("/idsonsell")) {
+      } else if (pathname === "/" && (prevPathRef.current?.startsWith("/marketplace") || prevPathRef.current?.startsWith("/idsonsell"))) {
         // Switching back to Top Up -> slide in from left
         setSlideDir(-1);
       } else {
