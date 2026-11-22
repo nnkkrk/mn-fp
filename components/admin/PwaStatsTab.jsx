@@ -133,16 +133,7 @@ export default function PwaStatsTab() {
     <div className="space-y-6">
 
       {/* ── Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="emerald"
-          subtitle="DEVICE & SUBSCRIBERS"
-          title="PWA & NOTIFICATIONS"
-          highlight="NOTIFICATIONS"
-          pulse
-        />
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-3 pb-2.5 border-b border-[var(--border)]/70">
         <div className="flex items-center gap-1.5 self-end sm:self-auto">
           {/* Timeframe Filter Dropdown */}
           <div className="relative inline-flex items-center" ref={filterRef}>

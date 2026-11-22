@@ -157,12 +157,6 @@ export default function BannersTab({ banners, onRefresh }) {
       {/* ================= COMPACT HEADER SECTION ================= */}
       <div className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border)]">
         <div className="flex items-center gap-2">
-        <SectionTitle
-          size="xs"
-          subtitle="Media & Promos"
-          title="Active"
-          highlight="Banners"
-        />
           <button aria-label="button"
             onClick={onRefresh}
             className="w-7 h-7 flex items-center justify-center rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-all cursor-pointer shrink-0"

@@ -202,16 +202,7 @@ const UiSettingsTab = () => {
   return (
     <div className="space-y-5 pb-8 max-w-full overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70 mb-2">
-        <SectionTitle
-          size="xs"
-          accentColor="purple"
-          subtitle="LAYOUT & DISPLAY"
-          title="UI SETTINGS"
-          highlight="SETTINGS"
-          pulse
-        />
-
+      <div className="flex items-center justify-end flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70 mb-2">
         <button 
           aria-label="button"
           onClick={fetchSettings}

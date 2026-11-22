@@ -744,17 +744,7 @@ export default function TradeIdsTab() {
       </AnimatePresence>
 
       {/* ================= HEADER & STATS ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-black italic tracking-tight uppercase flex items-center gap-2">
-            <ShoppingBag className="text-[var(--accent)]" size={24} />
-            <span>Trade IDs & Accounts</span>
-          </h1>
-          <p className="text-xs text-[var(--muted)] font-medium mt-0.5">
-            Manage game IDs on sale, stock/unstock status, rental countdowns, and account details.
-          </p>
-        </div>
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
         <div className="flex items-center gap-2">
           <button
             type="button"

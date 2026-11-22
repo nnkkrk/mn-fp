@@ -163,29 +163,19 @@ export default function OrdersTab() {
     <div className="w-full space-y-3 pb-8">
       {/* ================= HEADER & SEARCH BAR ================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-[var(--border)]/70">
-        <div className="flex items-center justify-between sm:justify-start gap-2.5">
-          <SectionTitle
-            size="xs"
-            subtitle="Fulfillment"
-            title="Customer"
-            highlight="Orders"
-            icon={<ShoppingBag size={13} className="text-[var(--accent)]" />}
-          />
-
-          <div className="flex items-center gap-1 sm:ml-2">
-            <span className="px-1.5 py-0.5 text-[11px] font-bold text-[var(--foreground)] tabular-nums flex items-center gap-1">
-              <span>{pagination.total}</span>
-              <span className="text-[10px] text-[var(--muted)] font-medium">Orders</span>
-            </span>
-            <button
-              type="button"
-              aria-label="Refresh Orders"
-              onClick={() => { fetchOrdersList(); }}
-              className="w-7 h-7 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-            >
-              <RefreshCcw size={13} className={loading ? "animate-spin text-[var(--accent)]" : ""} />
-            </button>
-          </div>
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded-md bg-[var(--foreground)]/[0.04] text-[11px] font-bold text-[var(--foreground)] tabular-nums flex items-center gap-1 border border-[var(--border)]">
+            <span>{pagination.total}</span>
+            <span className="text-[10px] text-[var(--muted)] font-medium">Orders</span>
+          </span>
+          <button
+            type="button"
+            aria-label="Refresh Orders"
+            onClick={() => { fetchOrdersList(); }}
+            className="w-7 h-7 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+          >
+            <RefreshCcw size={13} className={loading ? "animate-spin text-[var(--accent)]" : ""} />
+          </button>
         </div>
 
         {/* Search & Filter Trigger */}
@@ -199,17 +189,22 @@ export default function OrdersTab() {
             placeholder="Search by Order ID, Email, Method..."
             loading={loading}
             className="flex-1"
+            rightElement={
+              <button
+                type="button"
+                aria-label="Filter Orders"
+                onClick={() => setShowFilters(true)}
+                className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                  filters.status || filters.gameSlug || filters.from || filters.to
+                    ? "bg-[var(--accent)] text-white shadow-xs"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.08]"
+                }`}
+                title="Filter Orders"
+              >
+                <Filter size={13} />
+              </button>
+            }
           />
-          <button aria-label="Filter Orders"
-            onClick={() => setShowFilters(true)}
-            className={`h-8 w-8 rounded-lg border flex items-center justify-center transition-all cursor-pointer shadow-2xs shrink-0 ${
-              filters.status || filters.gameSlug || filters.from || filters.to
-                ? "bg-[var(--accent)] text-white border-transparent"
-                : "bg-[var(--card)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/30"
-            }`}
-          >
-            <Filter size={13} />
-          </button>
           
           {(search || filters.status || filters.gameSlug || filters.from || filters.to) && (
             <button aria-label="Clear Filters"
@@ -217,7 +212,7 @@ export default function OrdersTab() {
                 setSearch("");
                 setFilters({ status: "", gameSlug: "", from: "", to: "" });
               }}
-              className="px-2.5 h-8 rounded-lg text-rose-500 hover:bg-rose-500/10 text-[10px] font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer"
+              className="px-2.5 h-8 rounded-full text-rose-500 hover:bg-rose-500/10 text-[10px] font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer"
             >
               Clear
             </button>

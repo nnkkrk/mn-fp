@@ -439,15 +439,7 @@ export default function GiveawayAdminTab() {
   return (
     <div className="space-y-4 pb-8 animate-in fade-in duration-300">
       {/* ── Header Toolbar (Row 1) ── */}
-      <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          subtitle="Community Drops"
-          title="Giveaway"
-          highlight="Manager"
-          icon={<FiGift size={13} className="text-[var(--accent)]" />}
-        />
-
+      <div className="flex items-center justify-end gap-3 pb-2.5 border-b border-[var(--border)]/70">
         {/* Action Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
           <button

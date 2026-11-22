@@ -143,15 +143,7 @@ const SettingsTab = ({ onProviderChange, providerBalances }) => {
     return (
         <div className="max-w-2xl space-y-4">
             {/* Header Strip */}
-            <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
-                <SectionTitle
-                    size="xs"
-                    subtitle="CORE CONTROLS"
-                    title="MAIN SETTINGS"
-                    highlight="SETTINGS"
-                    pulse
-                />
-
+            <div className="flex items-center justify-end flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
                 {message.text && (
                     <div className={`hidden sm:flex items-center gap-2 text-[11px] font-bold px-3 py-1 rounded-lg ${
                         message.type === "success" ? "text-emerald-500 bg-emerald-500/10 border border-emerald-500/20" : "text-rose-500 bg-rose-500/10 border border-rose-500/20"

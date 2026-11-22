@@ -44,15 +44,7 @@ export default function ApiKeysTab() {
     return (
         <div className="w-full space-y-4">
             {/* ================= HEADER ================= */}
-            <div className="flex items-center justify-between gap-3 pb-3 border-b border-[var(--border)]/70">
-                <SectionTitle
-                    size="xs"
-                    subtitle="INTEGRATIONS & ACCESS"
-                    title="API KEYS"
-                    highlight="KEYS"
-                    pulse
-                />
-
+            <div className="flex items-center justify-end gap-3 pb-3 border-b border-[var(--border)]/70">
                 <div className="flex items-center gap-2 shrink-0">
                     <div className="flex items-center gap-1 text-[var(--muted)] text-xs font-bold tabular-nums">
                         <Key size={13} className="text-[var(--accent)]" />

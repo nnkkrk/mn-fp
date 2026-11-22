@@ -454,18 +454,9 @@ export default function ProductCatalogTab({ onStockUpdated }) {
     <div className="space-y-6 pb-20 max-w-full overflow-x-hidden text-[var(--foreground)]">
       {/* ================= HEADER BAR ================= */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-[var(--border)]/40">
-        <div>
-          <SectionTitle
-            size="xs"
-            subtitle="Inventory & Stock Availability"
-            title="Product"
-            highlight="Catalog"
-            icon={<Package size={13} className="text-[var(--accent)]" />}
-          />
-          <p className="text-[11px] text-[var(--muted)] mt-1">
-            Toggle in-stock or out-of-stock status for products and individual catalog items across the store.
-          </p>
-        </div>
+        <p className="text-[11px] text-[var(--muted)]">
+          Toggle in-stock or out-of-stock status for products and individual catalog items across the store.
+        </p>
 
         {/* Global Action / Stats & Save */}
         <div className="flex flex-wrap items-center gap-3">

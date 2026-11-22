@@ -109,14 +109,7 @@ export default function RedeemCodesTab() {
     return (
         <div className="space-y-3 sm:space-y-4 animate-in fade-in duration-300">
             {/* ── HEADER ── */}
-            <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
-                <SectionTitle
-                    size="xs"
-                    subtitle="VOUCHER ENGINE"
-                    title="REDEEM CODES"
-                    highlight="CODES"
-                    pulse
-                />
+            <div className="flex items-center justify-end flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
                 <button
                     onClick={() => fetchCodes(page)}
                     disabled={loading}

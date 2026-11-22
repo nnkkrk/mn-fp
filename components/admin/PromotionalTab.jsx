@@ -424,15 +424,7 @@ export default function PromotionalTab() {
       {/* ================= PREMIUM DASHBOARD HEADER ================= */}
       {/* ================= PREMIUM DASHBOARD HEADER ================= */}
       <div className="space-y-3 sm:space-y-4">
-        <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
-          <SectionTitle
-            size="xs"
-            subtitle="EMAIL & OUTREACH"
-            title="PROMO CAMPAIGNS"
-            highlight="CAMPAIGNS"
-            pulse
-          />
-          
+        <div className="flex items-center justify-end flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
           <div className="flex items-center gap-2 shrink-0">
             <button 
                onClick={() => {

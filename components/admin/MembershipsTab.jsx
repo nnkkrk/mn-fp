@@ -153,23 +153,13 @@ export default function MembershipsTab() {
     <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="purple"
-          subtitle={
-            <span className="inline-flex items-center gap-1.5">
-              PRIVILEGES
-              {memberships.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[9px] font-bold">
-                  {memberships.length} Active
-                </span>
-              )}
+        <div className="flex items-center gap-2">
+          {memberships.length > 0 && (
+            <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-bold">
+              {memberships.length} Active
             </span>
-          }
-          title="VIP MEMBERSHIPS"
-          highlight="MEMBERSHIPS"
-          pulse
-        />
+          )}
+        </div>
 
         <div className="flex items-center gap-1.5">
           <button

@@ -185,16 +185,7 @@ export default function SupportQueriesTab() {
   return (
     <div className="space-y-4 pb-6 max-w-full overflow-x-hidden">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="cyan"
-          subtitle="HELPDESK"
-          title="SUPPORT TICKETS"
-          highlight="TICKETS"
-          pulse
-        />
-
+      <div className="flex items-center justify-end flex-wrap gap-3 pb-2 border-b border-[var(--border)]/70">
         <div className="flex items-center gap-2 ml-auto shrink-0">
           <div className="flex items-center gap-1 text-[var(--muted)] text-xs font-bold tabular-nums">
             <span>{pagination.total}</span>

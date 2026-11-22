@@ -277,16 +277,7 @@ export default function BlogsTab() {
   return (
     <div className="space-y-3 pb-8 animate-in fade-in duration-300">
       {/* ── HEADER / TOOLBAR (ROW 1) ── */}
-      <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          subtitle="Content & SEO"
-          title="Blogs &"
-          highlight="Articles"
-          icon={<FileText size={13} className="text-[var(--accent)]" />}
-          pulse
-        />
-
+      <div className="flex items-center justify-end gap-3 pb-2.5 border-b border-[var(--border)]/70">
         <div className="flex items-center gap-1.5 shrink-0">
           {/* Refresh Button */}
           <button

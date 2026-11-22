@@ -26,6 +26,8 @@ export interface SearchInputProps {
   disabled?: boolean;
   /** Key down handler for input */
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  /** Optional right element (e.g. filter button) rendered inside the input on the right */
+  rightElement?: React.ReactNode;
 }
 
 const SIZE_STYLES = {
@@ -71,6 +73,7 @@ export default function SearchInput({
   className = "",
   disabled = false,
   onKeyDown,
+  rightElement,
 }: SearchInputProps) {
   // Local state for instant typing responsiveness
   const [localValue, setLocalValue] = useState(value);
@@ -130,7 +133,7 @@ export default function SearchInput({
         placeholder={placeholder}
         disabled={disabled}
         autoFocus={autoFocus}
-        className={`w-full h-full ${currentSize.input} ${roundedClass} border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted)]/40 focus:border-[var(--accent)]/50 focus:bg-[var(--background)] focus:ring-2 focus:ring-[var(--accent)]/10 font-sans disabled:opacity-50`}
+        className={`w-full h-full ${currentSize.input} ${rightElement ? (localValue ? "!pr-16" : "!pr-9") : ""} ${roundedClass} border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted)]/40 focus:border-[var(--accent)]/50 focus:bg-[var(--background)] focus:ring-2 focus:ring-[var(--accent)]/10 font-sans disabled:opacity-50`}
       />
 
       {/* CLEAR (X) BUTTON */}
@@ -139,10 +142,17 @@ export default function SearchInput({
           type="button"
           aria-label="Clear search"
           onClick={handleClear}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors"
+          className={`absolute ${rightElement ? "right-8" : "right-2.5"} top-1/2 -translate-y-1/2 p-1 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors`}
         >
           <X size={currentSize.clearIcon} />
         </button>
+      )}
+
+      {/* RIGHT ELEMENT (e.g. Filter button) */}
+      {rightElement && (
+        <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center">
+          {rightElement}
+        </div>
       )}
     </div>
   );

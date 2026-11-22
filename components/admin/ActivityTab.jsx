@@ -213,17 +213,7 @@ export default function ActivityTab({ onNavigate }) {
   return (
     <div className="w-full space-y-3 pb-8 max-w-7xl mx-auto">
       {/* ── Header Bar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 py-1">
-        <SectionTitle
-          size="xs"
-          accentColor="emerald"
-          subtitle="Real-time Stream"
-          icon={<FiZap size={13} className="text-emerald-400" />}
-          title="Live Activity"
-          highlight="Feed"
-          pulse
-        />
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-3 px-1 py-1">
         {/* Search, Filter Toggle & Refresh */}
         <div className="flex items-center gap-1.5 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-64">

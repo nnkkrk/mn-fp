@@ -723,17 +723,7 @@ export default function TournamentsAdminTab() {
       </AnimatePresence>
 
       {/* ── Top Header Toolbar (Row 1) ── */}
-      <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="amber"
-          subtitle="Esports & Custom Rooms"
-          title="Tournaments"
-          highlight="Console"
-          icon={<GiTrophy size={13} className="text-amber-400" />}
-          pulse
-        />
-
+      <div className="flex items-center justify-end gap-3 pb-2.5 border-b border-[var(--border)]/70">
         {/* Action Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
           {/* Presets Button */}

@@ -224,15 +224,7 @@ export default function StatsTab() {
         <div className="space-y-4 sm:space-y-6 pb-10">
 
             {/* HEADER */}
-            <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70 mb-2">
-                <SectionTitle
-                    size="xs"
-                    subtitle="BALANCE & LEDGER"
-                    title="WALLET MANAGER"
-                    highlight="MANAGER"
-                    pulse
-                />
-
+            <div className="flex items-center justify-end flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70 mb-2">
                 <div className="flex items-center justify-end gap-1.5 md:gap-2 shrink-0">
                     {/* TABS */}
                     <div className="flex bg-[var(--foreground)]/[0.03] p-0.5 rounded-full border border-[var(--border)]">

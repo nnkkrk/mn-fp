@@ -361,13 +361,6 @@ export default function AdsMonetizationTab() {
       {/* 1. TOP HEADER & ACTION BAR */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--border)]">
         <div className="flex items-center gap-3">
-          <SectionTitle
-            size="xs"
-            accentColor="amber"
-            subtitle="REVENUE & CONTROLS"
-            title="ADS & MONETIZATION"
-            highlight="MONETIZATION"
-          />
           <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${
             isAllAdsDisabled
               ? "bg-rose-500/10 text-rose-400 border-rose-500/30"

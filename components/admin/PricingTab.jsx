@@ -282,15 +282,7 @@ export default function PricingTab({
   return (
     <div className="space-y-4 pb-20 max-w-full overflow-x-hidden">
       {/* ================= TOP BAR ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
-        <SectionTitle
-          size="xs"
-          subtitle="Margins & Rates"
-          title="Pricing"
-          highlight="Config"
-          icon={<Settings2 size={13} className="text-[var(--accent)]" />}
-        />
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-3 mb-2">
         <div className="flex flex-wrap items-center gap-2">
           {/* Mode Switcher */}
           <div className="flex p-0.5 bg-[var(--border)]/50 border border-[var(--border)] rounded-md gap-0.5">

@@ -240,15 +240,7 @@ export default function UsersTab() {
   return (
     <div className="space-y-4 sm:space-y-6 pb-10">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <SectionTitle
-          size="xs"
-          subtitle="Directory"
-          title="User"
-          highlight="Accounts"
-          icon={<Users size={12} className="text-[var(--accent)]" />}
-        />
-
+      <div className="flex items-center justify-end gap-4">
         <div className="flex items-center gap-1 sm:justify-end">
           <div className="px-1.5 py-0.5 flex items-center gap-1 text-[11px] font-bold text-[var(--foreground)] tabular-nums">
             <Users size={12} className="text-[var(--accent)]" />
@@ -279,16 +271,19 @@ export default function UsersTab() {
           placeholder="SEARCH USERS..."
           loading={loading}
           className="flex-1 min-w-0"
+          rightElement={
+            <button
+              type="button"
+              aria-label="Filter users"
+              onClick={() => setShowFilters(true)}
+              className="h-7 w-7 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.08] transition-colors flex items-center justify-center outline-none shrink-0 cursor-pointer"
+              title="Filter Users"
+            >
+              <Filter size={13} />
+            </button>
+          }
         />
         <div className="flex gap-2 shrink-0">
-          <button
-            type="button"
-            aria-label="Filter users"
-            onClick={() => setShowFilters(true)}
-            className="h-9 px-2.5 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors flex items-center justify-center outline-none shrink-0 cursor-pointer"
-          >
-            <Filter size={14} />
-          </button>
           <div className="hidden sm:flex px-5 h-11 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] items-center gap-2.5">
             <Users size={14} className="text-[var(--accent)]" />
             <span className="text-xs font-bold text-[var(--foreground)] uppercase tracking-wider">

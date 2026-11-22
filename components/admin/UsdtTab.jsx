@@ -67,16 +67,7 @@ export default function UsdtTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2.5 border-b border-[var(--border)]/70 mb-4">
-        <SectionTitle
-          size="xs"
-          accentColor="emerald"
-          subtitle="WEB3 GATEWAY"
-          title="USDT CRYPTO DEPOSITS"
-          highlight="DEPOSITS"
-          pulse
-        />
-        
+      <div className="flex flex-col md:flex-row md:items-center justify-end gap-3 pb-2.5 border-b border-[var(--border)]/70 mb-4">
         <div className="w-full md:w-auto">
           {/* MOBILE DROPDOWN */}
           <div className="md:hidden relative group">

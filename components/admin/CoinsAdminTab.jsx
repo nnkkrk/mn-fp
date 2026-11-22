@@ -284,23 +284,13 @@ export default function CoinsAdminTab() {
       {/* Header */}
       {/* ── HEADER ── */}
       <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="amber"
-          subtitle={
-            <span className="inline-flex items-center gap-1.5">
-              REWARDS ENGINE
-              {pendingCount > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-rose-500 text-white text-[9px] font-black animate-pulse">
-                  {pendingCount}
-                </span>
-              )}
+        <div className="flex items-center gap-2">
+          {pendingCount > 0 && (
+            <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[9px] font-black animate-pulse">
+              {pendingCount} Pending
             </span>
-          }
-          title="BBC COINS MANAGER"
-          highlight="MANAGER"
-          pulse
-        />
+          )}
+        </div>
 
         <div className="flex items-center gap-1.5 shrink-0 overflow-x-auto no-scrollbar">
           <button aria-label="button"

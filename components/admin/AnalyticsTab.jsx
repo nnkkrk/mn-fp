@@ -402,16 +402,7 @@ export default function AnalyticsTab({ onNavigate }) {
     <div className="space-y-4 animate-in fade-in duration-200">
       
       {/* Top Header & Filter Toolbar */}
-      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="emerald"
-          subtitle="Store Performance"
-          title="Sales & Growth"
-          highlight="Analytics"
-          pulse
-        />
-
+      <div className="flex items-center justify-end gap-2 pb-2.5 border-b border-[var(--border)]/70">
         {/* Right side: Filter & Refresh */}
         <div className="flex items-center gap-1.5 shrink-0">
           <button

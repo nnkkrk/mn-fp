@@ -437,16 +437,7 @@ export default function EventsAdminTab() {
   return (
     <div className="space-y-4 pb-8">
       {/* ── Header Toolbar (Row 1) ── */}
-      <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-[var(--border)]/70">
-        {/* Title */}
-        <SectionTitle
-          size="xs"
-          subtitle="Schedule & Scrims"
-          title="Event"
-          highlight="Calendar"
-          icon={<FiCalendar size={13} className="text-[var(--accent)]" />}
-        />
-
+      <div className="flex items-center justify-end gap-3 pb-2.5 border-b border-[var(--border)]/70">
         {/* Action Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
           <button

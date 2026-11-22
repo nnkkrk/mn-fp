@@ -104,21 +104,11 @@ export default function TransactionsTab() {
     <div className="space-y-6 pb-10">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="emerald"
-          subtitle={
-            <span className="inline-flex items-center gap-1.5">
-              FINANCIAL LEDGER
-              <span className="px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-bold">
-                {pagination.total} TXNS
-              </span>
-            </span>
-          }
-          title="ALL TRANSACTIONS"
-          highlight="TRANSACTIONS"
-          pulse
-        />
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">
+            {pagination.total} TXNS
+          </span>
+        </div>
 
         <div className="flex items-center gap-1">
           <button

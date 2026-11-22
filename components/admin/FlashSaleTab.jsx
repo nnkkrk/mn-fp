@@ -234,17 +234,7 @@ export default function FlashSaleTab() {
   return (
     <div className="space-y-6 max-w-6xl">
       {/* HEADER BAR */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
-        <SectionTitle
-          size="sm"
-          accentColor="amber"
-          subtitle="Deals & Countdown"
-          icon={<Zap size={13} className="text-amber-400" />}
-          title="Flash Sale &"
-          highlight="Deals Manager"
-          description="Feature discounted game items, customize deal prices, and manage countdown timers"
-        />
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 pb-4 border-b border-[var(--border)]">
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <button
             type="button"

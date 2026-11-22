@@ -112,23 +112,13 @@ export default function BlocklistTab() {
     <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-[var(--border)]/70">
-        <SectionTitle
-          size="xs"
-          accentColor="rose"
-          subtitle={
-            <span className="inline-flex items-center gap-1.5">
-              SECURITY & ACCESS
-              {items.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[9px] font-bold">
-                  {items.length} Blocked
-                </span>
-              )}
+        <div className="flex items-center gap-2">
+          {items.length > 0 && (
+            <span className="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-bold">
+              {items.length} Blocked
             </span>
-          }
-          title="FRAUD BLOCKLIST"
-          highlight="BLOCKLIST"
-          pulse
-        />
+          )}
+        </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
           <button
