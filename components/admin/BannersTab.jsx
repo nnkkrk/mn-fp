@@ -17,6 +17,11 @@ import {
 } from "lucide-react";
 import { SectionTitle } from "@/components/common";
 
+const isVideoUrl = (url) => {
+  if (!url || typeof url !== "string") return false;
+  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
+};
+
 export default function BannersTab({ banners, onRefresh }) {
   const [form, setForm] = useState({
     bannerImage: "",
@@ -254,12 +259,12 @@ export default function BannersTab({ banners, onRefresh }) {
                 </div>
 
                 <div>
-                  <label className="text-[8px] font-black uppercase text-[var(--muted)] block mb-1">Image URL</label>
+                  <label className="text-[8px] font-black uppercase text-[var(--muted)] block mb-1">Media URL (Image or MP4 Video)</label>
                   <input
                     value={form.bannerImage}
                     onChange={(e) => setForm({ ...form, bannerImage: e.target.value })}
                     className="w-full h-8 bg-[var(--background)] border border-[var(--border)] rounded-lg px-2.5 text-[11px] text-[var(--foreground)] focus:border-[var(--accent)] outline-none font-mono placeholder:text-[var(--muted)]/40"
-                    placeholder="https://..."
+                    placeholder="https://... (image or .mp4 video)"
                   />
                 </div>
 
@@ -319,11 +324,22 @@ export default function BannersTab({ banners, onRefresh }) {
                   <div className="relative aspect-video rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--background)] flex items-center justify-center">
                     {form.bannerImage ? (
                       <>
-                        <img
-                          src={form.bannerImage}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
+                        {isVideoUrl(form.bannerImage) ? (
+                          <video
+                            src={form.bannerImage}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={form.bannerImage}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                         <div className="absolute bottom-2 left-2 right-2">
                           <h4 className="text-white text-xs font-black leading-tight line-clamp-1">
@@ -334,7 +350,7 @@ export default function BannersTab({ banners, onRefresh }) {
                     ) : (
                       <div className="flex flex-col items-center justify-center text-center p-3 text-[var(--muted)]/40">
                         <ImageIcon size={20} className="mb-1" />
-                        <p className="text-[8.5px] font-black uppercase tracking-wider">No Image URL</p>
+                        <p className="text-[8.5px] font-black uppercase tracking-wider">No Media URL</p>
                       </div>
                     )}
                   </div>
@@ -367,11 +383,22 @@ export default function BannersTab({ banners, onRefresh }) {
               >
                 {/* Banner Thumbnail */}
                 <div className="relative aspect-[16/9] overflow-hidden bg-[var(--background)]">
-                  <img
-                    src={b.bannerImage}
-                    alt={b.bannerTitle}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  {isVideoUrl(b.bannerImage) ? (
+                    <video
+                      src={b.bannerImage}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={b.bannerImage}
+                      alt={b.bannerTitle}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
                   {/* Status Badge */}

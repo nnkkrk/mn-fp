@@ -7,6 +7,11 @@ import logo from "@/public/logo.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { BannerSkeleton } from "../Skeleton/Skeleton";
 
+const isVideoUrl = (url?: string) => {
+  if (!url || typeof url !== "string") return false;
+  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
+};
+
 export default function GameBannerCarousel({ initialBanners = [] }: { initialBanners?: any[] }) {
   const [banners, setBanners] = useState<any[]>(initialBanners);
   const [current, setCurrent] = useState(0);
@@ -74,13 +79,24 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
             onClick={() => paginate(-1)}
             className="w-[11%] lg:w-[12%] h-[230px] lg:h-[270px] shrink-0 rounded-none overflow-hidden relative opacity-40 hover:opacity-85 scale-[0.92] hover:scale-95 transition-all duration-500 cursor-pointer border border-[var(--border)] shadow-sm bg-[var(--card)] group"
           >
-            <Image
-              src={prevBanner.bannerImage || logo}
-              alt={prevBanner.bannerTitle || "Previous"}
-              fill
-              sizes="250px"
-              className="object-cover object-top"
-            />
+            {isVideoUrl(prevBanner.bannerImage) ? (
+              <video
+                src={prevBanner.bannerImage}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
+              />
+            ) : (
+              <Image
+                src={prevBanner.bannerImage || logo}
+                alt={prevBanner.bannerTitle || "Previous"}
+                fill
+                sizes="250px"
+                className="object-cover object-top"
+              />
+            )}
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white shadow-md">
@@ -91,22 +107,33 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
 
           {/* Center Highlighted Slide (ACTIVE FOCUS - NO BORDER RADIUS) */}
           <div className="flex-1 h-[280px] lg:h-[330px] rounded-none overflow-hidden relative opacity-100 scale-100 z-20 border border-[var(--border)] shadow-xl bg-[var(--card)] group">
-            <Link href="/" className="relative block w-full h-full overflow-hidden">
-              <Image
-                src={currentBanner.bannerImage || logo}
-                alt={currentBanner.bannerTitle}
-                fill
-                priority
-                fetchPriority="high"
-                sizes="(max-width: 1024px) 85vw, 1150px"
-                className="object-cover object-top sm:object-[center_15%] transition-transform duration-500 ease-out group-hover:scale-[1.01]"
-              />
+            <Link href={currentBanner.bannerLink || "/"} className="relative block w-full h-full overflow-hidden">
+              {isVideoUrl(currentBanner.bannerImage) ? (
+                <video
+                  src={currentBanner.bannerImage}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover object-top sm:object-[center_15%] transition-transform duration-500 ease-out group-hover:scale-[1.01]"
+                />
+              ) : (
+                <Image
+                  src={currentBanner.bannerImage || logo}
+                  alt={currentBanner.bannerTitle}
+                  fill
+                  priority
+                  fetchPriority="high"
+                  sizes="(max-width: 1024px) 85vw, 1150px"
+                  className="object-cover object-top sm:object-[center_15%] transition-transform duration-500 ease-out group-hover:scale-[1.01]"
+                />
+              )}
 
               {/* Gradient Overlay for Text Readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent pointer-events-none" />
 
               {/* Content Overlay - Without LIVE FEATURE */}
-              <div className="absolute inset-0 flex flex-col justify-end p-5 lg:p-7 z-10">
+              <div className="absolute inset-0 flex flex-col justify-end p-5 lg:p-7 z-10 pointer-events-none">
                 <div className="max-w-xl">
                   <h2 className="text-white font-black text-xl md:text-3xl lg:text-4xl tracking-tighter leading-[0.95] uppercase mb-0.5 italic drop-shadow-lg">
                     {currentBanner.bannerTitle}
@@ -152,13 +179,24 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
             onClick={() => paginate(1)}
             className="w-[11%] lg:w-[12%] h-[230px] lg:h-[270px] shrink-0 rounded-none overflow-hidden relative opacity-40 hover:opacity-85 scale-[0.92] hover:scale-95 transition-all duration-500 cursor-pointer border border-[var(--border)] shadow-sm bg-[var(--card)] group"
           >
-            <Image
-              src={nextBanner.bannerImage || logo}
-              alt={nextBanner.bannerTitle || "Next"}
-              fill
-              sizes="250px"
-              className="object-cover object-top"
-            />
+            {isVideoUrl(nextBanner.bannerImage) ? (
+              <video
+                src={nextBanner.bannerImage}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
+              />
+            ) : (
+              <Image
+                src={nextBanner.bannerImage || logo}
+                alt={nextBanner.bannerTitle || "Next"}
+                fill
+                sizes="250px"
+                className="object-cover object-top"
+              />
+            )}
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white shadow-md">
@@ -175,18 +213,29 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        <Link href="/" className="relative block w-full h-full overflow-hidden">
-          <Image
-            src={currentBanner.bannerImage || logo}
-            alt={currentBanner.bannerTitle}
-            fill
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1280px"
-            className="object-cover object-top transition-transform duration-300 ease-out"
-          />
+        <Link href={currentBanner.bannerLink || "/"} className="relative block w-full h-full overflow-hidden">
+          {isVideoUrl(currentBanner.bannerImage) ? (
+            <video
+              src={currentBanner.bannerImage}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-300 ease-out"
+            />
+          ) : (
+            <Image
+              src={currentBanner.bannerImage || logo}
+              alt={currentBanner.bannerTitle}
+              fill
+              priority
+              fetchPriority="high"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1280px"
+              className="object-cover object-top transition-transform duration-300 ease-out"
+            />
+          )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent pointer-events-none" />
 
           <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6 z-10">
             <div className="max-w-xl">
