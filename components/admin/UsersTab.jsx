@@ -741,79 +741,97 @@ export default function UsersTab() {
         )}
       </AnimatePresence >
 
-      {/* ================= FILTER MODAL ================= */}
-      < AnimatePresence >
+      {/* ================= FILTER BOTTOM SHEET ================= */}
+      <AnimatePresence>
         {showFilters && (
-          <div className="fixed inset-0 z-[1200] flex items-center justify-end">
+          <div className="fixed inset-0 z-[1200] flex items-end sm:items-center justify-center p-0 sm:p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowFilters(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
             />
 
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="relative w-full max-w-sm h-full bg-[var(--background)] border-l border-[var(--border)] p-8 space-y-8 shadow-2xl"
+              initial={{ y: "100%", opacity: 0.5 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 280 }}
+              className="relative w-full sm:max-w-[420px] bg-[var(--card)] border border-[var(--border)] rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[82vh] overflow-hidden z-10"
             >
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-[var(--foreground)]">Filters</h3>
-                <button aria-label="button"
+              {/* Drag Handle for mobile */}
+              <div className="pt-2 pb-0.5 flex justify-center sm:hidden">
+                <div className="w-8 h-1 bg-[var(--muted)]/30 rounded-full" />
+              </div>
+
+              <div className="px-4 py-2.5 border-b border-[var(--border)] flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-md bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center shadow-2xs">
+                    <Filter size={12} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)] leading-none">Filter Users</h3>
+                    <p className="text-[8.5px] text-[var(--muted)] mt-0.5">Role, sorting & registration date</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Close"
                   onClick={() => setShowFilters(false)}
-                  className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all outline-none"
+                  className="w-6 h-6 rounded-md bg-[var(--foreground)]/[0.05] hover:bg-[var(--foreground)]/[0.1] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all outline-none cursor-pointer"
                 >
-                  <X size={20} />
+                  <X size={13} />
                 </button>
               </div>
 
-              <div className="space-y-6 pt-2">
+              <div className="flex-1 overflow-y-auto p-3.5 space-y-3 custom-scrollbar">
                 {/* SORTING */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] ml-1">Sort Preference</label>
-                  <div className="flex gap-2">
+                <div>
+                  <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">Sort Preference</label>
+                  <div className="flex gap-1.5">
                     <select
                       value={sortBy}
                       onChange={(e) => {
                         setSortBy(e.target.value);
                         setPage(1);
                       }}
-                      className="flex-1 h-12 px-4 rounded-2xl border border-[var(--border)] bg-[var(--foreground)]/[0.04] text-[var(--foreground)] text-sm font-bold focus:border-[var(--accent)]/50 outline-none transition-all cursor-pointer appearance-none"
+                      className="flex-1 h-8 px-2.5 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[11px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all cursor-pointer appearance-none"
                     >
                       <option value="lastLogin">Last Active</option>
                       <option value="totalOrders">Order Count</option>
                       <option value="joinDate">Join Date</option>
                       <option value="name">Name</option>
                     </select>
-                    <button aria-label="button"
+                    <button
+                      type="button"
+                      aria-label="Sort Order"
                       onClick={() => {
                         setOrder(order === "asc" ? "desc" : "asc");
                         setPage(1);
                       }}
-                      className="w-12 h-12 rounded-2xl border border-[var(--border)] bg-[var(--foreground)]/[0.04] text-[var(--accent)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.1] transition-all"
+                      className="w-8 h-8 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--accent)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.08] transition-all cursor-pointer"
                     >
-                      <Activity size={18} className={`transition-transform duration-500 ${order === "asc" ? "rotate-180" : ""}`} />
+                      <Activity size={14} className={`transition-transform duration-500 ${order === "asc" ? "rotate-180" : ""}`} />
                     </button>
                   </div>
                 </div>
 
-                <div className="h-px bg-[var(--border)]/50 my-2" />
+                <div className="h-px bg-[var(--border)]/40" />
 
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] ml-1">Role Type</label>
-                  <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">Role Type</label>
+                  <div className="grid grid-cols-4 gap-1.5">
                     {["user", "member", "admin", "owner"].map((type) => (
-                      <button aria-label="button"
+                      <button
+                        type="button"
                         key={type}
                         onClick={() => setFilters({ ...filters, userType: filters.userType === type ? "" : type })}
                         className={`
-                           px-4 py-2.5 rounded-xl border text-[10px] font-black uppercase transition-all outline-none
+                           h-7 px-2 rounded-lg border text-[9px] font-black uppercase tracking-wider transition-all outline-none cursor-pointer truncate
                            ${filters.userType === type
-                            ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
-                            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--muted)] hover:text-[var(--foreground)]"}
+                            ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-xs"
+                            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05]"}
                          `}
                       >
                         {type}
@@ -822,43 +840,47 @@ export default function UsersTab() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--muted)] ml-1">Joined From</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">Joined From</label>
                     <input
                       type="date"
                       value={filters.from}
                       onChange={(e) => setFilters({ ...filters, from: e.target.value })}
-                      className="w-full h-11 px-3 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-[10px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
+                      className="w-full h-8 px-2.5 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[10px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--muted)] ml-1">Joined To</label>
+                  <div>
+                    <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">Joined To</label>
                     <input
                       type="date"
                       value={filters.to}
                       onChange={(e) => setFilters({ ...filters, to: e.target.value })}
-                      className="w-full h-11 px-3 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-[10px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
+                      className="w-full h-8 px-2.5 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[10px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-4">
-                <button aria-label="button"
+              <div className="p-3 bg-[var(--foreground)]/[0.02] border-t border-[var(--border)] flex items-center gap-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <button
+                  type="button"
+                  aria-label="Clear All"
                   onClick={() => {
                     setFilters({ userType: "", from: "", to: "" });
                     setPage(1);
                   }}
-                  className="flex-1 h-11 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:bg-[var(--foreground)]/[0.05] hover:text-[var(--foreground)] transition-all outline-none"
+                  className="flex-1 h-8 rounded-lg border border-[var(--border)] text-[10px] font-semibold text-[var(--muted)] hover:bg-[var(--foreground)]/[0.05] hover:text-[var(--foreground)] transition-all outline-none cursor-pointer"
                 >
                   Clear All
                 </button>
 
-                <button aria-label="button"
+                <button
+                  type="button"
+                  aria-label="Apply"
                   onClick={() => setShowFilters(false)}
-                  className="flex-1 h-11 rounded-xl bg-[var(--accent)] text-white text-xs font-semibold shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95 transition-all outline-none"
+                  className="flex-1 h-8 rounded-lg bg-[var(--accent)] text-white text-[10px] font-semibold shadow-xs hover:brightness-110 active:scale-95 transition-all outline-none cursor-pointer"
                 >
                   Apply
                 </button>
@@ -866,7 +888,7 @@ export default function UsersTab() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence >
+      </AnimatePresence>
     </div >
   );
 }

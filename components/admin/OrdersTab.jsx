@@ -545,40 +545,60 @@ export default function OrdersTab() {
         )}
       </AnimatePresence>
 
-      {/* ================= FILTER MODAL ================= */}
+      {/* ================= FILTER BOTTOM SHEET ================= */}
       <AnimatePresence>
         {showFilters && (
-          <>
+          <div className="fixed inset-0 z-[1100] flex items-end sm:items-center justify-center p-0 sm:p-4">
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowFilters(false)}
-              className="fixed inset-0 z-[1100] bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
             />
+
+            {/* Bottom Sheet Modal Container */}
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-md bg-[var(--background)] border-l border-[var(--border)] z-[1110] flex flex-col"
+              initial={{ y: "100%", opacity: 0.5 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 280 }}
+              className="relative w-full sm:max-w-[420px] bg-[var(--card)] border border-[var(--border)] rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[82vh] z-10"
             >
-              <div className="p-6 border-b border-[var(--border)] flex justify-between items-center">
-                <h3 className="text-xl font-black uppercase tracking-tight text-[var(--foreground)]">Find Orders</h3>
-                <button aria-label="button"
+              {/* Drag Handle for mobile */}
+              <div className="pt-2 pb-0.5 flex justify-center sm:hidden">
+                <div className="w-8 h-1 bg-[var(--muted)]/30 rounded-full" />
+              </div>
+
+              {/* Header */}
+              <div className="px-4 py-2.5 border-b border-[var(--border)] flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-md bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center shadow-2xs">
+                    <Filter size={12} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)] leading-none">Filter Orders</h3>
+                    <p className="text-[8.5px] text-[var(--muted)] mt-0.5">Refine by game, status & date</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Close"
                   onClick={() => setShowFilters(false)}
-                  className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all"
+                  className="w-6 h-6 rounded-md bg-[var(--foreground)]/[0.05] hover:bg-[var(--foreground)]/[0.1] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all cursor-pointer"
                 >
-                  <X size={20} />
+                  <X size={13} />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 space-y-8">
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto p-3.5 space-y-3 custom-scrollbar">
                 {/* GAME SLUG */}
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] ml-1">Game Filter</label>
+                <div>
+                  <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">Game Filter</label>
                   <div className="relative">
-                    <Gamepad2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={18} />
+                    <Gamepad2 className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
                     <input
                       placeholder="e.g. mlbb, bgmi..."
                       value={filters.gameSlug}
@@ -586,34 +606,35 @@ export default function OrdersTab() {
                         setPage(1);
                         setFilters({ ...filters, gameSlug: e.target.value });
                       }}
-                      className="w-full h-14 pl-12 pr-4 rounded-2xl border border-[var(--border)] bg-[var(--foreground)]/[0.04] text-[var(--foreground)] text-sm font-bold focus:border-[var(--accent)]/50 outline-none uppercase transition-all placeholder:text-[var(--muted)]/40"
+                      className="w-full h-8 pl-8 pr-3 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[11px] font-bold focus:border-[var(--accent)]/50 outline-none uppercase transition-all placeholder:text-[var(--muted)]/40"
                     />
                   </div>
                 </div>
 
                 {/* STATUS FILTER */}
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] ml-1">Process Status</label>
-                  <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">Process Status</label>
+                  <div className="grid grid-cols-3 gap-1.5">
                     {[
                       { value: "pending", label: "Pending" },
                       { value: "success", label: "Success" },
                       { value: "failed", label: "Failed" },
                       { value: "refund", label: "Refund" },
-                      { value: "refund_wallet", label: "Wallet Refund" },
+                      { value: "refund_wallet", label: "Wallet Refund", span: "col-span-2" },
                     ].map((item) => (
-                      <button aria-label="button"
+                      <button
+                        type="button"
                         key={item.value}
                         onClick={() => {
                           setPage(1);
                           setFilters({ ...filters, status: filters.status === item.value ? "" : item.value });
                         }}
                         className={`
-                          py-3.5 px-2 rounded-xl border text-[10px] font-black uppercase tracking-wider transition-all truncate
-                          ${item.value === "refund_wallet" ? "col-span-2" : ""}
+                          h-7 px-2 rounded-lg border text-[9px] font-black uppercase tracking-wider transition-all truncate cursor-pointer
+                          ${item.span || ""}
                           ${filters.status === item.value
-                            ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20"
-                            : "border-[var(--border)] bg-[var(--foreground)]/[0.04] text-[var(--muted)] hover:text-[var(--foreground)]"}
+                            ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-xs"
+                            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05]"}
                         `}
                       >
                         {item.label}
@@ -622,12 +643,12 @@ export default function OrdersTab() {
                   </div>
                 </div>
 
-                <div className="h-px bg-[var(--border)]/50" />
+                <div className="h-px bg-[var(--border)]/40" />
 
                 {/* DATE RANGE */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] ml-1">From</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">From</label>
                     <input
                       type="date"
                       value={filters.from}
@@ -635,11 +656,11 @@ export default function OrdersTab() {
                         setPage(1);
                         setFilters({ ...filters, from: e.target.value });
                       }}
-                      className="w-full h-12 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.04] text-[var(--foreground)] text-[10px] font-black focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
+                      className="w-full h-8 px-2.5 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[10px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] ml-1">To</label>
+                  <div>
+                    <label className="text-[8.5px] font-black uppercase tracking-[0.14em] text-[var(--muted)] ml-0.5 block mb-1">To</label>
                     <input
                       type="date"
                       value={filters.to}
@@ -647,22 +668,35 @@ export default function OrdersTab() {
                         setPage(1);
                         setFilters({ ...filters, to: e.target.value });
                       }}
-                      className="w-full h-12 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.04] text-[var(--foreground)] text-[10px] font-black focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
+                      className="w-full h-8 px-2.5 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[10px] font-bold focus:border-[var(--accent)]/50 outline-none transition-all [color-scheme:dark]"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 bg-[var(--foreground)]/[0.02] border-t border-[var(--border)]">
-                <button aria-label="button"
+              {/* Footer */}
+              <div className="p-3 bg-[var(--foreground)]/[0.02] border-t border-[var(--border)] flex items-center gap-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                {(filters.status || filters.gameSlug || filters.from || filters.to) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFilters({ status: "", gameSlug: "", from: "", to: "" });
+                    }}
+                    className="flex-1 h-8 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:text-rose-500 font-bold uppercase tracking-wider text-[10px] transition-all cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                )}
+                <button
+                  type="button"
                   onClick={() => setShowFilters(false)}
-                  className="w-full py-4 rounded-2xl bg-[var(--foreground)] text-[var(--background)] font-black uppercase tracking-[0.2em] text-xs hover:scale-[0.98] transition-all"
+                  className="flex-1 h-8 rounded-lg bg-[var(--foreground)] text-[var(--background)] font-black uppercase tracking-wider text-[10px] hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-xs"
                 >
                   Apply Filters
                 </button>
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
     </div >
