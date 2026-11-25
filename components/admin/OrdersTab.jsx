@@ -825,7 +825,7 @@ function getWhatsAppUrl(phone, order) {
   }
   const orderId = order?.orderId || (order?._id ? String(order._id).slice(-8).toUpperCase() : "");
   const itemName = order?.itemName || "Diamond Top-up";
-  const text = `Hello! Regarding your order #${orderId} (${itemName}) on BlueBuff...`;
+  const text = `Hello! Regarding your order #${orderId} (${itemName}) on mlbbtopup.in...`;
   return `https://wa.me/${clean}?text=${encodeURIComponent(text)}`;
 }
 

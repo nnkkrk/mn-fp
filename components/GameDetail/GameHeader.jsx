@@ -11,8 +11,8 @@ export default function GameHeader({ game }) {
 
   const handleShare = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
-    const title = `${game.gameName} Top Up | BlueBuff MT Topup`;
-    const text = `Top up ${game.gameName} instantly at best prices on BlueBuff!`;
+    const title = `${game.gameName} Top Up | mlbbtopup.in`;
+    const text = `Top up ${game.gameName} instantly at best prices on mlbbtopup.in!`;
 
     // Native Web Share API (Mobile / Modern Browsers)
     if (typeof navigator !== "undefined" && navigator.share) {

@@ -936,7 +936,7 @@ function getWhatsAppUrl(phone, user) {
     clean = "91" + clean;
   }
   const userName = user?.name || "Player";
-  const text = `Hello ${userName}! Contacting you from BlueBuff...`;
+  const text = `Hello ${userName}! Contacting you from mlbbtopup.in...`;
   return `https://wa.me/${clean}?text=${encodeURIComponent(text)}`;
 }
 

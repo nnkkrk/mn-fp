@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { FiFilter, FiGrid, FiList, FiZap, FiPackage, FiLayers, FiAward, FiTag } from "react-icons/fi";
+import { FiFilter, FiGrid, FiList, FiZap, FiPackage, FiLayers, FiAward, FiTag, FiSearch, FiX } from "react-icons/fi";
 import GameGrid from "@/components/Games/GameGrid";
 import GameList from "@/components/Games/GameList";
 import FilterModal from "@/components/Games/FilterModal";
 import ServiceGridSection from "@/components/Games/ServiceGridSection";
 import { ProductCardSkeleton, ProductListSkeleton } from "@/components/Skeleton/Skeleton";
-import { EmptyState, SectionTitle, SearchInput } from "@/components/common";
+import { EmptyState, SectionTitle } from "@/components/common";
 import { Icons } from "@/components/icons";
 import api from "@/lib/axios";
 
@@ -222,51 +222,69 @@ function GameCatalogContent() {
           />
         </div>
 
-        {/* ================= COMPACT SEARCH & CONTROLS ================= */}
-        <div className="flex items-center gap-2 mb-6">
-          {/* SEARCH */}
-          <div className="flex-1 min-w-0">
-            <SearchInput
-              value={searchQuery}
-              onChange={setSearchQuery}
-              placeholder="Search games, passes & topups..."
-              size="sm"
-            />
-          </div>
+        {/* ================= UNIFIED SEARCH & CONTROLS BAR ================= */}
+        <div className="relative flex items-center w-full h-10 sm:h-11 rounded-2xl border border-[var(--border)] bg-[var(--card)] px-2 sm:px-2.5 mb-6 shadow-xs transition-all focus-within:border-[var(--accent)]/50 focus-within:ring-2 focus-within:ring-[var(--accent)]/10">
+          {/* SEARCH ICON */}
+          <FiSearch size={14} className="text-[var(--muted)]/50 shrink-0 ml-1 sm:ml-1.5" />
 
-          {/* ACTION CONTROLS */}
-          <div className="flex items-center gap-1.5 shrink-0">
+          {/* SEARCH INPUT */}
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search games, passes & topups..."
+            className="flex-1 bg-transparent px-2.5 py-1 text-xs sm:text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/40 min-w-0 font-sans"
+          />
+
+          {/* CLEAR (X) BUTTON */}
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              aria-label="Clear search"
+              className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors mr-1 shrink-0 cursor-pointer"
+            >
+              <FiX size={13} />
+            </button>
+          )}
+
+          {/* VERTICAL DIVIDER */}
+          <div className="w-[1px] h-4.5 bg-[var(--border)] mx-1 shrink-0" />
+
+          {/* VIEW TOGGLE & FILTER CONTROLS */}
+          <div className="flex items-center gap-0.5 shrink-0">
             {/* VIEW TOGGLE */}
-            <div className="flex p-0.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] gap-0.5">
-              {[
-                { id: "grid", icon: FiGrid, label: "Grid view" },
-                { id: "list", icon: FiList, label: "List view" },
-              ].map((mode) => (
-                <button
-                  key={mode.id}
-                  onClick={() => setViewMode(mode.id)}
-                  aria-label={`Switch to ${mode.label}`}
-                  title={mode.label}
-                  className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-200 ${
-                    viewMode === mode.id
-                      ? "bg-[var(--foreground)] text-[var(--background)] shadow-xs"
-                      : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5"
-                  }`}
-                >
-                  <mode.icon size={13} />
-                </button>
-              ))}
-            </div>
+            {[
+              { id: "grid", icon: FiGrid, label: "Grid view" },
+              { id: "list", icon: FiList, label: "List view" },
+            ].map((mode) => (
+              <button
+                key={mode.id}
+                onClick={() => setViewMode(mode.id)}
+                aria-label={`Switch to ${mode.label}`}
+                title={mode.label}
+                className={`w-7.5 h-7.5 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl transition-all duration-200 cursor-pointer ${
+                  viewMode === mode.id
+                    ? "bg-[var(--foreground)] text-[var(--background)] shadow-xs"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5"
+                }`}
+              >
+                <mode.icon size={13} />
+              </button>
+            ))}
+
+            {/* DIVIDER BETWEEN TOGGLE AND FILTER */}
+            <div className="w-[1px] h-3.5 bg-[var(--border)]/70 mx-0.5 shrink-0" />
 
             {/* FILTER BUTTON */}
             <button
               onClick={() => setShowFilter(true)}
               aria-label="Open filter options"
               title="Filter games"
-              className={`relative flex items-center justify-center w-9 h-9 rounded-2xl border transition-all duration-200 ${
+              className={`relative flex items-center justify-center w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-xl transition-all duration-200 cursor-pointer ${
                 activeFilterCount > 0
-                  ? "border-transparent bg-[var(--accent)] text-white"
-                  : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                  ? "bg-[var(--accent)] text-white shadow-xs"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5"
               }`}
             >
               <FiFilter size={13} />
