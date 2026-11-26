@@ -180,112 +180,136 @@ export default async function Page({ params }: PageProps) {
               })()}
 
               {/* Key Specs: Modern Gaming Dashboard HUD */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {Array.isArray(item.specs) && item.specs.length > 0 ? (
-                  item.specs.slice(0, 4).map((spec: any, sIdx: number) => {
-                    const colors = [
-                      { border: "hover:border-sky-500/40", text: "text-sky-500 dark:text-sky-400", sub: "text-sky-600 dark:text-sky-400/90" },
-                      { border: "hover:border-purple-500/40", text: "text-purple-500 dark:text-purple-400", sub: "text-purple-600 dark:text-purple-400/90" },
-                      { border: "hover:border-cyan-500/40", text: "text-blue-500 dark:text-cyan-400", sub: "text-blue-600 dark:text-cyan-400/90" },
-                      { border: "hover:border-amber-500/40", text: "text-amber-500 dark:text-amber-400", sub: "text-amber-600 dark:text-amber-400/90" },
-                    ];
-                    const c = colors[sIdx % colors.length];
-                    return (
-                      <div
-                        key={sIdx}
-                        className={`p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] ${c.border} transition-all group flex flex-col justify-between shadow-xs`}
-                      >
-                        <div className="flex items-center justify-between text-[var(--muted)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider truncate mr-1">
-                            {spec.label}
-                          </span>
-                          <Gamepad2 size={15} className={`${c.text} shrink-0`} />
-                        </div>
-                        <div className="text-base sm:text-lg font-black text-[var(--foreground)] tracking-tight mt-1.5 leading-snug line-clamp-1" title={spec.value}>
-                          {spec.value}
-                        </div>
-                        <div className={`text-[9.5px] font-semibold ${c.sub} mt-1 truncate`}>
-                          {spec.subtext || "Verified Spec"}
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
+              {(() => {
+                const validSpecs = Array.isArray(item.specs)
+                  ? item.specs.filter(
+                      (s: any) =>
+                        s &&
+                        typeof s === "object" &&
+                        Boolean(String(s.label || "").trim() || String(s.value || "").trim())
+                    )
+                  : [];
+
+                const hasLegacyStats = Boolean(
+                  totalHeroes || totalSkins || item.rank?.current || collectionTier
+                );
+                const hasBullets = Array.isArray(item.bulletPoints) && item.bulletPoints.length > 0;
+
+                if (validSpecs.length === 0 && (hasBullets || !hasLegacyStats)) {
+                  return null;
+                }
+
+                return (
                   <>
-                    {/* Heroes */}
-                    <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-sky-500/40 transition-all group flex flex-col justify-between shadow-xs">
-                      <div className="flex items-center justify-between text-[var(--muted)]">
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Heroes</span>
-                        <Gamepad2 size={16} className="text-sky-500 dark:text-sky-400 group-hover:scale-110 transition-transform shrink-0" />
-                      </div>
-                      <div className="text-lg sm:text-xl font-black text-[var(--foreground)] tracking-tight mt-1.5 leading-none">
-                        {totalHeroes ? `${totalHeroes}+` : "N/A"}
-                      </div>
-                      <div className="text-[9.5px] font-semibold text-sky-600 dark:text-sky-400/90 mt-1">
-                        All Meta Unlocked
-                      </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      {validSpecs.length > 0 ? (
+                        validSpecs.slice(0, 4).map((spec: any, sIdx: number) => {
+                          const colors = [
+                            { border: "hover:border-sky-500/40", text: "text-sky-500 dark:text-sky-400", sub: "text-sky-600 dark:text-sky-400/90" },
+                            { border: "hover:border-purple-500/40", text: "text-purple-500 dark:text-purple-400", sub: "text-purple-600 dark:text-purple-400/90" },
+                            { border: "hover:border-cyan-500/40", text: "text-blue-500 dark:text-cyan-400", sub: "text-blue-600 dark:text-cyan-400/90" },
+                            { border: "hover:border-amber-500/40", text: "text-amber-500 dark:text-amber-400", sub: "text-amber-600 dark:text-amber-400/90" },
+                          ];
+                          const c = colors[sIdx % colors.length];
+                          return (
+                            <div
+                              key={sIdx}
+                              className={`p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] ${c.border} transition-all group flex flex-col justify-between shadow-xs`}
+                            >
+                              <div className="flex items-center justify-between text-[var(--muted)]">
+                                <span className="text-[10px] font-bold uppercase tracking-wider truncate mr-1">
+                                  {spec.label}
+                                </span>
+                                <Gamepad2 size={15} className={`${c.text} shrink-0`} />
+                              </div>
+                              <div className="text-base sm:text-lg font-black text-[var(--foreground)] tracking-tight mt-1.5 leading-snug line-clamp-1" title={spec.value}>
+                                {spec.value}
+                              </div>
+                              <div className={`text-[9.5px] font-semibold ${c.sub} mt-1 truncate`}>
+                                {spec.subtext || "Verified Spec"}
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <>
+                          {/* Heroes */}
+                          <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-sky-500/40 transition-all group flex flex-col justify-between shadow-xs">
+                            <div className="flex items-center justify-between text-[var(--muted)]">
+                              <span className="text-[10px] font-bold uppercase tracking-wider">Heroes</span>
+                              <Gamepad2 size={16} className="text-sky-500 dark:text-sky-400 group-hover:scale-110 transition-transform shrink-0" />
+                            </div>
+                            <div className="text-lg sm:text-xl font-black text-[var(--foreground)] tracking-tight mt-1.5 leading-none">
+                              {totalHeroes ? `${totalHeroes}+` : "N/A"}
+                            </div>
+                            <div className="text-[9.5px] font-semibold text-sky-600 dark:text-sky-400/90 mt-1">
+                              All Meta Unlocked
+                            </div>
+                          </div>
+
+                          {/* Skins */}
+                          <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-purple-500/40 transition-all group flex flex-col justify-between shadow-xs">
+                            <div className="flex items-center justify-between text-[var(--muted)]">
+                              <span className="text-[10px] font-bold uppercase tracking-wider">Skins</span>
+                              <Shirt size={16} className="text-purple-500 dark:text-purple-400 group-hover:scale-110 transition-transform shrink-0" />
+                            </div>
+                            <div className="text-lg sm:text-xl font-black text-[var(--foreground)] tracking-tight mt-1.5 leading-none">
+                              {totalSkins ? `${totalSkins}+` : "N/A"}
+                            </div>
+                            <div className="text-[9.5px] font-semibold text-purple-600 dark:text-purple-400/90 mt-1">
+                              Rare & Collector
+                            </div>
+                          </div>
+
+                          {/* Rank */}
+                          <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-cyan-500/40 transition-all group flex flex-col justify-between shadow-xs">
+                            <div className="flex items-center justify-between text-[var(--muted)]">
+                              <span className="text-[10px] font-bold uppercase tracking-wider">Current Rank</span>
+                              <Trophy size={16} className="text-blue-500 dark:text-cyan-400 group-hover:scale-110 transition-transform shrink-0" />
+                            </div>
+                            <div className="text-lg sm:text-xl font-black text-[var(--accent)] tracking-tight mt-1.5 leading-none">
+                              {item.rank?.current || "Mythic"}
+                            </div>
+                            <div className="text-[9.5px] font-semibold text-blue-600 dark:text-cyan-400/90 mt-1">
+                              {item.rank?.highest ? `Peak: ${item.rank.highest}` : "Tournament Ready"}
+                            </div>
+                          </div>
+
+                          {/* Collection */}
+                          <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-amber-500/40 transition-all group flex flex-col justify-between shadow-xs">
+                            <div className="flex items-center justify-between text-[var(--muted)]">
+                              <span className="text-[10px] font-bold uppercase tracking-wider">Collection</span>
+                              <Crown size={16} className="text-amber-500 dark:text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
+                            </div>
+                            <div className="text-base sm:text-lg font-black text-amber-500 dark:text-amber-400 tracking-tight mt-1.5 leading-snug">
+                              {collectionTier || "Standard"}
+                            </div>
+                            <div className="text-[9.5px] font-semibold text-amber-600 dark:text-amber-400/90 mt-1">
+                              {item.collection?.points ? `${item.collection.points.toLocaleString("en-IN")} Pts` : "High Collector"}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
 
-                    {/* Skins */}
-                    <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-purple-500/40 transition-all group flex flex-col justify-between shadow-xs">
-                      <div className="flex items-center justify-between text-[var(--muted)]">
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Skins</span>
-                        <Shirt size={16} className="text-purple-500 dark:text-purple-400 group-hover:scale-110 transition-transform shrink-0" />
+                    {/* All Specs List (if more than 4 specs) */}
+                    {validSpecs.length > 4 && (
+                      <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] space-y-1.5 text-xs">
+                        <div className="text-[10px] font-bold uppercase text-[var(--muted)]">Additional Specifications</div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {validSpecs.slice(4).map((s: any, idx: number) => (
+                            <div key={idx} className="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+                              <div className="text-[10px] text-[var(--muted)] font-bold">{s.label}</div>
+                              <div className="font-black text-xs text-[var(--foreground)]">{s.value}</div>
+                              {s.subtext && <div className="text-[9px] text-[var(--muted)]">{s.subtext}</div>}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="text-lg sm:text-xl font-black text-[var(--foreground)] tracking-tight mt-1.5 leading-none">
-                        {totalSkins ? `${totalSkins}+` : "N/A"}
-                      </div>
-                      <div className="text-[9.5px] font-semibold text-purple-600 dark:text-purple-400/90 mt-1">
-                        Rare & Collector
-                      </div>
-                    </div>
-
-                    {/* Rank */}
-                    <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-cyan-500/40 transition-all group flex flex-col justify-between shadow-xs">
-                      <div className="flex items-center justify-between text-[var(--muted)]">
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Current Rank</span>
-                        <Trophy size={16} className="text-blue-500 dark:text-cyan-400 group-hover:scale-110 transition-transform shrink-0" />
-                      </div>
-                      <div className="text-lg sm:text-xl font-black text-[var(--accent)] tracking-tight mt-1.5 leading-none">
-                        {item.rank?.current || "Mythic"}
-                      </div>
-                      <div className="text-[9.5px] font-semibold text-blue-600 dark:text-cyan-400/90 mt-1">
-                        {item.rank?.highest ? `Peak: ${item.rank.highest}` : "Tournament Ready"}
-                      </div>
-                    </div>
-
-                    {/* Collection */}
-                    <div className="p-3 rounded-2xl bg-[var(--background)] dark:bg-white/[0.03] border border-[var(--border)] hover:border-amber-500/40 transition-all group flex flex-col justify-between shadow-xs">
-                      <div className="flex items-center justify-between text-[var(--muted)]">
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Collection</span>
-                        <Crown size={16} className="text-amber-500 dark:text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
-                      </div>
-                      <div className="text-base sm:text-lg font-black text-amber-500 dark:text-amber-400 tracking-tight mt-1.5 leading-snug">
-                        {collectionTier || "Standard"}
-                      </div>
-                      <div className="text-[9.5px] font-semibold text-amber-600 dark:text-amber-400/90 mt-1">
-                        {item.collection?.points ? `${item.collection.points.toLocaleString("en-IN")} Pts` : "High Collector"}
-                      </div>
-                    </div>
+                    )}
                   </>
-                )}
-              </div>
-
-              {/* All Specs List (if more than 4 specs) */}
-              {Array.isArray(item.specs) && item.specs.length > 4 && (
-                <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] space-y-1.5 text-xs">
-                  <div className="text-[10px] font-bold uppercase text-[var(--muted)]">Additional Specifications</div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {item.specs.slice(4).map((s: any, idx: number) => (
-                      <div key={idx} className="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-                        <div className="text-[10px] text-[var(--muted)] font-bold">{s.label}</div>
-                        <div className="font-black text-xs text-[var(--foreground)]">{s.value}</div>
-                        {s.subtext && <div className="text-[9px] text-[var(--muted)]">{s.subtext}</div>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* Server, Safe Rebind & Highlight Tags */}
               <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-[var(--border)]/60 text-xs font-semibold">
