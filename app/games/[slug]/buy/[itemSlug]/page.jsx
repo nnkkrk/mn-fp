@@ -529,10 +529,12 @@ function BuyFlowContent() {
                   </div>
                 </div>
 
-                {/* GPAY WARNING NOTICE (SINGLE LINE) */}
-                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10.5px] font-semibold text-amber-500 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className="shrink-0 text-xs">⚠️</span>
-                  <span className="truncate">Avoid <strong>GPay</strong>. Pay via PhonePe, Paytm or other UPI apps.</span>
+                {/* GPAY WARNING NOTICE */}
+                <div className="flex items-start gap-2 px-2.5 py-2 rounded-lg bg-amber-500/[0.06] border border-amber-500/20 text-[10px] leading-snug font-medium text-amber-700 dark:text-amber-300/90">
+                  <span className="shrink-0 text-amber-500">⚠️</span>
+                  <span>
+                    Avoid <strong className="font-bold">GPay</strong>. Pay via PhonePe, Paytm or other UPI apps.
+                  </span>
                 </div>
               </div>
 
@@ -577,7 +579,7 @@ function BuyFlowContent() {
                   aria-label="Confirm & Pay"
                   onClick={handleProceed}
                   disabled={isProcessing || !verifiedAccount || (paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0))}
-                  className={`w-full py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2
+                  className={`w-full h-10 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2
                     ${isProcessing || !verifiedAccount || (paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0))
                       ? "bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed"
                       : "bg-[var(--accent)] text-white hover:opacity-95 shadow-md active:scale-98"}
@@ -604,7 +606,7 @@ function BuyFlowContent() {
                   </p>
                 )}
 
-                {/* WHATSAPP RECHARGE ASSISTANCE BANNER (COMPACT) */}
+                {/* WHATSAPP RECHARGE ASSISTANCE BANNER (ONE LINE) */}
                 <div className="pt-1.5">
                   <a
                     href={`https://wa.me/${process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP || ""}?text=${encodeURIComponent(
@@ -612,11 +614,29 @@ function BuyFlowContent() {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 transition-colors"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/[0.06] hover:bg-emerald-500/[0.1] border border-emerald-500/20 text-[var(--foreground)]/80 transition-colors whitespace-nowrap"
                   >
-                    <FaWhatsapp className="text-sm shrink-0" />
-                    <span className="text-[11px] font-semibold text-center leading-tight">
-                      Facing difficulty to recharge? <span className="underline font-bold">Contact us on WhatsApp</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3.5 h-3.5 shrink-0"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 2C6.48 2 2 6.32 2 11.64C2 13.47 2.53 15.18 3.45 16.64L2.27 21.13L6.93 19.95C8.35 20.73 9.99 21.18 11.75 21.18H12C17.52 21.18 22 16.86 22 11.54C22 6.27 17.52 2 12 2Z"
+                        fill="#25D366"
+                      />
+                      <path
+                        d="M16.58 14.42C16.33 14.3 15.11 13.7 14.88 13.62C14.65 13.53 14.49 13.49 14.32 13.74C14.16 13.99 13.68 14.54 13.54 14.71C13.39 14.87 13.25 14.89 13 14.77C12.75 14.65 11.95 14.38 11 13.54C10.26 12.88 9.76 12.07 9.61 11.82C9.47 11.57 9.6 11.44 9.72 11.32C9.83 11.2 9.97 11.02 10.09 10.88C10.22 10.74 10.26 10.63 10.34 10.46C10.42 10.3 10.38 10.15 10.32 10.03C10.26 9.91 9.76 8.69 9.55 8.19C9.35 7.71 9.15 7.77 9 7.76H8.53C8.37 7.76 8.1 7.82 7.87 8.07C7.64 8.32 7 8.91 7 10.13C7 11.35 7.89 12.53 8.01 12.7C8.14 12.86 9.76 15.37 12.25 16.44C12.84 16.7 13.31 16.85 13.67 16.96C14.27 17.15 14.81 17.12 15.24 17.06C15.72 16.99 16.72 16.46 16.93 15.88C17.14 15.3 17.14 14.8 17.07 14.7C17.01 14.6 16.83 14.54 16.58 14.42Z"
+                        fill="#ffffff"
+                      />
+                    </svg>
+                    <span className="text-[10px] font-medium">
+                      Need help?{" "}
+                      <span className="font-semibold text-emerald-600 dark:text-emerald-400 underline">
+                        Chat on WhatsApp
+                      </span>
                     </span>
                   </a>
                 </div>
