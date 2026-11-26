@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FiArrowUpRight, FiTrendingUp } from "react-icons/fi";
+import { FiArrowUpRight } from "react-icons/fi";
 import { useBuyStore } from "@/store/useBuyStore";
 
 const DEFAULT_FEATURED_ITEMS = [
@@ -77,9 +77,22 @@ export default function StorySlider({ featuredItems = [] }) {
         {/* Section Heading */}
         <div className="flex items-center justify-between mb-2.5">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-              <FiTrendingUp size={13} />
-            </span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 shrink-0"
+              aria-hidden="true"
+            >
+              <path
+                d="M12.5 2.5C12.5 2.5 17 6.4 17 11.2C17 14.9 14.3 17.8 11.2 18.4C13.1 16.9 13.7 14.6 12.6 12.5C11.9 14.2 10.6 15.1 9.5 15.3C9.9 13.4 9.1 11.4 7.7 10.1C6.2 11.7 5.5 13.8 6.1 16C4.4 14.7 3.5 12.6 4 10.2C4.7 6.7 8.4 4.1 12.5 2.5Z"
+                fill="#f59e0b"
+              />
+              <path
+                d="M12.2 10.5C12.2 10.5 15 12.8 15 15.8C15 18.4 13.1 20.5 10.5 21C8 20.5 6.5 18.6 6.8 16.1C7.4 17.2 8.4 17.6 9.3 17.4C8.9 15.8 9.9 13.5 12.2 10.5Z"
+                fill="#fbbf24"
+              />
+            </svg>
             <h2 className="text-sm sm:text-base font-black tracking-tight text-[var(--foreground)]">
               Most Selling Items
             </h2>
@@ -111,17 +124,15 @@ export default function StorySlider({ featuredItems = [] }) {
                 }
                 className="group relative shrink-0 snap-start min-w-[200px] sm:min-w-[220px] rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/50 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-10px_rgba(var(--accent-rgb),0.28)] transition-all duration-200 p-3 flex items-center gap-3"
               >
-                {/* Item Image Pedestal */}
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shrink-0 border border-[var(--border)]/60 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--accent-rgb),0.12),transparent_72%)] bg-[var(--foreground)]/[0.03] p-1">
-                  <div className="relative w-full h-full rounded-lg overflow-hidden">
-                    <Image
-                      src={item.image || "/game-assets/weeklypass.webp"}
-                      alt={item.itemName}
-                      fill
-                      sizes="56px"
-                      className="object-contain group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
+                {/* Item Image (no outer border) */}
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 shrink-0">
+                  <Image
+                    src={item.image || "/game-assets/weeklypass.webp"}
+                    alt={item.itemName}
+                    fill
+                    sizes="56px"
+                    className="object-contain group-hover:scale-110 transition-transform duration-300"
+                  />
                 </div>
 
                 {/* Game Name + Item Name + Price */}
