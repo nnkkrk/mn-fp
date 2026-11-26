@@ -14,6 +14,7 @@ export default function MaintenanceWrapper({ maintenanceMode }) {
     const [userType, setUserType] = useState(null);
 
     useEffect(() => {
+        if (!maintenanceMode) return;
         // 1. Check localStorage for an immediate hint
         const cachedRole = localStorage.getItem("userType");
         if (cachedRole) setUserType(cachedRole);
@@ -33,7 +34,7 @@ export default function MaintenanceWrapper({ maintenanceMode }) {
                 })
                 .catch(err => console.error("Role verify failed", err));
         }
-    }, [pathname]); // Re-verify on navigation if needed, though once per session is usually enough
+    }, [maintenanceMode]);
 
     // If maintenance is OFF, do nothing
     if (!maintenanceMode) return null;

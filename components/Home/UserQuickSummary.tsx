@@ -43,7 +43,7 @@ function formatGameName(slug?: string): string {
  * Only renders for authenticated users.
  */
 export default function UserQuickSummary() {
-  const { token, user, walletBalance, setWalletBalance, logout, _hasHydrated } = useAuthStore();
+  const { token, user, walletBalance, _hasHydrated } = useAuthStore();
   const [latestOrder, setLatestOrder] = useState<LatestOrder | null>(null);
   const [totalOrders, setTotalOrders] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -61,48 +61,27 @@ export default function UserQuickSummary() {
     let mounted = true;
     setLoading(true);
 
-    Promise.all([
-      api
-        .get("/api/auth/me")
-        .then((res) => {
-          if (!mounted) return;
-          if (!res.data?.success || !res.data?.user) {
-            logout();
-            return;
-          }
-          const bal = res.data.user.wallet ?? res.data.user.walletBalance;
-          if (typeof bal === "number") {
-            setWalletBalance(bal);
-          }
-        })
-        .catch((err) => {
-          if (!mounted) return;
-          const status = err?.response?.status;
-          if (status === 401 || status === 403 || status === 404) {
-            logout();
-          }
-        }),
-      api
-        .post("/api/order/user", {
-          page: 1,
-          limit: 1,
-          sortBy: "newest",
-        })
-        .then((res) => {
-          if (!mounted || !res.data?.success) return;
-          const first = res.data.orders?.[0] || null;
-          setLatestOrder(first);
-          setTotalOrders(Number(res.data.totalCount) || 0);
-        })
-        .catch(() => {}),
-    ]).finally(() => {
-      if (mounted) setLoading(false);
-    });
+    api
+      .post("/api/order/user", {
+        page: 1,
+        limit: 1,
+        sortBy: "newest",
+      })
+      .then((res) => {
+        if (!mounted || !res.data?.success) return;
+        const first = res.data.orders?.[0] || null;
+        setLatestOrder(first);
+        setTotalOrders(Number(res.data.totalCount) || 0);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
 
     return () => {
       mounted = false;
     };
-  }, [isAuthenticated, setWalletBalance, logout]);
+  }, [isAuthenticated]);
 
   const formattedDate = latestOrder?.createdAt
     ? new Date(latestOrder.createdAt).toLocaleDateString("en-IN", {
