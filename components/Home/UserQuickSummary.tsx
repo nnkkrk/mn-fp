@@ -16,6 +16,25 @@ interface LatestOrder {
   createdAt: string;
 }
 
+function formatGameName(slug?: string): string {
+  if (!slug) return "";
+  const s = slug.toLowerCase();
+  if (s.includes("sgmy")) return "SG/MY MLBB";
+  if (s.includes("double")) return "MLBB Double";
+  if (s.includes("philippines") || s.includes("mlbb-ph")) return "MLBB PH";
+  if (s.includes("mobile-legends") || s.includes("mlbb")) return "Mobile Legends";
+  if (s.includes("bgmi") || s.includes("pubg")) return "BGMI";
+  if (s.includes("honor-of-kings")) return "Honor of Kings";
+  if (s.includes("genshin")) return "Genshin Impact";
+  if (s.includes("starlight")) return "Starlight";
+  return slug
+    .replace(/\d+$/, "")
+    .split("-")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 /**
  * Compact, user-specific home summary card showing:
  * - Wallet balance (non-clickable stat)
@@ -180,12 +199,12 @@ export default function UserQuickSummary() {
                     <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.06] text-[var(--muted)] shrink-0">
                       Last
                     </span>
-                    <p className="text-xs sm:text-[13px] font-extrabold text-[var(--foreground)] truncate max-w-[140px] sm:max-w-[200px]">
+                    <p className="text-xs sm:text-[13px] font-extrabold text-[var(--foreground)] truncate max-w-[130px] sm:max-w-[180px]">
                       {latestOrder.itemName}
                     </p>
-                    {latestOrder.price > 0 && (
-                      <span className="text-xs font-black text-[var(--accent)] tabular-nums shrink-0">
-                        · ₹{latestOrder.price}
+                    {latestOrder.gameSlug && (
+                      <span className="text-[11px] font-bold text-[var(--accent)] truncate max-w-[110px] shrink-0">
+                        · {formatGameName(latestOrder.gameSlug)}
                       </span>
                     )}
                   </div>
