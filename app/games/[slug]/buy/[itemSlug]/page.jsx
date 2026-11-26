@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense, useMemo } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { Icons } from "@/components/icons";
 import { FaWhatsapp } from "react-icons/fa";
-import { LoadingSpinner } from "@/components/common";
+import { LoadingSpinner, SlideToPayButton } from "@/components/common";
 
 import AuthGuard from "@/components/AuthGuard";
 import RecentVerifiedPlayers from "../../../../region/RecentVerifiedPlayers";
@@ -372,8 +372,8 @@ function BuyFlowContent() {
             <div className="space-y-2.5">
               <div className={`grid gap-2 ${gameWithOptions?.inputFieldTwo ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
                 <div className="relative">
-                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-                    <Icons.user className="text-base" />
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
+                    <Icons.user className="w-4 h-4" />
                   </div>
                   <input
                     type="text"
@@ -383,14 +383,14 @@ function BuyFlowContent() {
                       setPlayerId(e.target.value);
                       if (verifiedAccount) setVerifiedAccount(null);
                     }}
-                    className="w-full bg-[var(--card)] border-none focus:ring-1.5 focus:ring-[var(--accent)]/30 rounded-xl py-2 pl-11 pr-3 font-semibold text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted)] text-xs sm:text-sm h-10"
+                    className="w-full bg-[var(--card)] border-none focus:ring-1.5 focus:ring-[var(--accent)]/30 rounded-xl py-2 pl-12 pr-3 font-semibold text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted)] text-xs sm:text-sm h-10"
                   />
                 </div>
 
                 {gameWithOptions?.inputFieldTwo && (
                   <div className="relative">
-                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] z-10 pointer-events-none">
-                      <Icons.globe className="text-base" />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] z-10 pointer-events-none">
+                      <Icons.globe className="w-4 h-4" />
                     </div>
                     {gameWithOptions?.inputFieldTwoOptions?.length > 0 ? (
                       <select
@@ -399,7 +399,7 @@ function BuyFlowContent() {
                           setZoneId(e.target.value);
                           if (verifiedAccount) setVerifiedAccount(null);
                         }}
-                        className="w-full bg-[var(--card)] border-none focus:ring-1.5 focus:ring-[var(--accent)]/30 rounded-xl py-2 pl-11 pr-7 font-semibold text-[var(--foreground)] outline-none transition-all appearance-none cursor-pointer text-xs sm:text-sm h-10"
+                        className="w-full bg-[var(--card)] border-none focus:ring-1.5 focus:ring-[var(--accent)]/30 rounded-xl py-2 pl-12 pr-7 font-semibold text-[var(--foreground)] outline-none transition-all appearance-none cursor-pointer text-xs sm:text-sm h-10"
                       >
                         <option value="">{fieldTwoLabel}</option>
                         {gameWithOptions.inputFieldTwoOptions.map(opt => (
@@ -415,7 +415,7 @@ function BuyFlowContent() {
                           setZoneId(e.target.value);
                           if (verifiedAccount) setVerifiedAccount(null);
                         }}
-                        className="w-full bg-[var(--card)] border-none focus:ring-1.5 focus:ring-[var(--accent)]/30 rounded-xl py-2 pl-11 pr-3 font-semibold text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted)] text-xs sm:text-sm h-10"
+                        className="w-full bg-[var(--card)] border-none focus:ring-1.5 focus:ring-[var(--accent)]/30 rounded-xl py-2 pl-12 pr-3 font-semibold text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted)] text-xs sm:text-sm h-10"
                       />
                     )}
                   </div>
@@ -607,30 +607,17 @@ function BuyFlowContent() {
                   <span className="text-2xl font-black text-[var(--foreground)] tracking-tight">₹{item?.sellingPrice || 0}</span>
                 </div>
 
-                <button
-                  aria-label="Confirm & Pay"
-                  onClick={handleProceed}
-                  disabled={isProcessing || !verifiedAccount || (paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0))}
-                  className={`w-full h-10 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2
-                    ${isProcessing || !verifiedAccount || (paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0))
-                      ? "bg-[var(--muted)]/20 text-[var(--muted)] cursor-not-allowed"
-                      : "bg-[var(--accent)] text-white hover:opacity-95 shadow-md active:scale-98"}
-                  `}
-                >
-                  {isProcessing ? (
-                    <>
-                      <LoadingSpinner size="xs" color="current" />
-                      <span>Processing...</span>
-                    </>
-                  ) : paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0) ? (
-                    <span>Insufficient Wallet Balance</span>
-                  ) : (
-                    <>
-                      <span>Confirm & Pay</span>
-                      <Icons.arrowRight className="text-xs" />
-                    </>
-                  )}
-                </button>
+                <SlideToPayButton
+                  onConfirm={handleProceed}
+                  loading={isProcessing}
+                  disabled={!verifiedAccount || (paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0))}
+                  label={`Slide to Pay · ₹${item?.sellingPrice || 0}`}
+                  disabledLabel={
+                    paymentMethod === "wallet" && walletBalance < (item?.sellingPrice || 0)
+                      ? "Insufficient Wallet Balance"
+                      : "Verify Player to Pay"
+                  }
+                />
 
                 {!verifiedAccount && (
                   <p className="text-center text-[11px] font-medium text-[var(--muted)]">

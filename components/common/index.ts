@@ -28,5 +28,8 @@ export {
 } from "./SectionTitle";
 export type { SectionTitleProps, SectionTitleSize, SectionTitleAlign, SectionTitleColor } from "./SectionTitle";
 
+export { default as SlideToPayButton } from "./SlideToPayButton";
+export type { SlideToPayButtonProps } from "./SlideToPayButton";
+
 export { default as Icons, Icons as IconCatalog } from "../icons";
 
