@@ -142,44 +142,73 @@ export default function PackageSelector({
             })}
           </div>
         ) : (
-          <div className="pb-4">
-            <div ref={sliderRef} className="flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-3 pt-2 px-1 scrollbar-hide no-scrollbar -mx-1">
-              {items.map((item) => {
-                const isActive = activeItem.itemSlug === item.itemSlug;
-                const isOOS = item.isOutOfStock || item.itemAvailablity === false;
-                return (
-                  <div
-                    key={item.itemSlug}
-                    onClick={() => scrollToItem(item)}
-                    className={`relative snap-center min-w-[130px] rounded-xl p-2.5 cursor-pointer border-2 transition-all duration-300 flex flex-col justify-between min-h-[4.25rem] overflow-hidden bg-[var(--card)]/60
-                    ${isActive 
-                      ? isOOS ? "border-rose-500/60 bg-rose-500/[0.06] shadow-sm scale-[1.01]" : "border-[var(--accent)] bg-[var(--accent)]/[0.08] shadow-sm scale-[1.01]" 
-                      : isOOS ? "border-[var(--border)] opacity-60 hover:opacity-100" : "border-[var(--border)] opacity-80 hover:opacity-100 hover:border-[var(--accent)]/40"}
-                  `}>
-                     <div className={`absolute top-0 right-2.5 w-9 h-11 transition-all duration-300 ribbon-shape flex items-center justify-center pt-0.5
-                        ${isActive ? (isOOS ? "bg-gradient-to-b from-rose-500/20 to-transparent" : "bg-gradient-to-b from-[var(--accent)]/30 to-transparent") : "bg-[var(--accent)]/5"}
-                     `}>
-                        <div className="relative w-6 h-6">
-                          <Image src={item?.itemImageId?.image || item?.image || "/logo.png"} alt={`${item.itemName || "Package"} Top Up icon`} fill unoptimized className={`object-contain transition-all duration-300 ${isOOS ? "grayscale opacity-30" : isActive ? "opacity-100 scale-105" : "opacity-30"}`} />
-                        </div>
-                     </div>
-                    <div className="relative z-10 flex flex-col h-full pr-10 pt-0.5">
-                      <div className="flex items-center gap-1">
-                        <p className={`text-[9.5px] font-black tracking-tight uppercase leading-tight mb-1 truncate ${isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"}`}>
-                          {item.itemName}
-                        </p>
-                        {isOOS && (
-                          <span className="text-[6.5px] font-black uppercase text-rose-500 bg-rose-500/10 px-1 py-0.2 rounded border border-rose-500/20 mb-1">
-                            OOS
-                          </span>
-                        )}
-                      </div>
-                      <p className={`text-base font-black tracking-tight leading-none mt-auto ${isActive ? (isOOS ? "text-rose-400" : "text-[var(--accent)]") : "text-[var(--foreground)]"}`}>₹{item.sellingPrice}</p>
+          <div className="flex flex-col gap-2 pt-1 pb-2">
+            {items.map((item) => {
+              const isActive = activeItem.itemSlug === item.itemSlug;
+              const isOOS = item.isOutOfStock || item.itemAvailablity === false;
+              const discount =
+                item.dummyPrice > item.sellingPrice
+                  ? Math.round(((item.dummyPrice - item.sellingPrice) / item.dummyPrice) * 100)
+                  : 0;
+
+              return (
+                <div
+                  key={item.itemSlug}
+                  onClick={() => scrollToItem(item)}
+                  className={`relative rounded-xl px-3 py-2.5 cursor-pointer border transition-all duration-200 flex items-center justify-between gap-3 bg-[var(--card)]/70
+                  ${isActive
+                    ? isOOS
+                      ? "border-rose-500/60 bg-rose-500/[0.06] shadow-sm"
+                      : "border-[var(--accent)] bg-[var(--accent)]/[0.08] shadow-sm"
+                    : isOOS
+                    ? "border-[var(--border)] opacity-60 hover:opacity-100"
+                    : "border-[var(--border)] hover:border-[var(--accent)]/40"}
+                `}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative w-7 h-7 shrink-0">
+                      <Image
+                        src={item?.itemImageId?.image || item?.image || "/logo.png"}
+                        alt={`${item.itemName || "Package"} Top Up icon`}
+                        fill
+                        unoptimized
+                        className={`object-contain ${isOOS ? "grayscale opacity-40" : ""}`}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <p className={`text-xs font-extrabold uppercase tracking-tight truncate ${isActive ? (isOOS ? "text-rose-400" : "text-[var(--foreground)]") : "text-[var(--foreground)]/90"}`}>
+                        {item.itemName}
+                      </p>
+                      {isOOS ? (
+                        <span className="shrink-0 text-[9px] font-bold uppercase text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded">
+                          OOS
+                        </span>
+                      ) : discount > 0 ? (
+                        <span className="shrink-0 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                          -{discount}%
+                        </span>
+                      ) : null}
                     </div>
                   </div>
-                );
-              })}
-            </div>
+
+                  <div className="flex items-center gap-2.5 shrink-0">
+                    <div className="flex items-baseline gap-1.5">
+                      {item.dummyPrice > item.sellingPrice && (
+                        <span className="text-[10px] font-semibold text-[var(--muted)]/50 line-through">
+                          ₹{item.dummyPrice}
+                        </span>
+                      )}
+                      <span className={`text-sm font-black tracking-tight ${isActive ? (isOOS ? "text-rose-400" : "text-[var(--accent)]") : "text-[var(--foreground)]"}`}>
+                        ₹{item.sellingPrice}
+                      </span>
+                    </div>
+                    {isActive && (
+                      <FiCheckCircle size={14} className={isOOS ? "text-rose-500" : "text-[var(--accent)]"} />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
