@@ -538,18 +538,20 @@ export default function Header() {
                                 key={item.label}
                                 href={item.href}
                                 onClick={() => setUserMenuOpen(false)}
-                                className="relative flex flex-col items-center justify-center py-2 px-1 rounded-2xl bg-[var(--card)] shadow-sm border border-transparent hover:border-[var(--accent)]/30 hover:shadow-md transition-all group overflow-hidden text-center"
+                                className="relative flex items-center gap-1.5 py-2 px-2 rounded-2xl bg-[var(--card)] shadow-sm border border-transparent hover:border-[var(--accent)]/30 hover:shadow-md transition-all group overflow-hidden text-left"
                               >
                                 <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className={`shrink-0 transition-transform group-hover:scale-110 relative z-10 mb-1 ${item.colorClass || "text-[var(--foreground)]"}`}>
+                                <div className={`shrink-0 transition-transform group-hover:scale-110 relative z-10 ${item.colorClass || "text-[var(--foreground)]"}`}>
                                   {item.icon}
                                 </div>
-                                <p className="text-[8px] sm:text-[8.5px] font-black text-[var(--foreground)] leading-tight uppercase tracking-tight truncate w-full relative z-10">
-                                  {item.label}
-                                </p>
-                                <p className="text-[6.5px] sm:text-[7px] text-[var(--muted)] font-bold uppercase tracking-tight truncate leading-none w-full relative z-10 mt-0.5">
-                                  {item.desc}
-                                </p>
+                                <div className="min-w-0 flex-1 relative z-10">
+                                  <p className="text-[8px] sm:text-[8.5px] font-black text-[var(--foreground)] leading-tight uppercase tracking-tight truncate">
+                                    {item.label}
+                                  </p>
+                                  <p className="text-[6.5px] sm:text-[7px] text-[var(--muted)] font-bold uppercase tracking-tight truncate leading-none mt-0.5">
+                                    {item.desc}
+                                  </p>
+                                </div>
                               </Link>
                             ))}
                           </div>

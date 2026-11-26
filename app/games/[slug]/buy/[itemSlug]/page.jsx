@@ -318,7 +318,7 @@ function BuyFlowContent() {
               <div className="mt-4 pt-3 border-t border-[var(--border)]/40">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-1.5">
-                    <Icons.shoppingBag className="text-[var(--accent)] text-xs" />
+                    <Icons.shoppingBag className="text-[var(--accent)] w-3.5 h-3.5 shrink-0" />
                     <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">More packs you may like</span>
                   </div>
                   <button
@@ -465,7 +465,7 @@ function BuyFlowContent() {
               <div className="pt-2">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-1.5">
-                    <Icons.userCheck className="text-[var(--accent)] text-xs" />
+                    <Icons.userCheck className="text-[var(--accent)] w-3.5 h-3.5 shrink-0" />
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Recent Players</span>
                   </div>
                   <button
@@ -506,26 +506,43 @@ function BuyFlowContent() {
               {/* UPI SELECTION TILE */}
               <div
                 onClick={() => setPaymentMethod("upi")}
-                className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2.5
-                  ${paymentMethod === "upi" ? "bg-[var(--accent)]/5 border-[var(--accent)]" : "bg-[var(--card)]/50 border-transparent hover:border-[var(--accent)]/30"}
+                className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col gap-2.5
+                  ${paymentMethod === "upi"
+                    ? "bg-[var(--accent)]/[0.06] border-[var(--accent)] shadow-[0_6px_18px_-8px_rgba(var(--accent-rgb),0.32)]"
+                    : "bg-[var(--card)]/70 border-[var(--border)]/70 hover:border-[var(--accent)]/40"}
                 `}
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center
-                      ${paymentMethod === "upi" ? "bg-[var(--accent)] text-white" : "bg-[var(--background)] text-[var(--muted)]"}
-                    `}>
-                      <Icons.smartphone className="text-sm" />
-                    </div>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-7 h-7 shrink-0"
+                      aria-hidden="true"
+                    >
+                      <rect x="3" y="3" width="8" height="8" rx="2" fill="#2563eb" fillOpacity="0.18" stroke="#2563eb" strokeWidth="1.8" />
+                      <rect x="5.5" y="5.5" width="3" height="3" rx="0.7" fill="#2563eb" />
+                      <rect x="13" y="3" width="8" height="8" rx="2" fill="#38bdf8" fillOpacity="0.22" stroke="#0284c7" strokeWidth="1.8" />
+                      <rect x="15.5" y="5.5" width="3" height="3" rx="0.7" fill="#0284c7" />
+                      <rect x="3" y="13" width="8" height="8" rx="2" fill="#38bdf8" fillOpacity="0.22" stroke="#0284c7" strokeWidth="1.8" />
+                      <rect x="5.5" y="15.5" width="3" height="3" rx="0.7" fill="#0284c7" />
+                      <path d="M16.5 13L14 17H17L16.5 21L20 16.5H17L16.5 13Z" fill="#2563eb" />
+                    </svg>
                     <div>
-                      <h4 className="font-bold text-[var(--foreground)] text-xs sm:text-sm">UPI Gateway</h4>
-                      <p className="text-[10px] text-[var(--muted)]">PhonePe, Paytm, Other UPI Apps</p>
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-bold text-[var(--foreground)] text-xs sm:text-sm">UPI Gateway</h4>
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--accent)]/12 text-[var(--accent)]">
+                          Instant
+                        </span>
+                      </div>
+                      <p className="text-[10.5px] text-[var(--muted)] mt-0.5">PhonePe, Paytm, Other UPI Apps</p>
                     </div>
                   </div>
-                  <div className={`w-4 h-4 rounded-full border flex items-center justify-center
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors
                     ${paymentMethod === "upi" ? "bg-[var(--accent)] border-[var(--accent)] text-white" : "border-[var(--border)]"}
                   `}>
-                    {paymentMethod === "upi" && <Icons.check className="text-[8px] stroke-[3]" />}
+                    {paymentMethod === "upi" && <Icons.check className="text-[10px] stroke-[3]" />}
                   </div>
                 </div>
 
@@ -541,30 +558,45 @@ function BuyFlowContent() {
               {/* WALLET SELECTION TILE */}
               <div
                 onClick={() => setPaymentMethod("wallet")}
-                className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between
-                  ${paymentMethod === "wallet" ? "bg-[var(--accent)]/5 border-[var(--accent)]" : "bg-[var(--card)]/50 border-transparent hover:border-[var(--accent)]/30"}
+                className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3
+                  ${paymentMethod === "wallet"
+                    ? "bg-[var(--accent)]/[0.06] border-[var(--accent)] shadow-[0_6px_18px_-8px_rgba(var(--accent-rgb),0.32)]"
+                    : "bg-[var(--card)]/70 border-[var(--border)]/70 hover:border-[var(--accent)]/40"}
                 `}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center
-                    ${paymentMethod === "wallet" ? "bg-[var(--accent)] text-white" : "bg-[var(--background)] text-[var(--muted)]"}
-                  `}>
-                    <Icons.creditCard className="text-sm" />
-                  </div>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-7 h-7 shrink-0"
+                    aria-hidden="true"
+                  >
+                    <rect x="2.5" y="5.5" width="19" height="14" rx="3.5" fill="#10b981" fillOpacity="0.16" />
+                    <path
+                      d="M4.5 5.5H17.5C18.88 5.5 20 6.62 20 8V9.5H15.5C14.12 9.5 13 10.62 13 12C13 13.38 14.12 14.5 15.5 14.5H20V16C20 17.38 18.88 18.5 17.5 18.5H4.5C3.12 18.5 2 17.38 2 16V8C2 6.62 3.12 5.5 4.5 5.5Z"
+                      fill="#059669"
+                    />
+                    <rect x="13.5" y="10" width="8" height="4" rx="2" fill="#34d399" />
+                    <circle cx="16" cy="12" r="1" fill="#ffffff" />
+                  </svg>
                   <div>
                     <h4 className="font-bold text-[var(--foreground)] text-xs sm:text-sm">My Wallet</h4>
-                    <p className="text-[10px] text-[var(--muted)]">
-                      Available Balance: <strong className={walletBalance >= (item?.sellingPrice || 0) ? "text-emerald-500" : "text-[var(--foreground)]"}>₹{walletBalance || 0}</strong>
+                    <p className="text-[10.5px] text-[var(--muted)] mt-0.5">
+                      Available Balance:{" "}
+                      <strong className={walletBalance >= (item?.sellingPrice || 0) ? "text-emerald-600 dark:text-emerald-400" : "text-[var(--foreground)]"}>
+                        ₹{walletBalance || 0}
+                      </strong>
                       {walletBalance < (item?.sellingPrice || 0) && (
                         <span className="text-amber-500 ml-1.5 font-medium">(Low Balance)</span>
                       )}
                     </p>
                   </div>
                 </div>
-                <div className={`w-4 h-4 rounded-full border flex items-center justify-center
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors
                   ${paymentMethod === "wallet" ? "bg-[var(--accent)] border-[var(--accent)] text-white" : "border-[var(--border)]"}
                 `}>
-                  {paymentMethod === "wallet" && <Icons.check className="text-[8px] stroke-[3]" />}
+                  {paymentMethod === "wallet" && <Icons.check className="text-[10px] stroke-[3]" />}
                 </div>
               </div>
 

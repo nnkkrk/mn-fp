@@ -12,7 +12,7 @@ import { useBuyStore } from "@/store/useBuyStore";
 import GameHeader from "@/components/GameDetail/GameHeader";
 import PackageSelector from "@/components/GameDetail/PackageSelector";
 import BuyPanel from "@/components/GameDetail/BuyPanel";
-import { Gamepad2, Home } from "lucide-react";
+import { ArrowLeft, Gamepad2, Home } from "lucide-react";
 
 import { Suspense } from "react";
 
@@ -231,6 +231,17 @@ function GameDetailContent() {
   return (
     <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-3 sm:px-4 pb-28 pt-2">
       <div className="w-full max-w-6xl mx-auto space-y-2.5">
+
+        {/* ================= BACK BUTTON ================= */}
+        <button
+          type="button"
+          aria-label="Back"
+          onClick={() => router.back()}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] hover:opacity-80 transition-opacity uppercase tracking-wider cursor-pointer"
+        >
+          <ArrowLeft size={14} />
+          <span>Back</span>
+        </button>
 
         {/* ================= HEADER ================= */}
         <GameHeader game={game} />

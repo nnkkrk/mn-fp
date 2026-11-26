@@ -94,13 +94,13 @@ export default function PackageSelector({
                   )}
 
                   {/* RIBBON (TOP RIGHT) */}
-                  <div className={`absolute top-0 right-2.5 w-7 h-10 transition-all duration-300 ribbon-shape flex items-center justify-center pt-0.5 shadow-sm
+                  <div className={`absolute top-0 right-2.5 w-9 h-11 transition-all duration-300 ribbon-shape flex items-center justify-center pt-0.5 shadow-sm
                     ${isActive 
                         ? isOOS ? "bg-gradient-to-b from-rose-500/20 to-transparent" : "bg-gradient-to-b from-[var(--accent)]/30 to-[var(--accent)]/10" 
                         : "bg-gradient-to-b from-[var(--accent)]/[0.08] to-transparent"
                     }
                   `}>
-                    <div className="relative w-4 h-4 transition-transform duration-300 group-hover:scale-105">
+                    <div className="relative w-6 h-6 transition-transform duration-300 group-hover:scale-105">
                         <Image
                             src={item?.itemImageId?.image || item?.image || "/logo.png"}
                             alt={`${item.itemName || "Package"} Top Up icon`}
@@ -112,7 +112,7 @@ export default function PackageSelector({
                   </div>
 
                   {/* CONTENT */}
-                  <div className="relative z-10 flex flex-col h-full pr-8 pt-0.5">
+                  <div className="relative z-10 flex flex-col h-full pr-10 pt-0.5">
                     <p className={`text-[9.5px] font-black tracking-tight uppercase leading-tight mb-1 truncate ${isActive ? (isOOS ? "text-rose-400" : "text-[var(--foreground)]") : "text-[var(--muted)] group-hover:text-[var(--foreground)]"}`}>
                       {item.itemName}
                     </p>
@@ -156,14 +156,14 @@ export default function PackageSelector({
                       ? isOOS ? "border-rose-500/60 bg-rose-500/[0.06] shadow-sm scale-[1.01]" : "border-[var(--accent)] bg-[var(--accent)]/[0.08] shadow-sm scale-[1.01]" 
                       : isOOS ? "border-[var(--border)] opacity-60 hover:opacity-100" : "border-[var(--border)] opacity-80 hover:opacity-100 hover:border-[var(--accent)]/40"}
                   `}>
-                     <div className={`absolute top-0 right-2.5 w-7 h-10 transition-all duration-300 ribbon-shape flex items-center justify-center pt-0.5
+                     <div className={`absolute top-0 right-2.5 w-9 h-11 transition-all duration-300 ribbon-shape flex items-center justify-center pt-0.5
                         ${isActive ? (isOOS ? "bg-gradient-to-b from-rose-500/20 to-transparent" : "bg-gradient-to-b from-[var(--accent)]/30 to-transparent") : "bg-[var(--accent)]/5"}
                      `}>
-                        <div className="relative w-4 h-4">
+                        <div className="relative w-6 h-6">
                           <Image src={item?.itemImageId?.image || item?.image || "/logo.png"} alt={`${item.itemName || "Package"} Top Up icon`} fill unoptimized className={`object-contain transition-all duration-300 ${isOOS ? "grayscale opacity-30" : isActive ? "opacity-100 scale-105" : "opacity-30"}`} />
                         </div>
                      </div>
-                    <div className="relative z-10 flex flex-col h-full pr-8 pt-0.5">
+                    <div className="relative z-10 flex flex-col h-full pr-10 pt-0.5">
                       <div className="flex items-center gap-1">
                         <p className={`text-[9.5px] font-black tracking-tight uppercase leading-tight mb-1 truncate ${isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"}`}>
                           {item.itemName}
