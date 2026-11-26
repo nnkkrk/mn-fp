@@ -7,9 +7,9 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --accent-rgb: 59, 130, 246;
+  --accent: #059669;
+  --accent-hover: #047857;
+  --accent-rgb: 5, 150, 105;
   --muted: #64748b;
   --border: #e2e8f0;
   --card: #f1f5f9;
@@ -64,9 +64,9 @@ html, body {
 html[data-theme="dark"] {
   --background: #000000;
   --foreground: #f1f5f9;
-  --accent: #7dd3fc;
-  --accent-hover: #38bdf8;
-  --accent-rgb: 125, 211, 252;
+  --accent: #059669;
+  --accent-hover: #047857;
+  --accent-rgb: 5, 150, 105;
   --muted: #94a3b8;
   --border: #111111;
   --card: #000000;
@@ -76,9 +76,9 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --background: #ffffff;
   --foreground: #0f172a;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --accent-rgb: 59, 130, 246;
+  --accent: #059669;
+  --accent-hover: #047857;
+  --accent-rgb: 5, 150, 105;
   --muted: #64748b;
   --border: #e2e8f0;
   --card: #f8fafc;

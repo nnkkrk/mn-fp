@@ -14,18 +14,18 @@ interface ColorPreset {
 }
 
 const COLOR_PRESETS: ColorPreset[] = [
-  { id: "cyan", name: "Cyber Cyan", hex: "#00e5ff", hoverHex: "#00b4d8" },
-  { id: "sky", name: "Sky Blue", hex: "#38bdf8", hoverHex: "#0284c7" },
-  { id: "blue", name: "Electric Blue", hex: "#3b82f6", hoverHex: "#2563eb" },
-  { id: "indigo", name: "Deep Indigo", hex: "#6366f1", hoverHex: "#4f46e5" },
-  { id: "purple", name: "Neon Purple", hex: "#a855f7", hoverHex: "#9333ea" },
-  { id: "pink", name: "Hot Pink", hex: "#ec4899", hoverHex: "#db2777" },
-  { id: "rose", name: "Rose Ruby", hex: "#f43f5e", hoverHex: "#e11d48" },
-  { id: "red", name: "Crimson Red", hex: "#ef4444", hoverHex: "#dc2626" },
-  { id: "orange", name: "Sunset Orange", hex: "#f97316", hoverHex: "#ea580c" },
-  { id: "amber", name: "Solar Gold", hex: "#f59e0b", hoverHex: "#d97706" },
-  { id: "lime", name: "Toxic Lime", hex: "#84cc16", hoverHex: "#65a30d" },
-  { id: "emerald", name: "Mint Emerald", hex: "#10b981", hoverHex: "#059669" },
+  { id: "blue", name: "Royal Blue", hex: "#2563eb", hoverHex: "#1d4ed8" },
+  { id: "sky", name: "Ocean Cobalt", hex: "#0284c7", hoverHex: "#0369a1" },
+  { id: "cyan", name: "Arctic Cyan", hex: "#0891b2", hoverHex: "#0e7490" },
+  { id: "teal", name: "Deep Teal", hex: "#0d9488", hoverHex: "#0f766e" },
+  { id: "emerald", name: "Rich Emerald", hex: "#059669", hoverHex: "#047857" },
+  { id: "indigo", name: "Royal Indigo", hex: "#4f46e5", hoverHex: "#4338ca" },
+  { id: "purple", name: "Velvet Violet", hex: "#7c3aed", hoverHex: "#6d28d9" },
+  { id: "pink", name: "Berry Plum", hex: "#c026d3", hoverHex: "#a21caf" },
+  { id: "rose", name: "Crimson Rose", hex: "#e11d48", hoverHex: "#be123c" },
+  { id: "orange", name: "Burnt Coral", hex: "#ea580c", hoverHex: "#c2410c" },
+  { id: "amber", name: "Warm Gold", hex: "#d97706", hoverHex: "#b45309" },
+  { id: "slate", name: "Graphite", hex: "#334155", hoverHex: "#1e293b" },
 ];
 
 const SEASONS: { id: ThemeEffect; name: string; icon: string }[] = [
@@ -154,7 +154,7 @@ export default function ThemeToggle() {
     }
   };
 
-  const currentAccentDisplay = accentColor || (theme === "dark" ? "#7dd3fc" : "#3b82f6");
+  const currentAccentDisplay = accentColor || "#059669";
 
   return (
     <>
@@ -213,7 +213,7 @@ export default function ThemeToggle() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 8 }}
                   transition={{ duration: 0.16, ease: "easeOut" }}
-                  className="relative w-full max-w-[275px] sm:max-w-[285px] rounded-2xl border border-[var(--border)] p-3 text-[var(--foreground)] select-none max-h-[92vh] overflow-y-auto"
+                  className="relative w-full max-w-[330px] sm:max-w-[355px] rounded-2xl border border-[var(--border)] p-4 sm:p-5 text-[var(--foreground)] select-none max-h-[92vh] overflow-y-auto"
                   style={{
                     backgroundColor: theme === "dark" ? "#0c0c0f" : "#ffffff",
                     zIndex: 2147483647,
@@ -222,7 +222,7 @@ export default function ThemeToggle() {
                   }}
                 >
                   {/* STUDIO HEADER */}
-                  <div className="flex items-center justify-between pb-1.5 border-b border-[var(--border)] mb-2">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-[var(--border)] mb-3.5">
                     <div className="flex items-center gap-1.5">
                       <div
                         className="w-5.5 h-5.5 rounded-md flex items-center justify-center transition-colors duration-300"
@@ -248,7 +248,7 @@ export default function ThemeToggle() {
                   </div>
 
                   {/* SECTION 1: THEME MODE */}
-                  <div className="mb-2">
+                  <div className="mb-3.5">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-[8.5px] font-black uppercase tracking-widest text-[var(--muted)]">
                         Mode
@@ -297,7 +297,7 @@ export default function ThemeToggle() {
                   </div>
 
                   {/* SECTION 2: ACCENT COLOR */}
-                  <div className="mb-2">
+                  <div className="mb-3.5">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-[8.5px] font-black uppercase tracking-widest text-[var(--muted)]">
                         Accent Color

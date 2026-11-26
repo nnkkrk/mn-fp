@@ -547,11 +547,22 @@ function BuyFlowContent() {
                 </div>
 
                 {/* GPAY WARNING NOTICE */}
-                <div className="flex items-start gap-2 px-2.5 py-2 rounded-lg bg-amber-500/[0.06] border border-amber-500/20 text-[10px] leading-snug font-medium text-amber-700 dark:text-amber-300/90">
-                  <span className="shrink-0 text-amber-500">⚠️</span>
-                  <span>
-                    Avoid <strong className="font-bold">GPay</strong>. Pay via PhonePe, Paytm or other UPI apps.
-                  </span>
+                <div className="flex items-start gap-2 px-3 py-2 rounded-xl bg-amber-500/[0.08] border border-amber-500/25 text-[10.5px] leading-snug">
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-3.5 h-3.5 shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  >
+                    <circle cx="10" cy="10" r="9" fill="#f59e0b" fillOpacity="0.18" />
+                    <path d="M10 6V10.5" stroke="#d97706" strokeWidth="1.8" strokeLinecap="round" />
+                    <circle cx="10" cy="13.5" r="1" fill="#d97706" />
+                  </svg>
+                  <div className="text-[var(--foreground)]/80 font-medium">
+                    <p className="font-bold text-amber-600">Avoid GPay</p>
+                    <p>Pay via PhonePe, Paytm or other UPI apps.</p>
+                  </div>
                 </div>
               </div>
 
