@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Swords, Shirt, Crown, Clock, XCircle } from "lucide-react";
+import { ArrowUpRight, Crown, Clock, XCircle } from "lucide-react";
 
 interface IdCardProps {
   item: any;
@@ -138,61 +138,14 @@ export default function IdCard({ item }: IdCardProps) {
             {item.title}
           </h2>
 
-          {/* KEY STATS & BULLET POINTS */}
-          {(() => {
-            const bullets: string[] = (item.bulletPoints && item.bulletPoints.length > 0)
-              ? item.bulletPoints
-              : Array.isArray(item.specs) && item.specs.length > 0
-              ? item.specs.map((s: any) => (typeof s === "string" ? s : `${s.label ? s.label + ": " : ""}${s.value || ""}`))
-              : [];
-
-            if (bullets.length > 0) {
-              return (
-                <div className="flex items-center gap-2 text-[11px] font-semibold text-[var(--muted)] flex-wrap">
-                  {bullets.slice(0, 2).map((b, idx) => (
-                    <span key={idx} className="flex items-center gap-1.5 truncate max-w-[170px]">
-                      {idx > 0 && <span className="w-1 h-1 rounded-full bg-[var(--border)] shrink-0" />}
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
-                      <span className="text-[var(--foreground)] font-bold truncate">{b}</span>
-                    </span>
-                  ))}
-                  {item.account?.server && (
-                    <span className="text-[9px] uppercase font-bold text-[var(--muted)] bg-[var(--foreground)]/[0.04] px-1.5 py-0.5 rounded border border-[var(--border)]">
-                      {item.account.server}
-                    </span>
-                  )}
-                </div>
-              );
-            }
-
-            return (
-              <div className="flex items-center gap-2.5 text-[11px] font-semibold text-[var(--muted)] flex-wrap">
-                {totalHeroes !== undefined && totalHeroes !== null && (
-                  <span className="flex items-center gap-1.5">
-                    <Swords size={12} className="text-sky-400 shrink-0" />
-                    <span>{totalHeroes}+ Heroes</span>
-                  </span>
-                )}
-                {totalSkins !== undefined && totalSkins !== null && (
-                  <>
-                    <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
-                    <span className="flex items-center gap-1.5">
-                      <Shirt size={12} className="text-purple-400 shrink-0" />
-                      <span>{totalSkins}+ Skins</span>
-                    </span>
-                  </>
-                )}
-                {item.account?.server && (
-                  <>
-                    <span className="w-1 h-1 rounded-full bg-[var(--border)]" />
-                    <span className="text-[10px] uppercase font-bold text-[var(--muted)]">
-                      {item.account.server}
-                    </span>
-                  </>
-                )}
-              </div>
-            );
-          })()}
+          {/* REGION / SERVER */}
+          {item.account?.server && (
+            <div>
+              <span className="inline-block text-[10px] uppercase font-bold text-[var(--muted)] bg-[var(--foreground)]/[0.04] px-2 py-0.5 rounded border border-[var(--border)]">
+                {item.account.server}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* PRICE & ACTION FOOTER */}
@@ -228,8 +181,8 @@ export default function IdCard({ item }: IdCardProps) {
               </div>
             )}
 
-            <div className="w-6 h-6 rounded-full bg-[var(--foreground)]/5 group-hover:bg-[var(--accent)] group-hover:text-white flex items-center justify-center text-[var(--muted)] transition-all">
-              <ArrowUpRight size={13} />
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--accent)] to-blue-600 text-white shadow-sm shadow-[var(--accent)]/30 group-hover:scale-105 flex items-center justify-center transition-all">
+              <ArrowUpRight size={16} />
             </div>
           </div>
         </div>

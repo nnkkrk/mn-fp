@@ -46,8 +46,7 @@ export default function ShareButton({
         if (filesToShare.length > 0) {
           await navigator.share({
             title,
-            text: `${title}\nPrice: ₹${price}`,
-            url,
+            text: shareText,
             files: filesToShare,
           });
           setSharing(false);
@@ -56,8 +55,7 @@ export default function ShareButton({
 
         await navigator.share({
           title,
-          text: `${title}\nPrice: ₹${price}`,
-          url,
+          text: shareText,
         });
         setSharing(false);
         return;

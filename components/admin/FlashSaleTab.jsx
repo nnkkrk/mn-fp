@@ -284,63 +284,73 @@ export default function FlashSaleTab() {
       )}
 
       {/* QUICK STATUS METRICS */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] space-y-1">
-          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider">Homepage Display</span>
-          <div className="flex items-center gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="px-3 py-2 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] flex items-center justify-between gap-2">
+          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider">Display</span>
+          <div className="flex items-center gap-1.5">
             <span className={`w-2 h-2 rounded-full ${enabled ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`} />
-            <span className="text-sm font-black text-[var(--foreground)]">{enabled ? "VISIBLE" : "HIDDEN"}</span>
+            <span className="text-xs font-black text-[var(--foreground)]">{enabled ? "Visible" : "Hidden"}</span>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] space-y-1">
-          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider">Active Deals</span>
-          <div className="text-sm font-black text-[var(--foreground)] tabular-nums">
-            {activeItemsCount} <span className="text-[11px] text-[var(--muted)] font-normal">/ {items.length} Total</span>
+        <div className="px-3 py-2 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] flex items-center justify-between gap-2">
+          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider">Deals</span>
+          <div className="text-xs font-black text-[var(--foreground)] tabular-nums">
+            {activeItemsCount} <span className="text-[10px] text-[var(--muted)] font-semibold">/ {items.length}</span>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] space-y-1">
-          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider">Campaign Title</span>
-          <div className="text-sm font-black text-amber-400 truncate">
+        <div className="px-3 py-2 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] flex items-center justify-between gap-2 min-w-0">
+          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider shrink-0">Title</span>
+          <div className="text-xs font-black text-amber-600 dark:text-amber-400 truncate">
             {title || "Flash Sale"}
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] space-y-1">
-          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider">Ends At</span>
-          <div className="text-xs font-mono font-bold text-[var(--foreground)] truncate">
-            {endTime ? new Date(endTime).toLocaleString() : "No end time"}
+        <div className="px-3 py-2 rounded-xl bg-[var(--card)]/40 border border-[var(--border)] flex items-center justify-between gap-2 min-w-0">
+          <span className="text-[10px] uppercase font-black text-[var(--muted)] tracking-wider shrink-0">Ends</span>
+          <div className="text-[11px] font-mono font-bold text-[var(--foreground)] truncate">
+            {endTime
+              ? new Date(endTime).toLocaleString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "None"}
           </div>
         </div>
       </div>
 
       {/* SECTION 1: CAMPAIGN CONTROLS & COUNTDOWN TIMER */}
-      <div className="p-5 rounded-2xl bg-[var(--card)]/30 border border-[var(--border)] space-y-5">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-              <Clock size={16} />
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-[var(--card)]/30 border border-[var(--border)] space-y-3.5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+              <Clock size={15} />
             </div>
-            <div>
-              <h2 className="text-xs sm:text-sm font-black uppercase tracking-wider text-[var(--foreground)]">
-                Campaign Settings & Expiration Timer
+            <div className="min-w-0">
+              <h2 className="text-xs sm:text-sm font-black uppercase tracking-wider text-[var(--foreground)] truncate">
+                Campaign Settings
               </h2>
-              <p className="text-[11px] text-[var(--muted)]">
-                Configure the title heading, homepage visibility, and precise expiration countdown
+              <p className="text-[11px] text-[var(--muted)] truncate">
+                Title, homepage visibility & countdown
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase text-[var(--muted)] hidden sm:inline">
-              Flash Sale Row:
+          <button
+            type="button"
+            onClick={() => setEnabled(!enabled)}
+            aria-label="Toggle homepage visibility"
+            className="flex items-center gap-2 shrink-0 cursor-pointer"
+          >
+            <span className={`text-[10px] font-black uppercase tracking-wider ${enabled ? "text-emerald-600 dark:text-emerald-400" : "text-[var(--muted)]"}`}>
+              {enabled ? "Visible" : "Hidden"}
             </span>
-            <button
-              type="button"
-              onClick={() => setEnabled(!enabled)}
-              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                enabled ? "bg-amber-500" : "bg-neutral-700"
+            <span
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                enabled ? "bg-amber-500" : "bg-neutral-400 dark:bg-neutral-700"
               }`}
             >
               <span
@@ -348,66 +358,59 @@ export default function FlashSaleTab() {
                   enabled ? "translate-x-5" : "translate-x-0"
                 }`}
               />
-            </button>
-          </div>
+            </span>
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-1">
             <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-              Section Title (e.g. "Flash Sale", "Weekend Dhamaka")
+              Section Title
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Flash Sale"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs font-bold text-[var(--foreground)] outline-none focus:border-amber-500"
+              placeholder="e.g. Flash Sale, Weekend Dhamaka"
+              className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs font-bold text-[var(--foreground)] outline-none focus:border-amber-500"
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-              Sale Expiration Date & Time
+              Expires At
             </label>
             <input
               type="datetime-local"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs font-mono font-bold text-[var(--foreground)] outline-none focus:border-amber-500"
+              className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs font-mono font-bold text-[var(--foreground)] outline-none focus:border-amber-500"
             />
           </div>
         </div>
 
         {/* Quick Extend Buttons */}
-        <div className="pt-2 border-t border-[var(--border)]/50 flex items-center justify-between flex-wrap gap-2">
-          <span className="text-[10px] font-black uppercase text-[var(--muted)]">Quick Timer Extensions:</span>
+        <div className="pt-2.5 border-t border-[var(--border)]/50 flex items-center justify-between flex-wrap gap-2">
+          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Quick Extend:</span>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <button
-              type="button"
-              onClick={() => handleExtendHours(6)}
-              className="px-2.5 py-1 rounded-lg bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)] text-[10px] font-bold border border-[var(--border)] transition-colors cursor-pointer"
-            >
-              +6 Hours
-            </button>
-            <button
-              type="button"
-              onClick={() => handleExtendHours(12)}
-              className="px-2.5 py-1 rounded-lg bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)] text-[10px] font-bold border border-[var(--border)] transition-colors cursor-pointer"
-            >
-              +12 Hours
-            </button>
-            <button
-              type="button"
-              onClick={() => handleExtendHours(24)}
-              className="px-2.5 py-1 rounded-lg bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)] text-[10px] font-bold border border-[var(--border)] transition-colors cursor-pointer"
-            >
-              +24 Hours
-            </button>
+            {[
+              { hours: 6, label: "+6h" },
+              { hours: 12, label: "+12h" },
+              { hours: 24, label: "+24h" },
+            ].map((preset) => (
+              <button
+                key={preset.hours}
+                type="button"
+                onClick={() => handleExtendHours(preset.hours)}
+                className="px-2.5 py-1 rounded-lg bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)] text-[11px] font-bold border border-[var(--border)] transition-colors cursor-pointer"
+              >
+                {preset.label}
+              </button>
+            ))}
             <button
               type="button"
               onClick={() => handleExtendHours(72)}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-[10px] font-bold border border-amber-500/20 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 text-[11px] font-bold border border-amber-500/30 transition-colors cursor-pointer"
             >
               +3 Days
             </button>
