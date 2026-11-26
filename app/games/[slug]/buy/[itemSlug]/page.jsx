@@ -12,6 +12,7 @@ import { saveVerifiedPlayer } from "@/utils/storage/verifiedPlayerStorage";
 import { BuyFlowSkeleton } from "@/components/Skeleton/BuyFlowSkeleton";
 import api from "@/lib/axios";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useBuyStore } from "@/store/useBuyStore";
 import OrderDeliveryPushPrompt from "@/components/Order/OrderDeliveryPushPrompt";
 
 function BuyFlowContent() {
@@ -28,7 +29,7 @@ function BuyFlowContent() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [showMorePacks, setShowMorePacks] = useState(true);
+  const [showMorePacks, setShowMorePacks] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,8 +44,10 @@ function BuyFlowContent() {
   const [isFetching, setIsFetching] = useState(true);
 
   /* ================= FALLBACK DISPLAY PARAMS ================= */
-  const fallbackName = params.get("name");
-  const fallbackImage = params.get("image");
+  const selectedBuyItem = useBuyStore((s) => s.selectedBuyItem);
+  const storePreview = selectedBuyItem && selectedBuyItem.itemSlug === itemSlug ? selectedBuyItem : null;
+  const fallbackName = storePreview?.name || params.get("name");
+  const fallbackImage = storePreview?.image || params.get("image");
 
   /* ================= LOAD USER DATA & WALLET ================= */
   useEffect(() => {

@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import GameBannerCarousel from "./GameBannerCarousel";
 import TopNoticeBanner from "./TopNoticeBanner";
 import StorySlider from "./StorySlider";
+import UserQuickSummary from "./UserQuickSummary";
 import BattleRoyaleSection from "./BattleRoyaleSection";
 import TradeMarketplaceBanner from "./TradeMarketplaceBanner";
 import HomeEarnPromotion from "./HomeEarnPromotion";
@@ -77,6 +78,7 @@ export default function HeroSection({ bannerSettings, initialBanners }: { banner
       {bs.showGameBannerCarousel !== false && <GameBannerCarousel initialBanners={initialBanners} />}
 
       <div className="space-y-1 mt-2">
+        <UserQuickSummary />
         {bs.showStorySlider !== false && <StorySlider featuredItems={bs.featuredStoryItems} />}
         {bs.showBattleRoyaleSection !== false && <BattleRoyaleSection />}
         {bs.showFlashSale !== false && <FlashSale />}

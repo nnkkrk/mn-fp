@@ -7,8 +7,7 @@ import Loader from "@/components/Loader/Loader";
 import { GameSlugSkeleton } from "@/components/Skeleton/Skeleton";
 import MLBBPurchaseGuide from "@/components/HelpImage/MLBBPurchaseGuide";
 import api from "@/lib/axios";
-
-import GameSwitcher from "@/components/GameDetail/GameSwitcher";
+import { useBuyStore } from "@/store/useBuyStore";
 
 import GameHeader from "@/components/GameDetail/GameHeader";
 import PackageSelector from "@/components/GameDetail/PackageSelector";
@@ -216,25 +215,22 @@ function GameDetailContent() {
     if (redirecting) return;
     setRedirecting(true);
 
-    const query = new URLSearchParams({
+    useBuyStore.getState().setSelectedBuyItem({
+      slug: String(slug),
+      itemSlug: item.itemSlug,
       name: item.itemName,
-      price: item.sellingPrice.toString(),
-      dummy: item.dummyPrice?.toString() || "",
+      price: item.sellingPrice,
+      dummy: item.dummyPrice,
       image: item.itemImageId?.image || "",
     });
-    const basePath = `/games/${slug}/buy`;
 
-    router.push(
-      `${basePath}/${item.itemSlug}?${query.toString()}`
-    );
+    router.push(`/games/${slug}/buy/${item.itemSlug}`);
   };
 
   /* ================= RENDER ================= */
   return (
     <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-3 sm:px-4 pb-28 pt-2">
       <div className="w-full max-w-6xl mx-auto space-y-2.5">
-        {/* ================= SWITCH GAME ================= */}
-        <GameSwitcher />
 
         {/* ================= HEADER ================= */}
         <GameHeader game={game} />
