@@ -273,7 +273,7 @@ function BuyFlowContent() {
 
   return (
     <AuthGuard>
-      <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-2 pb-16 px-2 sm:px-4">
+      <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-4 pb-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
 
           {/* BACK BUTTON */}
@@ -427,7 +427,7 @@ function BuyFlowContent() {
                 aria-label="Check Name"
                 onClick={handleValidate}
                 disabled={loading || !playerId}
-                className="w-full py-3 bg-[var(--accent)] text-white font-bold tracking-wide text-xs uppercase rounded-xl shadow-sm hover:opacity-95 active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                className="w-full h-10 bg-[var(--accent)] text-white font-bold tracking-wide text-xs uppercase rounded-xl shadow-sm hover:opacity-95 active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <LoadingSpinner size="xs" color="current" />
