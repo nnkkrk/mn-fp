@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FaPhoneAlt,
   FaInstagram,
-  FaYoutube,
   FaWhatsapp,
 } from "react-icons/fa";
 import { FiChevronDown, FiZap, FiTarget, FiMail, FiRefreshCw, FiClock, FiCheckCircle, FiAlertCircle, FiList } from "react-icons/fi";
@@ -27,7 +26,6 @@ const SUPPORT_CONFIG = {
     items: [
       { id: "phone", title: "Phone", value: `+91 ${process.env.NEXT_PUBLIC_SUPPORT_PHONE}`, href: `tel:+91${process.env.NEXT_PUBLIC_SUPPORT_PHONE}`, icon: <FaPhoneAlt /> },
       { id: "instagram", title: "Instagram", value: "@mlbbtopup.in", href: "https://www.instagram.com/mlbbtopup.in", icon: <FaInstagram /> },
-      { id: "youtube", title: "YouTube", value: "Subscribe", href: "https://whatsapp.com/channel/0029Vb87jgR17En1n5PKy129", icon: <FaYoutube /> },
       { id: "whatsapp", title: "WhatsApp", value: "Chat now", href: "https://whatsapp.com/channel/0029Vb87jgR17En1n5PKy129", icon: <FaWhatsapp /> },
     ],
   },
@@ -134,7 +132,7 @@ export default function QueryTab() {
           <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--muted)] flex items-center gap-2">
             <FiTarget className="text-[var(--accent)]" size={10} /> {SUPPORT_CONFIG.contacts.title}
           </h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {SUPPORT_CONFIG.contacts.items.map((item, idx) => (
               <motion.a
                 key={item.id}
@@ -144,14 +142,14 @@ export default function QueryTab() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.05 }}
-                className="group flex items-center gap-3 p-3 rounded-xl bg-[var(--card)]/30 border border-white/5 hover:border-[var(--accent)]/30 transition-all shadow-sm"
+                className="group flex items-center gap-2 py-2 px-1.5 rounded-lg hover:bg-[var(--foreground)]/[0.04] transition-all"
               >
-                <div className="p-2 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
+                <div className="p-1.5 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white transition-all shrink-0">
                   {item.icon}
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-black uppercase tracking-tight text-[var(--foreground)] truncate">{item.title}</p>
-                  <p className="text-[8px] font-medium text-[var(--muted)]/60 truncate">{item.value}</p>
+                  <p className="text-[8px] font-medium text-[var(--muted)]/70 truncate">{item.value}</p>
                 </div>
               </motion.a>
             ))}
@@ -182,18 +180,29 @@ export default function QueryTab() {
           </AnimatePresence>
 
           <div className="space-y-3">
-            <div className="relative">
-              <select
-                value={queryType}
-                onChange={(e) => setQueryType(e.target.value)}
-                className="w-full p-3.5 rounded-xl bg-[var(--background)]/50 border border-white/5 text-[10px] font-black uppercase tracking-widest outline-none focus:border-[var(--accent)] appearance-none cursor-pointer text-[var(--foreground)]"
-              >
-                <option value="" className="bg-[var(--card)]">What's your issue?</option>
-                {SUPPORT_CONFIG.queryTypes.map((type) => (
-                  <option key={type} value={type} className="bg-[var(--card)]">{type.toUpperCase()}</option>
-                ))}
-              </select>
-              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--muted)]" size={14} />
+            <div className="space-y-1.5">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
+                What&apos;s your issue?
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {SUPPORT_CONFIG.queryTypes.map((type) => {
+                  const selected = queryType === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setQueryType(type)}
+                      className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer text-left truncate ${
+                        selected
+                          ? "bg-[var(--accent)]/12 border-[var(--accent)] text-[var(--accent)] shadow-xs"
+                          : "bg-[var(--background)]/50 border-[var(--border)]/60 text-[var(--foreground)]/80 hover:border-[var(--accent)]/40"
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <textarea

@@ -78,7 +78,7 @@ export default function MyProfilePage() {
 
           {/* Name & ID on right */}
           <div className="min-w-0 flex-1">
-            <h2 className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight truncate leading-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight break-words leading-tight">
               {user.name || "User"}
             </h2>
             {user.userId && (
