@@ -71,15 +71,15 @@ const TournamentCard = ({ t, isJoined }: { t: Tournament; isJoined?: boolean }) 
         }`}
       >
         {/* Top: Game info + Status */}
-        <div className="space-y-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--background)] shrink-0 flex items-center justify-center">
+        <div className="space-y-2.5">
+          <div className="flex items-start justify-between gap-2.5">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-12 h-12 rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--background)] shrink-0 flex items-center justify-center">
                 <Image
                   src={meta.logo}
                   alt={meta.name}
-                  width={44}
-                  height={44}
+                  width={48}
+                  height={48}
                   className="object-cover w-full h-full"
                   onError={(e: any) => {
                     e.currentTarget.src = "/logoBB.png";
@@ -88,19 +88,14 @@ const TournamentCard = ({ t, isJoined }: { t: Tournament; isJoined?: boolean }) 
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[8px] font-black uppercase tracking-widest text-[var(--accent)] px-1.5 py-0.5 rounded bg-[var(--accent)]/10 border border-[var(--accent)]/20">
+                  <span className="text-[9px] font-black uppercase tracking-wider text-[var(--accent)] px-2 py-0.5 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/20">
                     {meta.tag}
                   </span>
-                  <span className="text-[8px] font-bold uppercase tracking-widest text-[var(--muted)]/60">
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]">
                     {t.format}
                   </span>
-                  {isJoined && (
-                    <span className="px-1.5 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase tracking-widest flex items-center gap-1">
-                      <FiCheck size={9} /> Registered
-                    </span>
-                  )}
                 </div>
-                <h3 className="text-xs font-black uppercase tracking-tight text-[var(--foreground)] truncate mt-1">
+                <h3 className="text-sm font-black uppercase tracking-tight text-[var(--foreground)] truncate mt-1">
                   {t.title}
                 </h3>
               </div>
@@ -110,9 +105,9 @@ const TournamentCard = ({ t, isJoined }: { t: Tournament; isJoined?: boolean }) 
 
           {/* Match Start Time Schedule */}
           {t.startsAt && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--background)]/60">
-              <FiClock size={11} className="text-[var(--accent)] shrink-0" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)]/60">
+              <FiClock size={12} className="text-[var(--accent)] shrink-0" />
+              <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--muted)]">
                 Starts: <span className="text-[var(--foreground)] font-black">{formatDateTime(t.startsAt)}</span>
               </span>
             </div>
@@ -120,23 +115,23 @@ const TournamentCard = ({ t, isJoined }: { t: Tournament; isJoined?: boolean }) 
         </div>
 
         {/* Middle: Prize + Slots filled bar */}
-        <div className="space-y-2.5 pt-1">
+        <div className="space-y-2 pt-0.5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <GiTrophy size={13} className="text-amber-500 shrink-0" />
+            <div className="flex items-center gap-2">
+              <GiTrophy size={15} className="text-amber-500 shrink-0" />
               <div className="flex flex-col">
-                <span className="text-[7px] font-black uppercase tracking-widest text-[var(--muted)]/50">Prize Pool</span>
-                <span className="text-[10px] font-black uppercase tracking-tight text-amber-500">
+                <span className="text-[8px] font-black uppercase tracking-wider text-[var(--muted)]">Prize Pool</span>
+                <span className="text-xs font-black uppercase tracking-tight text-amber-500">
                   {t.prize}
                 </span>
               </div>
             </div>
 
             <div className="text-right">
-              <span className="text-[7px] font-black uppercase tracking-widest text-[var(--muted)]/50 block">Registered</span>
+              <span className="text-[8px] font-black uppercase tracking-wider text-[var(--muted)] block">Registered</span>
               <div className="flex items-center gap-1 text-[var(--foreground)] justify-end">
-                <FiUsers size={10} className="text-[var(--muted)]" />
-                <span className="text-[9px] font-black">{t.slotsFilled || 0}/{t.slots}</span>
+                <FiUsers size={11} className="text-[var(--muted)]" />
+                <span className="text-xs font-black tabular-nums">{t.slotsFilled || 0}/{t.slots}</span>
               </div>
             </div>
           </div>
@@ -151,7 +146,7 @@ const TournamentCard = ({ t, isJoined }: { t: Tournament; isJoined?: boolean }) 
                 transition={{ duration: 0.6, delay: 0.1 }}
               />
             </div>
-            <div className="flex justify-between items-center text-[7px] font-bold text-[var(--muted)]/40 uppercase tracking-widest">
+            <div className="flex justify-between items-center text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider">
               <span>{pct}% Filled</span>
               <span>{t.slots - (t.slotsFilled || 0)} slots left</span>
             </div>
@@ -249,26 +244,25 @@ export default function TournamentHub() {
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pb-32">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7 space-y-5 sm:space-y-6">
 
         {/* ── TOP HERO HEADER & ACTION BAR ── */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="pb-2 border-b border-[var(--border)]"
+          className="pb-3 border-b border-[var(--border)]"
         >
           <SectionTitle
             as="h1"
             subtitle="BLUE BUFF INDIA ESPORTS"
             title="COMPETITIVE ARENA"
             highlight="ARENA"
-            description="Join daily community scrims & cash cups. Compete with your squad, win Weekly Passes, Diamonds & cash prizes."
             action={
               <div className="flex items-center gap-2.5">
                 <Link
                   href="/dashboard/tournaments"
                   style={{ color: "#ffffff" }}
-                  className="px-4 py-2.5 rounded-xl bg-[var(--accent)] !text-white text-[9px] font-black uppercase tracking-widest flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm"
+                  className="px-4 py-2 rounded-xl bg-[var(--accent)] !text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm"
                 >
                   <GiTrophy size={13} /> My Tournaments
                 </Link>
@@ -278,14 +272,14 @@ export default function TournamentHub() {
         </motion.div>
 
         {/* ── FILTER TABS ── */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
           {filterTabs.map((tab) => {
             const isSelected = selectedFilter === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setSelectedFilter(tab.id)}
-                className={`px-3.5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all whitespace-nowrap border ${
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all whitespace-nowrap border cursor-pointer ${
                   isSelected
                     ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
                     : "bg-[var(--card)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/30"

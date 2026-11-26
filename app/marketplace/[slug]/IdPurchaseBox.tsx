@@ -254,8 +254,8 @@ ${productUrl}`;
       </div>
 
       {/* ── MOBILE STICKY FLOATING ACTION BAR ── */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 p-3 bg-[var(--card)]/95 dark:bg-black/95 backdrop-blur-xl border-t border-[var(--border)] shadow-2xl animate-in slide-in-from-bottom-2 duration-300">
-        <div className="max-w-md mx-auto flex items-center justify-between gap-3 pl-12 sm:pl-2 pr-1">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-[var(--card)]/95 backdrop-blur-xl border-t border-[var(--border)] shadow-[0_-8px_30px_-10px_rgba(0,0,0,0.18)]">
+        <div className="max-w-md mx-auto flex items-center justify-between gap-3">
           <div>
             <div className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]">
               {mode === "buy" ? "Account Price" : `${item.rent?.durationHours || 24}h Rent`}
