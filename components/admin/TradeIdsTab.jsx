@@ -21,6 +21,7 @@ import {
   Check,
   Layers,
   Info,
+  Upload,
 } from "lucide-react";
 
 /* ================= HELPER FUNCTIONS ================= */
@@ -305,6 +306,7 @@ export default function TradeIdsTab() {
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [modalTab, setModalTab] = useState("basic"); // "basic" | "rent"
   const [saving, setSaving] = useState(false);
+  const [newImageUrl, setNewImageUrl] = useState("");
 
   const handleGameSelect = (gameId) => {
     const selected = SUPPORTED_GAMES.find((g) => g.id === gameId);
@@ -769,123 +771,125 @@ export default function TradeIdsTab() {
       </div>
 
       {/* ================= KPI CARDS ================= */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        {/* Total Accounts */}
-        <div className="p-3.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-1">
-          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-            <span>Total Accounts</span>
-            <Layers size={13} />
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+        {[
+          {
+            label: "Total",
+            value: stats.total,
+            icon: Layers,
+            cls: "bg-[var(--card)] border-[var(--border)] text-[var(--foreground)]",
+            labelCls: "text-[var(--muted)]",
+          },
+          {
+            label: "In Stock",
+            value: stats.inStock,
+            icon: CheckCircle2,
+            cls: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
+          },
+          {
+            label: "Unstocked",
+            value: stats.unstocked,
+            icon: XCircle,
+            cls: "bg-red-500/10 border-red-500/30 text-red-400",
+          },
+          {
+            label: "On Rent",
+            value: stats.onRent,
+            icon: Zap,
+            cls: "bg-amber-500/10 border-amber-500/30 text-amber-400",
+          },
+          {
+            label: "Rent Ready",
+            value: stats.rentAvailable,
+            icon: Clock,
+            cls: "bg-sky-500/10 border-sky-500/30 text-sky-400 col-span-2 sm:col-span-1",
+          },
+        ].map(({ label, value, icon: Icon, cls, labelCls }) => (
+          <div
+            key={label}
+            className={`px-3 py-2 rounded-xl border flex items-center justify-between gap-2 ${cls}`}
+          >
+            <div className={`flex items-center gap-1.5 min-w-0 text-[10px] font-black uppercase tracking-wider ${labelCls || ""}`}>
+              <Icon size={12} className="shrink-0" />
+              <span className="truncate">{label}</span>
+            </div>
+            <div className="text-base font-black tracking-tight tabular-nums shrink-0">{value}</div>
           </div>
-          <div className="text-2xl font-black tracking-tight">{stats.total}</div>
-        </div>
-
-        {/* In Stock */}
-        <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 space-y-1">
-          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
-            <span>In Stock</span>
-            <CheckCircle2 size={13} />
-          </div>
-          <div className="text-2xl font-black tracking-tight">{stats.inStock}</div>
-        </div>
-
-        {/* Unstocked */}
-        <div className="p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 space-y-1">
-          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
-            <span>Unstocked</span>
-            <XCircle size={13} />
-          </div>
-          <div className="text-2xl font-black tracking-tight">{stats.unstocked}</div>
-        </div>
-
-        {/* On Rent */}
-        <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 space-y-1">
-          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
-            <span>Currently On Rent</span>
-            <Zap size={13} />
-          </div>
-          <div className="text-2xl font-black tracking-tight">{stats.onRent}</div>
-        </div>
-
-        {/* Rent Ready */}
-        <div className="p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-400 space-y-1 col-span-2 sm:col-span-1">
-          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
-            <span>Rent Ready</span>
-            <Clock size={13} />
-          </div>
-          <div className="text-2xl font-black tracking-tight">{stats.rentAvailable}</div>
-        </div>
+        ))}
       </div>
 
       {/* ================= FILTER & SEARCH BAR ================= */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-2 rounded-2xl bg-[var(--card)] border border-[var(--border)]">
-        {/* Search Input */}
-        <div className="relative flex-1 flex items-center px-3">
-          <Search size={14} className="text-[var(--muted)] shrink-0 mr-2" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search accounts by code, title, tags, server..."
-            className="w-full bg-transparent text-xs py-1.5 focus:outline-none placeholder:text-[var(--muted)]/60"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="text-[var(--muted)] hover:text-white p-1"
-            >
-              <X size={12} />
-            </button>
-          )}
+      <div className="flex flex-col gap-2.5 p-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          {/* Search Input */}
+          <div className="relative flex-1 flex items-center px-2.5">
+            <Search size={14} className="text-[var(--muted)] shrink-0 mr-2" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search accounts by code, title, tags, server..."
+              className="w-full bg-transparent text-xs py-1.5 focus:outline-none placeholder:text-[var(--muted)]/60"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="text-[var(--muted)] hover:text-white p-1"
+              >
+                <X size={12} />
+              </button>
+            )}
+          </div>
+
+          {/* Status Filters */}
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar px-1">
+            {[
+              { id: "all", label: `All (${stats.total})` },
+              { id: "in_stock", label: `In Stock (${stats.inStock})` },
+              { id: "unstocked", label: `Unstocked (${stats.unstocked})` },
+              { id: "on_rent", label: `On Rent (${stats.onRent})` },
+              { id: "rent_available", label: `Rent Ready (${stats.rentAvailable})` },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setFilterStatus(tab.id)}
+                className={`shrink-0 px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                  filterStatus === tab.id
+                    ? "bg-[var(--accent)] text-white shadow-xs"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Status Filters */}
-        <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 px-2">
+        {/* Game Filter Bar */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2 border-t border-[var(--border)]/60 px-1">
           {[
-            { id: "all", label: `All (${stats.total})` },
-            { id: "in_stock", label: `In Stock (${stats.inStock})` },
-            { id: "unstocked", label: `Unstocked (${stats.unstocked})` },
-            { id: "on_rent", label: `On Rent (${stats.onRent})` },
-            { id: "rent_available", label: `Rent Ready (${stats.rentAvailable})` },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setFilterStatus(tab.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer ${
-                filterStatus === tab.id
-                  ? "bg-[var(--accent)] text-white shadow-xs"
-                  : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+            { id: "all", label: "All Games", icon: "🎮" },
+            { id: "coc", label: "Clash of Clans (COC)", icon: "⚔️" },
+            { id: "mlbb", label: "Mobile Legends (MLBB)", icon: "🛡️" },
+            { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
+          ].map((g) => {
+            const isActive = filterGame === g.id;
+            return (
+              <button
+                key={g.id}
+                onClick={() => setFilterGame(g.id)}
+                className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                  isActive
+                    ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] shadow-xs"
+                    : "bg-[var(--background)]/50 text-[var(--muted)] hover:text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--foreground)]/5"
+                }`}
+              >
+                <span>{g.icon}</span>
+                <span>{g.label}</span>
+              </button>
+            );
+          })}
         </div>
-      </div>
-
-      {/* Game Filter Bar */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 px-1">
-        {[
-          { id: "all", label: "All Games", icon: "🎮" },
-          { id: "coc", label: "Clash of Clans (COC)", icon: "⚔️" },
-          { id: "mlbb", label: "Mobile Legends (MLBB)", icon: "🛡️" },
-          { id: "bgmi", label: "BGMI / PUBG", icon: "🎯" },
-        ].map((g) => {
-          const isActive = filterGame === g.id;
-          return (
-            <button
-              key={g.id}
-              onClick={() => setFilterGame(g.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
-                isActive
-                  ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] shadow-xs"
-                  : "bg-[var(--card)] text-[var(--muted)] hover:text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--foreground)]/5"
-              }`}
-            >
-              <span>{g.icon}</span>
-              <span>{g.label}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* ================= ACCOUNTS LIST ================= */}
@@ -899,15 +903,16 @@ export default function TradeIdsTab() {
           <Package size={36} className="mx-auto text-[var(--muted)]/50" />
           <div className="text-sm font-bold">No accounts found</div>
           <p className="text-xs text-[var(--muted)] max-w-sm mx-auto">
-            {search || filterStatus !== "all"
+            {search || filterStatus !== "all" || filterGame !== "all"
               ? "No accounts match your search or filter. Try clearing your filters."
               : "No accounts have been created in the database yet. Click 'Add New ID' to create your first game account listing."}
           </p>
-          {(search || filterStatus !== "all") && (
+          {(search || filterStatus !== "all" || filterGame !== "all") && (
             <button
               onClick={() => {
                 setSearch("");
                 setFilterStatus("all");
+                setFilterGame("all");
               }}
               className="px-4 py-1.5 rounded-full border border-[var(--border)] text-xs font-bold"
             >
@@ -927,68 +932,68 @@ export default function TradeIdsTab() {
             return (
               <div
                 key={item._id || item.id}
-                className={`relative rounded-3xl border transition-all overflow-hidden flex flex-col justify-between ${
+                className={`relative rounded-2xl border transition-all overflow-hidden flex flex-col justify-between ${
                   isStock
                     ? "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/40 shadow-sm"
-                    : "bg-[var(--card)]/60 border-red-500/20 opacity-80"
+                    : "bg-[var(--card)]/60 border-red-500/20 opacity-85"
                 }`}
               >
                 {/* ── CARD TOP ── */}
-                <div className="p-4 sm:p-5 space-y-4">
+                <div className="p-3 sm:p-3.5 space-y-2.5">
                   {/* Image & Header Badges */}
-                  <div className="flex gap-4">
-                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-black/40 shrink-0 border border-[var(--border)]">
+                  <div className="flex gap-3 items-start">
+                    <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden bg-black/40 shrink-0 border border-[var(--border)]">
                       <img
                         src={coverImage}
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
                       {item.collection?.tier && (
-                        <div className="absolute bottom-1 left-1 right-1 px-1.5 py-0.5 rounded-md bg-black/80 backdrop-blur-xs text-[8px] font-black uppercase text-amber-400 truncate flex items-center gap-1">
-                          <Crown size={9} className="shrink-0" />
+                        <div className="absolute bottom-0.5 left-0.5 right-0.5 px-1 py-0.5 rounded bg-black/80 backdrop-blur-xs text-[8px] font-black uppercase text-amber-400 truncate flex items-center gap-0.5">
+                          <Crown size={8} className="shrink-0" />
                           <span className="truncate">{item.collection.tier}</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="flex-1 min-w-0 space-y-1.5">
+                    <div className="flex-1 min-w-0 space-y-1">
                       {/* Code, Game & Server Badges */}
-                      <div className="flex items-center gap-2 flex-wrap">
+                      <div className="flex items-center gap-1 flex-wrap">
                         {/* Game Badge */}
                         {(() => {
                           const gMeta = SUPPORTED_GAMES.find((g) => g.id === (item.game || "mlbb")) || SUPPORTED_GAMES[0];
                           return (
-                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider border flex items-center gap-1 ${gMeta.badgeColor}`}>
+                            <span className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider border flex items-center gap-1 ${gMeta.badgeColor}`}>
                               <span>{gMeta.icon}</span>
                               <span>{gMeta.short}</span>
                             </span>
                           );
                         })()}
-                        <span className="px-2 py-0.5 rounded-md bg-[var(--foreground)]/5 border border-[var(--border)] text-[10px] font-black uppercase tracking-wider text-[var(--accent)]">
+                        <span className="px-1.5 py-0.5 rounded bg-[var(--foreground)]/5 border border-[var(--border)] text-[9px] font-black uppercase tracking-wider text-[var(--accent)]">
                           {item.id}
                         </span>
-                        <span className="px-2 py-0.5 rounded-md bg-[var(--foreground)]/5 text-[10px] font-bold text-[var(--muted)]">
+                        <span className="px-1.5 py-0.5 rounded bg-[var(--foreground)]/5 text-[9px] font-bold text-[var(--muted)]">
                           {item.account?.server || "Server"}
                         </span>
                         {item.rank?.current && (
-                          <span className="px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[10px] font-bold">
+                          <span className="px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[9px] font-bold">
                             {item.rank.current}
                           </span>
                         )}
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-sm sm:text-base font-black tracking-tight leading-snug line-clamp-2">
+                      <h3 className="text-xs sm:text-sm font-black tracking-tight leading-snug line-clamp-1">
                         {item.title}
                       </h3>
 
                       {/* Price display */}
                       <div className="flex items-baseline gap-2">
-                        <span className="text-lg font-black text-[var(--accent)]">
+                        <span className="text-base font-black text-[var(--accent)] tabular-nums">
                           ₹{Number(item.price).toLocaleString("en-IN")}
                         </span>
                         {rentInfo.available && (
-                          <span className="text-[11px] font-bold text-amber-500 dark:text-amber-400">
+                          <span className="text-[10px] font-bold text-amber-500 dark:text-amber-400">
                             • Rent: ₹{rentInfo.price}/{rentInfo.durationHours || 24}h
                           </span>
                         )}
@@ -1006,88 +1011,83 @@ export default function TradeIdsTab() {
 
                     if (bullets.length > 0) {
                       return (
-                        <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] space-y-1">
+                        <div className="px-2.5 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex flex-wrap items-center gap-x-3 gap-y-0.5">
                           {bullets.slice(0, 3).map((bullet, bIdx) => (
-                            <div key={bIdx} className="flex items-start gap-1.5 text-xs text-[var(--foreground)] truncate">
-                              <span className="text-[var(--accent)] font-black text-sm shrink-0 leading-none">•</span>
+                            <div key={bIdx} className="flex items-center gap-1 text-[11px] text-[var(--foreground)] max-w-full">
+                              <span className="text-[var(--accent)] font-black shrink-0">•</span>
                               <span className="font-semibold truncate">{bullet}</span>
                             </div>
                           ))}
                           {bullets.length > 3 && (
-                            <div className="text-[10px] font-bold text-[var(--muted)] pl-3">
-                              +{bullets.length - 3} more specs
-                            </div>
+                            <span className="text-[10px] font-bold text-[var(--muted)]">
+                              +{bullets.length - 3} more
+                            </span>
                           )}
                         </div>
                       );
                     }
 
                     return (
-                      <div className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-center text-[11px] text-[var(--muted)]">
+                      <div className="px-2.5 py-1 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[10px] text-[var(--muted)]">
                         No specs listed
                       </div>
                     );
                   })()}
 
                   {/* ── STOCK & RENT STATUS CARDS ── */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {/* 1. STOCK / UNSTOCK STATUS & QUICK TOGGLE */}
-                    <div className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--background)] border border-[var(--border)]">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+                      <div className="flex items-center gap-1.5 min-w-0">
                         <span
-                          className={`w-2.5 h-2.5 rounded-full ${
+                          className={`w-2 h-2 rounded-full shrink-0 ${
                             isStock ? "bg-emerald-400 animate-pulse" : "bg-red-500"
                           }`}
                         />
-                        <div>
-                          <div className="text-[10px] font-black uppercase tracking-wider">
-                            Stock Status
-                          </div>
-                          <div
-                            className={`text-xs font-black ${
-                              isStock ? "text-emerald-400" : "text-red-400"
-                            }`}
-                          >
-                            {isStock ? "IN STOCK (Active in Store)" : "UNSTOCKED (Hidden / Out of Stock)"}
-                          </div>
-                        </div>
+                        <span
+                          className={`text-[11px] font-black truncate ${
+                            isStock ? "text-emerald-400" : "text-red-400"
+                          }`}
+                        >
+                          {isStock ? "In Stock" : "Unstocked"}
+                        </span>
                       </div>
 
                       {/* Instant Toggle Button */}
                       <button
                         type="button"
                         onClick={() => toggleStockStatus(item)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-xs ${
+                        className={`shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                           isStock
                             ? "bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30"
-                            : "bg-emerald-500 hover:bg-emerald-600 text-black border border-emerald-400 font-black"
+                            : "bg-emerald-500 hover:bg-emerald-600 text-black border border-emerald-400"
                         }`}
                         title={isStock ? "Click to unstock account" : "Click to put back in stock"}
                       >
-                        {isStock ? "Unstock Now" : "Stock Account"}
+                        {isStock ? "Unstock" : "Stock Now"}
                       </button>
                     </div>
 
                     {/* 2. RENT STATUS & "HOW MUCH LATER AGAIN" CONTROLS */}
-                    <div className="p-3 rounded-2xl bg-[var(--background)] border border-[var(--border)] space-y-2.5">
-                      <div className="flex items-center justify-between">
+                    <div className="px-2.5 py-1.5 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2">
+                      <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-                          <Clock size={12} className="text-amber-400" />
-                          <span>Rental System</span>
+                          <Clock size={11} className="text-amber-400 shrink-0" />
+                          <span>Rental</span>
                         </div>
 
                         {!rentInfo.available ? (
                           <span className="px-2 py-0.5 rounded-full bg-[var(--foreground)]/5 text-[9px] font-bold text-[var(--muted)]">
-                            Rent Disabled
+                            Disabled
                           </span>
                         ) : isRented ? (
-                          <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-[9px] font-black uppercase tracking-wider flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
-                            Currently Rented
+                            Rented
                           </span>
                         ) : (
-                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-black uppercase tracking-wider">
-                            Rent Available Now
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[9px] font-black uppercase tracking-wider">
+                            Available
                           </span>
                         )}
                       </div>
@@ -1096,19 +1096,19 @@ export default function TradeIdsTab() {
                       {rentInfo.available && (
                         <div>
                           {isRented ? (
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                               {/* Countdown & Return Time */}
-                              <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+                              <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-0.5">
                                 <div className="text-[10px] font-bold uppercase tracking-wider text-amber-300 flex items-center justify-between">
-                                  <span>Available again in:</span>
-                                  <span className="font-mono font-black text-xs">
+                                  <span>Available in:</span>
+                                  <span className="font-mono font-black text-[11px]">
                                     {countdown?.text || "Calculating..."}
                                   </span>
                                 </div>
 
                                 {rentInfo.availableAgainAt && (
                                   <div className="text-[10px] text-[var(--muted)]">
-                                    Return date:{" "}
+                                    Return:{" "}
                                     <span className="font-bold text-[var(--foreground)]">
                                       {new Date(rentInfo.availableAgainAt).toLocaleString()}
                                     </span>
@@ -1126,18 +1126,18 @@ export default function TradeIdsTab() {
                               </div>
 
                               {/* Action Buttons for Rented Account */}
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1.5">
                                 <button
                                   type="button"
                                   onClick={() => handleMarkRentReturned(item)}
-                                  className="flex-1 py-1.5 px-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer text-center"
+                                  className="flex-1 py-1 px-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-black text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer text-center"
                                 >
-                                  Mark Returned (Free Now)
+                                  Mark Returned
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => openRentActionModal(item)}
-                                  className="py-1.5 px-3 rounded-xl bg-[var(--card)] hover:bg-[var(--foreground)]/5 border border-[var(--border)] text-[11px] font-bold transition-all cursor-pointer"
+                                  className="py-1 px-2.5 rounded-lg bg-[var(--card)] hover:bg-[var(--foreground)]/5 border border-[var(--border)] text-[10px] font-bold transition-all cursor-pointer"
                                   title="Extend or edit rent period"
                                 >
                                   Extend
@@ -1145,20 +1145,20 @@ export default function TradeIdsTab() {
                               </div>
                             </div>
                           ) : (
-                            <div className="flex items-center justify-between gap-2 pt-1">
-                              <div className="text-xs text-[var(--muted)] font-medium">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="text-[11px] text-[var(--muted)] font-medium">
                                 Rate:{" "}
                                 <span className="font-black text-emerald-400">
                                   ₹{rentInfo.price}
                                 </span>{" "}
-                                for {rentInfo.durationHours || 24} hours
+                                / {rentInfo.durationHours || 24}h
                               </div>
                               <button
                                 type="button"
                                 onClick={() => openRentActionModal(item)}
-                                className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                                className="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-500 text-black text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer"
                               >
-                                Mark as Rented
+                                Mark Rented
                               </button>
                             </div>
                           )}
@@ -1169,27 +1169,27 @@ export default function TradeIdsTab() {
                 </div>
 
                 {/* ── CARD FOOTER ACTIONS ── */}
-                <div className="px-4 py-3 bg-[var(--background)]/80 border-t border-[var(--border)] flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
+                <div className="px-3 py-2 bg-[var(--background)]/80 border-t border-[var(--border)] flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1">
                     {/* View in Store */}
                     <a
                       href={`/marketplace/${item.slug || item.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-colors"
+                      className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/5 transition-colors"
                       title="View public marketplace page"
                     >
-                      <ExternalLink size={14} />
+                      <ExternalLink size={13} />
                     </a>
 
                     {/* Delete Account */}
                     <button
                       type="button"
                       onClick={() => handleDeleteItem(item)}
-                      className="p-2 rounded-xl text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
                       title="Delete account"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={13} />
                     </button>
                   </div>
 
@@ -1197,9 +1197,9 @@ export default function TradeIdsTab() {
                   <button
                     type="button"
                     onClick={() => handleOpenEditModal(item)}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--card)] hover:bg-[var(--foreground)]/10 border border-[var(--border)] text-xs font-bold transition-all cursor-pointer"
+                    className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[var(--card)] hover:bg-[var(--foreground)]/10 border border-[var(--border)] text-[11px] font-bold transition-all cursor-pointer"
                   >
-                    <Edit3 size={12} className="text-[var(--accent)]" />
+                    <Edit3 size={11} className="text-[var(--accent)]" />
                     <span>Edit Details</span>
                   </button>
                 </div>
@@ -1345,13 +1345,23 @@ export default function TradeIdsTab() {
       {/* ================= EDIT / CREATE ACCOUNT MODAL ================= */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div
+            onClick={() => setIsModalOpen(false)}
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md"
+          >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl bg-[var(--card)] border border-[var(--border)] shadow-2xl text-[var(--foreground)] overflow-hidden my-auto"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 320 }}
+              className="w-full max-w-2xl max-h-[90vh] sm:max-h-[88vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-[var(--card)] border-t sm:border border-[var(--border)] shadow-2xl text-[var(--foreground)] overflow-hidden"
             >
+              {/* Mobile Bottom-Sheet Handle */}
+              <div className="sm:hidden flex justify-center pt-2.5 pb-0.5 shrink-0">
+                <div className="w-10 h-1 rounded-full bg-[var(--foreground)]/15" />
+              </div>
+
               {/* Modal Header */}
               <div className="p-4 sm:p-5 border-b border-[var(--border)] flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
@@ -1377,16 +1387,16 @@ export default function TradeIdsTab() {
               </div>
 
               {/* Navigation Tabs (Simpler 2-Tab Layout) */}
-              <div className="flex items-center gap-1 px-4 sm:px-5 pt-3 border-b border-[var(--border)] shrink-0 overflow-x-auto">
+              <div className="grid grid-cols-2 px-4 sm:px-5 pt-2 border-b border-[var(--border)] shrink-0">
                 {[
-                  { id: "basic", label: "1. Account & Bullet Specs" },
-                  { id: "rent", label: "2. Rental & Screenshots" },
+                  { id: "basic", label: "1. Account Specs" },
+                  { id: "rent", label: "2. Rent & Media" },
                 ].map((t) => (
                   <button
                     key={t.id}
                     type="button"
                     onClick={() => setModalTab(t.id)}
-                    className={`px-3 py-2 border-b-2 text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    className={`px-2 py-2 border-b-2 text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer truncate text-center ${
                       modalTab === t.id
                         ? "border-[var(--accent)] text-[var(--accent)]"
                         : "border-transparent text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -1403,33 +1413,21 @@ export default function TradeIdsTab() {
                 {modalTab === "basic" && (
                   <div className="space-y-4">
                     {/* Game Selector */}
-                    <div className="space-y-1.5">
+                    <div>
                       <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
                         Select Game *
                       </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {SUPPORTED_GAMES.map((g) => {
-                          const isSelected = (formData.game || "coc") === g.id;
-                          return (
-                            <button
-                              key={g.id}
-                              type="button"
-                              onClick={() => handleGameSelect(g.id)}
-                              className={`p-2.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
-                                isSelected
-                                  ? "bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)] shadow-xs"
-                                  : "bg-[var(--background)] border-[var(--border)] hover:border-[var(--accent)]/40 text-[var(--foreground)]"
-                              }`}
-                            >
-                              <span className="text-xl shrink-0">{g.icon}</span>
-                              <div className="min-w-0">
-                                <div className="font-black text-xs truncate leading-tight">{g.short}</div>
-                                <div className="text-[10px] text-[var(--muted)] truncate">{g.name}</div>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
+                      <select
+                        value={formData.game || "coc"}
+                        onChange={(e) => handleGameSelect(e.target.value)}
+                        className="w-full mt-1 p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] font-bold text-xs focus:outline-none focus:border-[var(--accent)]"
+                      >
+                        {SUPPORTED_GAMES.map((g) => (
+                          <option key={g.id} value={g.id}>
+                            {g.short === g.name ? g.name : `${g.short} — ${g.name}`}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1815,42 +1813,126 @@ export default function TradeIdsTab() {
                     )}
 
                     {/* Account Screenshots / Images */}
-                    <div className="space-y-2 p-3.5 rounded-2xl bg-[var(--background)] border border-[var(--border)]">
-                      <div className="flex items-center justify-between">
+                    <div className="space-y-3 p-3.5 rounded-2xl bg-[var(--background)] border border-[var(--border)]">
+                      <div className="flex items-center justify-between gap-2">
                         <label className="text-[10px] font-black uppercase tracking-wider text-[var(--foreground)] flex items-center gap-1.5">
                           <ImageIcon size={13} className="text-[var(--accent)]" />
-                          <span>Account Screenshots / Images (URL per line)</span>
+                          <span>Account Images</span>
                         </label>
                         <span className="text-[10px] text-[var(--muted)]">First image is cover</span>
                       </div>
-                      <textarea
-                        rows={3}
-                        value={(formData.media?.images || []).join("\n")}
-                        onChange={(e) => {
-                          const urls = e.target.value
-                            .split(/[\n,]/)
-                            .map((s) => s.trim())
-                            .filter(Boolean);
-                          setFormData({
-                            ...formData,
-                            media: { ...formData.media, images: urls },
-                          });
-                        }}
-                        placeholder="https://example.com/screenshot1.jpg\nhttps://example.com/screenshot2.jpg"
-                        className="w-full p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:border-[var(--accent)] font-mono leading-relaxed"
-                      />
 
-                      {/* Preview thumbnails */}
+                      {/* Simplified Add by URL or File */}
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="flex flex-1 gap-1.5">
+                          <input
+                            type="url"
+                            value={newImageUrl}
+                            onChange={(e) => setNewImageUrl(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                const trimmed = newImageUrl.trim();
+                                if (!trimmed) return;
+                                setFormData({
+                                  ...formData,
+                                  media: {
+                                    ...formData.media,
+                                    images: [...(formData.media?.images || []), trimmed],
+                                  },
+                                });
+                                setNewImageUrl("");
+                              }
+                            }}
+                            placeholder="Paste image URL..."
+                            className="flex-1 px-3 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:border-[var(--accent)]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const trimmed = newImageUrl.trim();
+                              if (!trimmed) return;
+                              setFormData({
+                                ...formData,
+                                media: {
+                                  ...formData.media,
+                                  images: [...(formData.media?.images || []), trimmed],
+                                },
+                              });
+                              setNewImageUrl("");
+                            }}
+                            className="px-3 py-2 rounded-xl bg-[var(--accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity shrink-0 flex items-center gap-1 cursor-pointer"
+                          >
+                            <Plus size={13} />
+                            <span>Add</span>
+                          </button>
+                        </div>
+
+                        <label className="px-3 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)]/50 text-xs font-bold text-[var(--foreground)] cursor-pointer flex items-center justify-center gap-1.5 shrink-0 transition-colors">
+                          <Upload size={13} className="text-[var(--accent)]" />
+                          <span>Upload</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className="hidden"
+                            onChange={(e) => {
+                              const files = Array.from(e.target.files || []);
+                              if (files.length === 0) return;
+                              Promise.all(
+                                files.map(
+                                  (file) =>
+                                    new Promise((resolve) => {
+                                      const reader = new FileReader();
+                                      reader.onload = () => resolve(String(reader.result || ""));
+                                      reader.onerror = () => resolve("");
+                                      reader.readAsDataURL(file);
+                                    })
+                                )
+                              ).then((dataUrls) => {
+                                const valid = dataUrls.filter(Boolean);
+                                if (valid.length === 0) return;
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  media: {
+                                    ...prev.media,
+                                    images: [...(prev.media?.images || []), ...valid],
+                                  },
+                                }));
+                              });
+                              e.target.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+
+                      {/* Preview thumbnails with 1-click remove */}
                       {formData.media?.images?.length > 0 && (
-                        <div className="flex items-center gap-2 overflow-x-auto p-2 bg-[var(--card)] rounded-xl border border-[var(--border)]">
+                        <div className="flex items-center gap-2.5 overflow-x-auto p-2 bg-[var(--card)] rounded-xl border border-[var(--border)]">
                           {formData.media.images.map((img, idx) => (
                             <div
                               key={idx}
-                              className="relative w-16 h-16 rounded-lg overflow-hidden bg-black/40 border border-[var(--border)] shrink-0"
+                              className="relative w-16 h-16 rounded-lg overflow-hidden bg-black/40 border border-[var(--border)] shrink-0 group"
                             >
                               <img src={img} alt="preview" className="w-full h-full object-cover" />
-                              <span className="absolute bottom-0 right-0 px-1 text-[8px] bg-black/80 font-bold">
-                                #{idx + 1}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setFormData({
+                                    ...formData,
+                                    media: {
+                                      ...formData.media,
+                                      images: formData.media.images.filter((_, i) => i !== idx),
+                                    },
+                                  })
+                                }
+                                className="absolute top-1 right-1 w-4 h-4 rounded-full bg-black/80 text-white flex items-center justify-center hover:bg-red-500 transition-colors cursor-pointer"
+                                title="Remove image"
+                              >
+                                <X size={10} />
+                              </button>
+                              <span className="absolute bottom-0 left-0 right-0 px-1 py-0.5 text-[8px] text-center bg-black/75 text-white font-bold">
+                                {idx === 0 ? "Cover" : `#${idx + 1}`}
                               </span>
                             </div>
                           ))}

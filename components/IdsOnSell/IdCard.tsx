@@ -79,6 +79,7 @@ export default function IdCard({ item }: IdCardProps) {
           src={item.media?.images?.[0] || item.image || "/logo.png"}
           alt={item.title || "Gaming ID"}
           fill
+          unoptimized
           className={`object-cover transition-transform duration-500 group-hover:scale-105 ${
             isUnstocked ? "grayscale-[40%]" : ""
           }`}

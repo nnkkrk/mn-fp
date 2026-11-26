@@ -43,30 +43,45 @@ function formatGameName(slug?: string): string {
  * Only renders for authenticated users.
  */
 export default function UserQuickSummary() {
-  const { token, walletBalance, setWalletBalance, _hasHydrated } = useAuthStore();
+  const { token, user, walletBalance, setWalletBalance, logout, _hasHydrated } = useAuthStore();
   const [latestOrder, setLatestOrder] = useState<LatestOrder | null>(null);
   const [totalOrders, setTotalOrders] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const authToken =
-    token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+  const isAuthenticated = _hasHydrated && Boolean(token && user);
 
   useEffect(() => {
-    if (!authToken) return;
+    if (!isAuthenticated) {
+      setLatestOrder(null);
+      setTotalOrders(0);
+      setLoading(false);
+      return;
+    }
 
     let mounted = true;
+    setLoading(true);
 
     Promise.all([
       api
         .get("/api/auth/me")
         .then((res) => {
           if (!mounted) return;
-          const bal = res.data?.user?.wallet ?? res.data?.user?.walletBalance;
+          if (!res.data?.success || !res.data?.user) {
+            logout();
+            return;
+          }
+          const bal = res.data.user.wallet ?? res.data.user.walletBalance;
           if (typeof bal === "number") {
             setWalletBalance(bal);
           }
         })
-        .catch(() => {}),
+        .catch((err) => {
+          if (!mounted) return;
+          const status = err?.response?.status;
+          if (status === 401 || status === 403 || status === 404) {
+            logout();
+          }
+        }),
       api
         .post("/api/order/user", {
           page: 1,
@@ -87,10 +102,7 @@ export default function UserQuickSummary() {
     return () => {
       mounted = false;
     };
-  }, [authToken, setWalletBalance]);
-
-  if (!_hasHydrated && !authToken) return null;
-  if (!authToken) return null;
+  }, [isAuthenticated, setWalletBalance, logout]);
 
   const formattedDate = latestOrder?.createdAt
     ? new Date(latestOrder.createdAt).toLocaleDateString("en-IN", {
@@ -145,7 +157,7 @@ export default function UserQuickSummary() {
                   Wallet
                 </p>
                 <p className="text-sm sm:text-base font-black text-[var(--foreground)] tabular-nums truncate">
-                  ₹{Number(walletBalance || 0).toFixed(2)}
+                  {!isAuthenticated ? "—" : `₹${Number(walletBalance || 0).toFixed(2)}`}
                 </p>
               </div>
             </div>
@@ -182,7 +194,7 @@ export default function UserQuickSummary() {
                   Total Orders
                 </p>
                 <p className="text-sm sm:text-base font-black text-[var(--foreground)] tabular-nums truncate">
-                  {loading ? "—" : totalOrders}
+                  {!isAuthenticated || loading ? "—" : totalOrders}
                 </p>
               </div>
             </div>
@@ -190,7 +202,17 @@ export default function UserQuickSummary() {
 
           {/* Bottom / Right: Last Order + Reorder */}
           <div className="flex items-center justify-between md:justify-end gap-3 pt-2.5 md:pt-0 border-t md:border-t-0 border-[var(--border)]/60">
-            {loading ? (
+            {!isAuthenticated ? (
+              <div className="flex items-center justify-between w-full md:w-auto gap-3">
+                <span className="text-xs text-[var(--muted)] font-medium">Login to view orders</span>
+                <Link
+                  href="/login"
+                  className="shrink-0 px-3.5 py-2 rounded-xl bg-gradient-to-b from-[var(--accent)] to-blue-600 text-white text-xs font-semibold hover:brightness-105 transition-all"
+                >
+                  Login
+                </Link>
+              </div>
+            ) : loading ? (
               <div className="h-8 w-44 rounded-lg bg-[var(--foreground)]/[0.06] animate-pulse" />
             ) : latestOrder ? (
               <>

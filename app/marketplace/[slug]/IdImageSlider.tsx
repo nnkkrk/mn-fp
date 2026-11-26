@@ -106,6 +106,7 @@ export default function IdImageSlider({
               src={slideImages[currentIndex]}
               alt={`${title} - image ${currentIndex + 1}`}
               fill
+              unoptimized
               className="object-cover"
               priority={currentIndex === 0}
             />
