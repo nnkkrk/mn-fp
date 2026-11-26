@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Offline | mlbbtopup.in</title>
   <link rel="icon" href="/favicon.ico">
-  <meta name="theme-color" content="#f8fafc">
+  <meta name="theme-color" content="#ffffff">
   <style>
     * {
       box-sizing: border-box;
@@ -18,11 +18,7 @@
     }
 
     body {
-      background: #f8fafc;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(59, 130, 246, 0.05) 0px, transparent 60%);
+      background: #ffffff;
       color: #0f172a;
       min-height: 100vh;
       display: flex;
@@ -34,31 +30,12 @@
       overflow-x: hidden;
     }
 
-    /* Subtle background grid pattern */
-    .bg-grid {
-      position: absolute;
-      inset: 0;
-      background-size: 32px 32px;
-      background-image: 
-        linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
-      pointer-events: none;
-      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-    }
-
     .card {
       position: relative;
       z-index: 10;
       max-width: 380px;
       width: 100%;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 28px;
-      padding: 32px 24px 28px;
-      box-shadow: 
-        0 20px 40px -15px rgba(15, 23, 42, 0.08),
-        0 0 0 1px rgba(15, 23, 42, 0.03);
+      padding: 24px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -362,81 +339,64 @@
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-
   <div class="card">
     <!-- Cute Sleepy Router Mascot with Interactive Click -->
     <div class="mascot-container" onclick="pokeMascot()" title="Tap to wake me up!">
       <div class="zzz-bubble">Zzz...</div>
-      <svg class="mascot-svg" id="mascot" viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Floating disconnected plug cord dangling -->
-        <path d="M 60 88 Q 60 102 76 102 T 94 96" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" fill="none" />
-        <rect x="92" y="90" width="10" height="12" rx="2" fill="#64748b" transform="rotate(25 92 90)" />
-        <line x1="102" y1="95" x2="108" y2="98" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
-        <line x1="100" y1="101" x2="106" y2="104" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+      <svg class="mascot-svg" id="mascot" viewBox="0 38 180 148" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Ground shadow -->
+        <ellipse cx="90" cy="174" rx="34" ry="6.5" fill="#0f172a" opacity="0.12" />
 
-        <!-- Router Antennas -->
-        <line x1="36" y1="36" x2="22" y2="14" stroke="#64748b" stroke-width="4" stroke-linecap="round" />
-        <circle cx="20" cy="12" r="5" fill="#f43f5e" />
-        
-        <line x1="84" y1="36" x2="98" y2="14" stroke="#64748b" stroke-width="4" stroke-linecap="round" />
-        <circle cx="100" cy="12" r="5" fill="#f43f5e" />
+        <!-- Sleepy Buff-y body -->
+        <g transform="rotate(-3 90 116)">
+          <!-- Ears -->
+          <path d="M54 74 C44 62, 44 50, 52 47 C59 45, 67 54, 70 67 Z" fill="#38bdf8" stroke="#172554" stroke-width="3.5" stroke-linejoin="round" />
+          <path d="M126 74 C136 62, 136 50, 128 47 C121 45, 113 54, 110 67 Z" fill="#38bdf8" stroke="#172554" stroke-width="3.5" stroke-linejoin="round" />
 
-        <!-- Router Body -->
-        <rect x="20" y="34" width="80" height="56" rx="20" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="3" />
-        
-        <!-- Sleepy / Cute Face -->
-        <!-- Cheeks -->
-        <circle cx="36" cy="67" r="5.5" fill="#fecdd3" />
-        <circle cx="84" cy="67" r="5.5" fill="#fecdd3" />
-        
-        <!-- Sleepy Closed Curved Eyes -->
-        <path id="left-eye" d="M 40 59 Q 47 65 54 59" stroke="#334155" stroke-width="3" stroke-linecap="round" fill="none" />
-        <path id="right-eye" d="M 66 59 Q 73 65 80 59" stroke="#334155" stroke-width="3" stroke-linecap="round" fill="none" />
-        
-        <!-- Cute Little Mouth -->
-        <path id="mascot-mouth" d="M 57 71 Q 60 74 63 71" stroke="#475569" stroke-width="2.5" stroke-linecap="round" fill="none" />
-        
-        <!-- Router Signal LEDs -->
-        <circle cx="48" cy="43" r="2.5" fill="#cbd5e1" />
-        <circle cx="60" cy="43" r="2.5" fill="#cbd5e1" />
-        <circle cx="72" cy="43" r="2.5" fill="#f43f5e">
-          <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite" />
-        </circle>
+          <!-- Feet -->
+          <ellipse cx="68" cy="156" rx="12" ry="8" fill="#1d4ed8" stroke="#172554" stroke-width="3.5" />
+          <ellipse cx="112" cy="156" rx="12" ry="8" fill="#1d4ed8" stroke="#172554" stroke-width="3.5" />
+
+          <!-- Resting arms -->
+          <ellipse cx="37" cy="124" rx="9" ry="12" fill="#3b82f6" stroke="#172554" stroke-width="3.5" />
+          <ellipse cx="143" cy="124" rx="9" ry="12" fill="#3b82f6" stroke="#172554" stroke-width="3.5" />
+
+          <!-- Mochi body -->
+          <rect x="42" y="60" width="96" height="96" rx="44" fill="#3b82f6" stroke="#172554" stroke-width="3.8" />
+          <path d="M134 94 C136 128, 118 152, 84 152 C68 152, 56 146, 49 136 C60 144, 76 146, 94 143 C118 139, 131 120, 134 94 Z" fill="#2563eb" />
+          <ellipse cx="68" cy="75" rx="14" ry="6" transform="rotate(-22 68 75)" fill="#93c5fd" opacity="0.7" />
+
+          <!-- Face patch -->
+          <ellipse cx="90" cy="112" rx="34" ry="25" fill="#eff6ff" opacity="0.92" />
+
+          <!-- Sleepy eyes (wake up on tap!) -->
+          <path id="left-eye" d="M 68 106 Q 74 113 80 106" stroke="#172554" stroke-width="3.5" stroke-linecap="round" fill="none" />
+          <path id="right-eye" d="M 100 106 Q 106 113 112 106" stroke="#172554" stroke-width="3.5" stroke-linecap="round" fill="none" />
+
+          <!-- Sleepy mouth -->
+          <path id="mascot-mouth" d="M 87 120 A 3 3 0 1 1 93 120" stroke="#172554" stroke-width="2.6" stroke-linecap="round" fill="none" />
+
+          <!-- Blush -->
+          <ellipse cx="63" cy="116" rx="4.5" ry="2.6" fill="#fda4af" opacity="0.7" />
+          <ellipse cx="117" cy="116" rx="4.5" ry="2.6" fill="#fda4af" opacity="0.7" />
+
+          <!-- Belly diamond -->
+          <polygon points="90,141 95,147 90,153 85,147" fill="#38bdf8" stroke="#172554" stroke-width="2" stroke-linejoin="round" />
+        </g>
       </svg>
     </div>
 
     <!-- Status Badge -->
     <div class="badge">
       <span class="pulse-dot"></span>
-      You Are Offline
+      Offline
     </div>
 
-    <!-- Headline & Copy in Simple English -->
-    <h1>Oops, No Internet!</h1>
+    <!-- Minimal Headline & Copy -->
+    <h1>No Internet</h1>
     <p class="desc">
-      Your device lost connection to the internet. Please check your Wi-Fi or turn on mobile data. Don't worry, your orders and diamonds are 100% safe!
+      Check your connection. Your orders &amp; diamonds are safe.
     </p>
-
-    <!-- Interactive Funny Tip / Excuse Box in Simple English -->
-    <div class="excuse-box" onclick="cycleExcuse()" title="Tap for another funny tip!">
-      <div class="excuse-header">
-        <span class="excuse-tag">
-          💡 Quick Fun Tip
-        </span>
-        <span class="excuse-btn">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-          </svg>
-          New Tip
-        </span>
-      </div>
-      <div class="excuse-text" id="excuse-text">
-        "Your Wi-Fi is taking a quick power nap."
-      </div>
-    </div>
 
     <!-- Buttons -->
     <div class="action-group">
@@ -446,12 +406,12 @@
           <polyline points="1 20 1 14 7 14"></polyline>
           <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
         </svg>
-        <span id="retry-label">Retry Connection</span>
+        <span id="retry-label">Retry</span>
       </button>
 
       <button class="btn-game-toggle" onclick="toggleMiniGame()">
         <span>🎮</span>
-        <span id="game-btn-text">Bored? Play Mini Game</span>
+        <span id="game-btn-text">Play Mini Game</span>
       </button>
     </div>
 
@@ -469,7 +429,7 @@
 
     <div class="status-footer">
       <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#94a3b8;"></span>
-      Auto-reconnecting once you're back online...
+      Auto-reconnecting...
     </div>
   </div>
 
@@ -510,22 +470,19 @@
       const mouth = document.getElementById('mascot-mouth');
 
       // Surprise eyes (circles)
-      leftEye.setAttribute('d', 'M 47 56 A 4 4 0 1 1 47 64 A 4 4 0 1 1 47 56');
-      rightEye.setAttribute('d', 'M 73 56 A 4 4 0 1 1 73 64 A 4 4 0 1 1 73 56');
-      mouth.setAttribute('d', 'M 57 73 A 3 3 0 1 1 63 73');
+      leftEye.setAttribute('d', 'M 74 102 A 4.5 4.5 0 1 1 74 111 A 4.5 4.5 0 1 1 74 102');
+      rightEye.setAttribute('d', 'M 106 102 A 4.5 4.5 0 1 1 106 111 A 4.5 4.5 0 1 1 106 102');
+      mouth.setAttribute('d', 'M 86 121 A 4 4 0 1 1 94 121');
 
-      mascot.style.transform = 'scale(1.15) rotate(6deg)';
+      mascot.style.transform = 'scale(1.1) rotate(5deg)';
 
       clearTimeout(pokeTimer);
       pokeTimer = setTimeout(() => {
-        // Return to sleepy
-        leftEye.setAttribute('d', 'M 40 59 Q 47 65 54 59');
-        rightEye.setAttribute('d', 'M 66 59 Q 73 65 80 59');
-        mouth.setAttribute('d', 'M 57 71 Q 60 74 63 71');
+        leftEye.setAttribute('d', 'M 68 106 Q 74 113 80 106');
+        rightEye.setAttribute('d', 'M 100 106 Q 106 113 112 106');
+        mouth.setAttribute('d', 'M 87 120 A 3 3 0 1 1 93 120');
         mascot.style.transform = '';
       }, 900);
-
-      cycleExcuse();
     }
 
     // ==========================================

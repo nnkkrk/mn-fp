@@ -22,6 +22,7 @@ import api from "@/lib/axios";
 import { Suspense, useRef } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { LoadingSpinner } from "@/components/common";
+import { BuffyMascot, type BuffyMood } from "@/components/mascots";
 
 const COUNTRY_CODES = [
   { label: "India (+91)", code: "+91", flag: "🇮🇳" },
@@ -289,6 +290,17 @@ function AuthContent() {
     show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } },
   };
 
+  const buffyMood: BuffyMood =
+    success === "done"
+      ? "happy"
+      : error
+      ? "error"
+      : loading
+      ? "loading"
+      : showOtpField || showPhonePrompt
+      ? "thinking"
+      : "idle";
+
   return (
     <section suppressHydrationWarning className="relative min-h-screen flex flex-col items-center justify-center py-8 sm:py-16 px-4 overflow-hidden bg-[var(--background)]">
       {/* AMBIENT BACKGROUND */}
@@ -308,25 +320,30 @@ function AuthContent() {
           <div className="hidden md:flex flex-col items-center justify-center text-center p-6 lg:p-10 relative border-b md:border-b-0 md:border-r border-[var(--border)]/50">
             <motion.div
               variants={itemVariants}
-              className="relative flex flex-col items-center justify-center py-4"
+              className="relative flex flex-col items-center justify-center py-2"
             >
               <div className="absolute inset-0 bg-[var(--accent)] blur-3xl opacity-20 rounded-full scale-125 pointer-events-none" />
-              <Image
-                src="/logo.png"
-                alt="MLBB TOPUP Logo"
-                width={320}
-                height={320}
-                priority
-                className="relative z-10 w-auto h-28 md:h-32 lg:h-40 object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300 logo-light-theme"
-              />
-              <Image
-                src="/logo-dark.png"
-                alt="MLBB TOPUP Logo"
-                width={320}
-                height={320}
-                priority
-                className="relative z-10 w-auto h-28 md:h-32 lg:h-40 object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300 logo-dark-theme"
-              />
+              <BuffyMascot
+                mood={buffyMood}
+                className="relative z-10 w-36 h-36 lg:w-44 lg:h-44"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="MLBB TOPUP Logo"
+                  width={260}
+                  height={260}
+                  priority
+                  className="w-auto h-11 lg:h-14 object-contain logo-light-theme"
+                />
+                <Image
+                  src="/logo-dark.png"
+                  alt="MLBB TOPUP Logo"
+                  width={260}
+                  height={260}
+                  priority
+                  className="w-auto h-11 lg:h-14 object-contain logo-dark-theme"
+                />
+              </BuffyMascot>
             </motion.div>
           </div>
 
@@ -340,20 +357,23 @@ function AuthContent() {
             >
               {/* HEADER */}
               <div className="flex flex-col items-center text-center mb-3 sm:mb-4">
-                {/* Mobile Logo Only */}
+                {/* Mobile Logo + Mascot */}
                 <motion.div
                   variants={itemVariants}
-                  className="relative -mt-4 sm:-mt-5 mb-2 sm:mb-2.5 md:hidden"
+                  className="relative -mt-4 sm:-mt-5 mb-2.5 sm:mb-3 md:hidden flex flex-col items-center"
                 >
                   <div className="absolute inset-0 bg-[var(--accent)] blur-2xl opacity-10" />
-                  <div className="relative flex justify-center">
+                  <BuffyMascot
+                    mood={buffyMood}
+                    className="relative z-10 w-24 h-24 sm:w-28 sm:h-28"
+                  >
                     <Image
                       src="/logo.png"
                       alt="Logo"
                       width={160}
                       height={160}
                       priority
-                      className="relative z-10 w-auto h-[74px] sm:h-[84px] object-contain logo-light-theme"
+                      className="w-auto h-9 sm:h-10 object-contain logo-light-theme"
                     />
                     <Image
                       src="/logo-dark.png"
@@ -361,25 +381,25 @@ function AuthContent() {
                       width={160}
                       height={160}
                       priority
-                      className="relative z-10 w-auto h-[74px] sm:h-[84px] object-contain logo-dark-theme"
+                      className="w-auto h-9 sm:h-10 object-contain logo-dark-theme"
                     />
-                  </div>
+                  </BuffyMascot>
                 </motion.div>
 
-                <motion.div variants={itemVariants} className="space-y-1.5 sm:space-y-2">
-                  <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-[var(--foreground)] to-[var(--foreground)]/60 drop-shadow-sm">
+                <motion.div variants={itemVariants} className="space-y-1">
+                  <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight text-[var(--foreground)]">
                     {showPhonePrompt
-                      ? "Enter Phone Number"
+                      ? "Add your phone"
                       : showOtpField
-                      ? "Enter Your Code"
-                      : "Login / Register"}
+                      ? "Check your inbox"
+                      : "Welcome back"}
                   </h1>
-                  <p className="text-[11px] sm:text-xs font-medium text-[var(--muted)]/80 tracking-wide uppercase">
+                  <p className="text-xs sm:text-[13px] font-normal text-[var(--muted)]">
                     {showPhonePrompt
                       ? "Enter your mobile number to continue"
                       : showOtpField
-                      ? "Enter the code we sent to your email"
-                      : "Sign in to your account / Register"}
+                      ? "Enter the 6-digit code sent to your email"
+                      : "Sign in or create your account in seconds"}
                   </p>
                 </motion.div>
               </div>
@@ -441,7 +461,7 @@ function AuthContent() {
                             onChange={handleCountryCodeChange}
                             placeholder="+91"
                             maxLength={5}
-                            className="w-full h-12 bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl px-2 sm:px-3 text-center text-xs sm:text-sm font-black focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 tracking-wider cursor-pointer"
+                            className="w-full h-11 bg-[var(--background)]/70 border border-[var(--border)] rounded-xl px-2 sm:px-3 text-center text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 placeholder:font-normal cursor-pointer"
                           />
                           <select
                             value={COUNTRY_CODES.some((c) => c.code === countryCode) ? countryCode : "custom"}
@@ -479,7 +499,7 @@ function AuthContent() {
                             onChange={handlePhoneChange}
                             required
                             autoFocus
-                            className="w-full h-12 bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-8 sm:pl-9 pr-3 sm:pr-4 text-xs sm:text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 tracking-wider"
+                            className="w-full h-11 bg-[var(--background)]/70 border border-[var(--border)] rounded-xl pl-8 sm:pl-9 pr-3 sm:pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 placeholder:font-normal"
                           />
                         </div>
                       </div>
@@ -494,7 +514,7 @@ function AuthContent() {
                       aria-label="button"
                       type="submit"
                       disabled={loading || (countryCode === "+91" ? phoneNumber.length !== 10 : phoneNumber.length < 6)}
-                      className="w-full h-12 relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)] text-xs sm:text-sm"
+                      className="w-full h-11 relative overflow-hidden group/btn bg-gradient-to-b from-[var(--accent)] to-blue-600 text-white font-semibold tracking-tight rounded-xl hover:brightness-105 active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_6px_16px_-4px_rgba(var(--accent-rgb),0.45)] text-sm"
                     >
                       {loading ? (
                         <LoadingSpinner size="md" color="white" />
@@ -526,7 +546,7 @@ function AuthContent() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         disabled={showOtpField}
-                        className={`w-full h-12 bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-2xl pl-12 pr-5 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[var(--accent)]/10 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 ${showOtpField ? "opacity-50" : ""}`}
+                        className={`w-full h-11 bg-[var(--background)]/70 border border-[var(--border)] rounded-xl pl-11 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all placeholder:text-[var(--muted)]/50 placeholder:font-normal shadow-[0_1px_2px_rgba(0,0,0,0.03)] ${showOtpField ? "opacity-50" : ""}`}
                       />
                       {showOtpField && (
                         <button aria-label="button"
@@ -566,7 +586,7 @@ function AuthContent() {
                                   onKeyDown={(e) => handleKeyDown(idx, e)}
                                   required
                                   autoFocus={idx === 0}
-                                  className="w-full aspect-square text-center bg-[var(--foreground)]/[0.03] border border-[var(--border)] rounded-xl text-xl font-black focus:outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/10 transition-all shadow-sm"
+                                  className="w-full aspect-square text-center bg-[var(--background)]/70 border border-[var(--border)] rounded-xl text-lg font-bold focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
                                 />
                               </motion.div>
                             ))}
@@ -583,7 +603,7 @@ function AuthContent() {
                     <button aria-label="button"
                       type="submit"
                       disabled={loading}
-                      className="w-full h-12 relative overflow-hidden group/btn bg-[var(--accent)] text-white font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)] text-sm"
+                      className="w-full h-11 relative overflow-hidden group/btn bg-gradient-to-b from-[var(--accent)] to-blue-600 text-white font-semibold tracking-tight rounded-xl hover:brightness-105 active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_6px_16px_-4px_rgba(var(--accent-rgb),0.45)] text-sm"
                     >
                     {loading ? (
                       <LoadingSpinner size="md" color="white" />
@@ -593,7 +613,7 @@ function AuthContent() {
                           {showOtpField ? (
                             <>Verify & Login <FiCheckCircle className="text-lg" /></>
                           ) : (
-                            <>Sign In with Email <FiArrowRight className="text-lg group-hover/btn:translate-x-0.5 transition-transform" /></>
+                            <>Continue with Email <FiArrowRight className="text-base group-hover/btn:translate-x-0.5 transition-transform" /></>
                           )}
                         </span>
                       </>
@@ -603,9 +623,9 @@ function AuthContent() {
 
                 {/* DIVIDER */}
                 <div className="relative flex items-center gap-3 py-1">
-                  <div className="h-px flex-1 bg-[var(--border)]/60" />
-                  <span className="text-[9px] font-black text-[var(--muted)]/70 uppercase tracking-[0.2em]">Or continue with</span>
-                  <div className="h-px flex-1 bg-[var(--border)]/60" />
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--border)] to-[var(--border)]" />
+                  <span className="text-[11px] font-medium text-[var(--muted)]">or</span>
+                  <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[var(--border)] to-[var(--border)]" />
                 </div>
 
                 {/* GOOGLE SECTION (Always Available) */}
@@ -619,7 +639,7 @@ function AuthContent() {
                       }
                     }}
                     disabled={loading}
-                    className="w-full h-12 bg-[var(--foreground)]/[0.03] hover:bg-[var(--foreground)]/[0.06] border border-[var(--border)] rounded-2xl flex items-center justify-center gap-3 text-sm font-bold text-[var(--foreground)] transition-all active:scale-[0.98] shadow-sm group disabled:opacity-50"
+                    className="w-full h-11 bg-[var(--background)]/80 hover:bg-[var(--foreground)]/[0.04] border border-[var(--border)] hover:border-[var(--foreground)]/20 rounded-xl flex items-center justify-center gap-2.5 text-sm font-semibold text-[var(--foreground)] transition-all active:scale-[0.99] shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:shadow-sm group disabled:opacity-50"
                   >
                     <svg className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" viewBox="0 0 24 24">
                       <path
