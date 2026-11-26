@@ -77,7 +77,7 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
           {/* Left Preview Slide */}
           <div 
             onClick={() => paginate(-1)}
-            className="w-[11%] lg:w-[12%] h-[230px] lg:h-[270px] shrink-0 rounded-none overflow-hidden relative opacity-40 hover:opacity-85 scale-[0.92] hover:scale-95 transition-all duration-500 cursor-pointer border border-[var(--border)] shadow-sm bg-[var(--card)] group"
+            className="w-[11%] lg:w-[12%] h-[200px] lg:h-[235px] shrink-0 rounded-none overflow-hidden relative opacity-40 hover:opacity-85 scale-[0.92] hover:scale-95 transition-all duration-500 cursor-pointer border border-[var(--border)] shadow-sm bg-[var(--card)] group"
           >
             {isVideoUrl(prevBanner.bannerImage) ? (
               <video
@@ -106,7 +106,7 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
           </div>
 
           {/* Center Highlighted Slide (ACTIVE FOCUS - NO BORDER RADIUS) */}
-          <div className="flex-1 h-[280px] lg:h-[330px] rounded-none overflow-hidden relative opacity-100 scale-100 z-20 border border-[var(--border)] shadow-xl bg-[var(--card)] group">
+          <div className="flex-1 h-[240px] lg:h-[285px] rounded-none overflow-hidden relative opacity-100 scale-100 z-20 border border-[var(--border)] shadow-xl bg-[var(--card)] group">
             <Link href={currentBanner.bannerLink || "/"} className="relative block w-full h-full overflow-hidden">
               {isVideoUrl(currentBanner.bannerImage) ? (
                 <video
@@ -177,7 +177,7 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
           {/* Right Preview Slide */}
           <div 
             onClick={() => paginate(1)}
-            className="w-[11%] lg:w-[12%] h-[230px] lg:h-[270px] shrink-0 rounded-none overflow-hidden relative opacity-40 hover:opacity-85 scale-[0.92] hover:scale-95 transition-all duration-500 cursor-pointer border border-[var(--border)] shadow-sm bg-[var(--card)] group"
+            className="w-[11%] lg:w-[12%] h-[200px] lg:h-[235px] shrink-0 rounded-none overflow-hidden relative opacity-40 hover:opacity-85 scale-[0.92] hover:scale-95 transition-all duration-500 cursor-pointer border border-[var(--border)] shadow-sm bg-[var(--card)] group"
           >
             {isVideoUrl(nextBanner.bannerImage) ? (
               <video
@@ -209,7 +209,7 @@ export default function GameBannerCarousel({ initialBanners = [] }: { initialBan
 
       {/* MOBILE / SINGLE BANNER VIEW (NO BORDER RADIUS, NO LIVE FEATURE) */}
       <div
-        className={`${showMulti ? "md:hidden" : "block"} relative w-full h-[200px] sm:h-[260px] rounded-none overflow-hidden border border-[var(--border)] shadow-xl group bg-[var(--card)]`}
+        className={`${showMulti ? "md:hidden" : "block"} relative w-full h-[175px] sm:h-[225px] rounded-none overflow-hidden border border-[var(--border)] shadow-xl group bg-[var(--card)]`}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
