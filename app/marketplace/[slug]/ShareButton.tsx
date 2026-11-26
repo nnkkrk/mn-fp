@@ -17,11 +17,18 @@ export default function ShareButton({
 }: ShareButtonProps) {
   const [sharing, setSharing] = useState(false);
 
-  const handleShare = async () => {
+  const handleShare = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (sharing) return;
     setSharing(true);
 
-    const shareText = `${title}\nPrice: ₹${price}\n${url}`;
+    const fullUrl =
+      url.startsWith("/") && typeof window !== "undefined"
+        ? `${window.location.origin}${url}`
+        : url;
+
+    const shareText = `${title}\nPrice: ₹${price}\n${fullUrl}`;
 
     // Try Web Share API (native sheet on Android/iOS)
     if (typeof navigator !== "undefined" && navigator.share) {

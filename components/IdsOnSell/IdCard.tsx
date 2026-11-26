@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Crown, Clock, XCircle } from "lucide-react";
+import ShareButton from "@/app/marketplace/[slug]/ShareButton";
 
 interface IdCardProps {
   item: any;
@@ -138,14 +139,22 @@ export default function IdCard({ item }: IdCardProps) {
             {item.title}
           </h2>
 
-          {/* REGION / SERVER */}
-          {item.account?.server && (
+          {/* REGION / SERVER & SHARE */}
+          <div className="flex items-center justify-between gap-2">
             <div>
-              <span className="inline-block text-[10px] uppercase font-bold text-[var(--muted)] bg-[var(--foreground)]/[0.04] px-2 py-0.5 rounded border border-[var(--border)]">
-                {item.account.server}
-              </span>
+              {item.account?.server && (
+                <span className="inline-block text-[10px] uppercase font-bold text-[var(--muted)] bg-[var(--foreground)]/[0.04] px-2 py-0.5 rounded border border-[var(--border)]">
+                  {item.account.server}
+                </span>
+              )}
             </div>
-          )}
+            <ShareButton
+              title={item.title}
+              price={item.price}
+              url={`/marketplace/${item.slug || item.id}`}
+              imageUrl={item.media?.images?.[0] || item.image}
+            />
+          </div>
         </div>
 
         {/* PRICE & ACTION FOOTER */}
