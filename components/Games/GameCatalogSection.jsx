@@ -157,7 +157,20 @@ function GameCatalogContent() {
   }, [searchQuery, hideOOS, sort, isOutOfStock]);
 
   const processedGames = useMemo(() => processList(games), [games, processList]);
-  const processedMlbbGames = useMemo(() => processList(mlbbVeriant), [mlbbVeriant, processList]);
+  const processedMlbbGames = useMemo(
+    () =>
+      processList(mlbbVeriant).filter((g) => {
+        const name = g.gameName?.toLowerCase() || "";
+        const slug = g.gameSlug?.toLowerCase() || "";
+        const isGlobal = name.includes("global") || slug.includes("global");
+        const isAllRegion =
+          name.includes("all region") ||
+          slug.includes("all-region") ||
+          slug.includes("allregion");
+        return !isGlobal && !isAllRegion;
+      }),
+    [mlbbVeriant, processList]
+  );
 
   const processedOtts = useMemo(() => otts?.items ? processList(otts.items) : [], [otts, processList]);
   const processedMemberships = useMemo(() => memberships?.items ? processList(memberships.items) : [], [memberships, processList]);
@@ -323,7 +336,7 @@ function GameCatalogContent() {
               {(activeTab === "all" || activeTab === "mlbb") && processedMlbbGames.length > 0 && (
                 <div className="mb-6">
                   <SectionHeader
-                    title="MLBB Special"
+                    title="MLBB Indian Most Used"
                     icon={FiZap}
                     count={processedMlbbGames.length}
                     gradient="from-blue-500 to-indigo-600"
