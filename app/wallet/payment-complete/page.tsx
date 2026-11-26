@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Icons } from "@/components/icons";
-import { LoadingSpinner } from "@/components/common";
+import { BuffyMascot } from "@/components/mascots";
 
 export default function PaymentComplete() {
   const [status, setStatus] = useState("checking"); // checking | success | failed | delayed
@@ -106,45 +106,31 @@ export default function PaymentComplete() {
               exit={{ opacity: 0, scale: 1.05 }}
               className="flex flex-col items-center text-center"
             >
-              {/* ICON AREA */}
-              <div className="mb-6">
+              {/* MASCOT AREA */}
+              <div className="mb-4">
                 {status === "checking" && (
-                  <div className="relative mx-auto mb-4">
-                    <div className="w-20 h-20 rounded-full border-2 border-[var(--accent)]/20 flex items-center justify-center relative">
+                  <div className="relative mx-auto flex items-center justify-center">
+                    <div className="relative w-44 h-44 rounded-full border-2 border-[var(--accent)]/15 flex items-center justify-center">
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 rounded-full border-t-2 border-[var(--accent)]"
+                        transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
+                        className="absolute inset-0 rounded-full border-t-2 border-r-2 border-[var(--accent)]"
                       />
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="w-14 h-14 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]"
-                      >
-                        <LoadingSpinner size="md" color="accent" />
-                      </motion.div>
+                      <BuffyMascot mood="loading" size="md" speech="Checking..." />
                     </div>
                   </div>
                 )}
 
                 {status === "success" && (
-                  <div className="w-16 h-16 rounded-[1.25rem] bg-[#10b981] flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.3)] mb-4 mx-auto">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#10b981]">
-                      <Icons.check size={18} />
-                    </div>
-                  </div>
+                  <BuffyMascot mood="happy" size="md" speech="Added!" />
                 )}
 
                 {status === "failed" && (
-                  <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20">
-                    <Icons.close size={28} className="text-red-500" />
-                  </div>
+                  <BuffyMascot mood="error" size="md" speech="Failed!" />
                 )}
 
                 {status === "delayed" && (
-                  <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-                    <Icons.clock size={28} className="text-amber-500" />
-                  </div>
+                  <BuffyMascot mood="thinking" size="md" speech="Hold on..." />
                 )}
               </div>
 
