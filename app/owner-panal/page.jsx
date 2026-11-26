@@ -66,6 +66,7 @@ import EventsAdminTab from "@/components/admin/EventsAdminTab";
 
 
 import UiSettingsTab from "@/components/admin/UiSettingsTab";
+import FeaturedItemsPicker from "@/components/admin/FeaturedItemsPicker";
 import PwaStatsTab from "@/components/admin/PwaStatsTab";
 import GiveawayAdminTab from "@/components/admin/GiveawayAdminTab";
 import BlocklistTab from "@/components/admin/BlocklistTab";
@@ -126,6 +127,7 @@ const MENU_CATEGORIES = [
     category: "Content & Storefront",
     items: [
       { id: "banners", label: "Store Banners", icon: FiImage },
+      { id: "featured-items", label: "Featured Items", icon: FiStar },
       { id: "blogs", label: "Blogs & Articles", icon: FiFileText },
       { id: "ads", label: "Ads & Monetization", icon: FiTv },
     ]
@@ -144,7 +146,7 @@ const VALID_TABS = [
   "analytics", "activity", "pwa-stats",
   "orders", "transactions", "catalog", "pricing", "flash-sale", "trade-ids", "wallet", "usdt",
   "users", "memberships", "queries", "blocklist",
-  "promotional", "redeem", "coins", "ads", "banners", "giveaway", "events", "tournaments", "blogs",
+  "promotional", "redeem", "coins", "ads", "banners", "featured-items", "giveaway", "events", "tournaments", "blogs",
   "ui-settings", "api-keys", "settings"
 ];
 
@@ -1068,6 +1070,9 @@ export default function AdminPanalPage() {
             )}
             {activeTab === "ui-settings" && (
               <UiSettingsTab />
+            )}
+            {activeTab === "featured-items" && (
+              <FeaturedItemsPicker />
             )}
             {activeTab === "analytics" && (
               <AnalyticsTab onNavigate={handleTabChange} />

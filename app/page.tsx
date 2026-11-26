@@ -191,6 +191,7 @@ export default async function Page() {
           showGiveawayBanner: settings.showGiveawayBanner,
           showGameBannerCarousel: settings.showGameBannerCarousel,
           showStorySlider: settings.showStorySlider,
+          featuredStoryItems: settings.featuredStoryItems,
           showBattleRoyaleSection: settings.showBattleRoyaleSection,
           showFlashSale: settings.showFlashSale,
           showHomeQuickActions: settings.showHomeQuickActions,

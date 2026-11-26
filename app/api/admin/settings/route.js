@@ -108,6 +108,20 @@ export async function PATCH(req) {
         if (typeof body.playStoreAppName === "string") settings.playStoreAppName = body.playStoreAppName;
         if (typeof body.playStoreAppSubtext === "string") settings.playStoreAppSubtext = body.playStoreAppSubtext;
 
+        if (Array.isArray(body.featuredStoryItems)) {
+            settings.featuredStoryItems = body.featuredStoryItems
+                .filter((item) => item && item.gameSlug && item.itemSlug && item.itemName)
+                .map((item) => ({
+                    gameSlug: String(item.gameSlug),
+                    gameName: String(item.gameName || ""),
+                    itemSlug: String(item.itemSlug),
+                    itemName: String(item.itemName),
+                    sellingPrice: Number(item.sellingPrice) || 0,
+                    dummyPrice: Number(item.dummyPrice) || 0,
+                    image: String(item.image || ""),
+                }));
+        }
+
         if (topupProvider && ["1game", "bluebuff"].includes(topupProvider)) {
             settings.topupProvider = topupProvider;
         }

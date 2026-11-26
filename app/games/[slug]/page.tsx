@@ -34,6 +34,7 @@ function GameDetailContent() {
 
   /** ✅ detect weekly pass */
   const isWeeklyPass = searchParams.get("type") === "weekly-pass";
+  const selectedItemSlug = searchParams.get("item");
   const isBGMI =
     game?.gameName?.toLowerCase() === "pubg mobile" ||
     game?.gameName?.toLowerCase() === "bgmi" ||
@@ -102,20 +103,34 @@ function GameDetailContent() {
       });
   }, [slug]);
 
-  /* ================= WEEKLY PASS AUTO-SELECT (NOT FILTER) ================= */
+  /* ================= AUTO-SELECT ITEM BY ?item= OR ?type=weekly-pass ================= */
   useEffect(() => {
-    if (!game?.allItems || !isWeeklyPass) return;
+    if (!game?.allItems) return;
 
-    const weeklyPass = game.allItems.find(
-      (i: any) =>
-        i.itemName === "Weekly Pass" &&
-        i.itemSlug === "weekly-pass816"
-    );
-
-    if (weeklyPass) {
-      setActiveItem(weeklyPass);
+    if (selectedItemSlug) {
+      const matched = game.allItems.find(
+        (i: any) =>
+          i.itemSlug === selectedItemSlug &&
+          !i.isOutOfStock &&
+          i.itemAvailablity !== false
+      );
+      if (matched) {
+        setActiveItem(matched);
+        return;
+      }
     }
-  }, [game, isWeeklyPass]);
+
+    if (isWeeklyPass) {
+      const weeklyPass = game.allItems.find(
+        (i: any) =>
+          i.itemName === "Weekly Pass" &&
+          i.itemSlug === "weekly-pass816"
+      );
+      if (weeklyPass) {
+        setActiveItem(weeklyPass);
+      }
+    }
+  }, [game, isWeeklyPass, selectedItemSlug]);
 
   if (loading) {
     return <GameSlugSkeleton />;

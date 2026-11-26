@@ -3,100 +3,44 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { FiArrowUpRight } from "react-icons/fi";
 
-
-const storyData = [
-  // {
-  //   id: 5,
-  //   title: "BGMI",
-  //   badge: "Sale",
-  //   color: "#f59e0b", // Orange
-  //   image: "/game-assets/bgmi-logo.webp",
-  //   link: "/games/bgmi-manual",
-  // },
-  // {
-  //   id: 0,
-  //   title: "Weekly Pass",
-  //   badge: "Best",
-  //   color: "#15803d", // Green
-  //   image: "/game-assets/weeklypass.webp",
-  //   link: "/games/mobile-legends114?type=weekly-pass",
-  // },
+const DEFAULT_FEATURED_ITEMS = [
   {
-    id: 1,
-    title: "Weekly Bundle",
-    badge: "Hot",
-    color: "#b91c1c", // Red
+    gameSlug: "mobile-legends114",
+    gameName: "MLBB India",
+    itemSlug: "weekly-pass816",
+    itemName: "Weekly Pass",
+    sellingPrice: 155,
+    dummyPrice: 170,
+    image: "/game-assets/weeklypass.webp",
+  },
+  {
+    gameSlug: "weeklymonthly-bundle646",
+    gameName: "Weekly Bundle",
+    itemSlug: "weekly-bundle",
+    itemName: "Weekly Bundle",
+    sellingPrice: 83,
+    dummyPrice: 100,
     image: "/game-assets/weekly-monthly-bundle.webp",
-    link: "/games/weeklymonthly-bundle646",
-    slug: "weeklymonthly-bundle646",
   },
   {
-    id: 2,
-    title: "MLBB India",
-    badge: "Live",
-    color: "#15803d", // Green
-    image: "/game-assets/mlbbindia.webp",
-    link: "/games/mobile-legends114",
-    slug: "mobile-legends114",
-  },
-  {
-    id: 3,
-    title: "MLBB Double",
-    badge: "New",
-    color: "#1d4ed8", // Blue
-    image: "/game-assets/double-dias.webp",
-    link: "/games/mlbb-double332",
-    slug: "mlbb-double332",
-  },
-  {
-    id: 4,
-    title: "MLBB Small",
-    color: "#7e22ce", // Purple
-    image: "/game-assets/mlbb-ph-small.webp",
-    link: "/games/mobile-legends-philippines888",
-    slug: "mobile-legends-philippines888",
-  },
-
-  {
-    id: 5,
-    title: "Starlight",
-    badge: "Hot",
-    color: "#0e7490", // Cyan
+    gameSlug: "starlight-card-manual",
+    gameName: "Starlight Card",
+    itemSlug: "starlight-normal",
+    itemName: "Starlight Card",
+    sellingPrice: 280,
+    dummyPrice: 299,
     image: "/game-assets/starkight.webp",
-    link: "/games/starlight-card-manual",
-    slug: "starlight-card-manual",
   },
-  {
-    id: 6,
-    title: "Honour of Kings",
-    badge: "New",
-    color: "#15803d", // Green
-    image: "/game-assets/hok.webp",
-    link: "/games/honor-of-kings57",
-    slug: "honor-of-kings57",
-  },
-  // {
-  //   id: 7,
-  //   title: "Membership",
-  //   badge: "VIP",
-  //   color: "#db2777", // Pink
-  //   image: "/membership/silver-m.webp",
-  //   link: "/games/membership/silver-membership",
-  //   slug: "silver-membership",
-  // },
-  // {
-  //   id: 8,
-  //   title: "Reseller",
-  //   badge: "B2B",
-  //   color: "#ca8a04", // Yellow/Gold
-  //   image: "/membership/reseller-m.webp",
-  //   link: "/games/membership/reseller-membership",
-  //   slug: "reseller-membership",
-  // },
 ];
 
-export default function StorySlider() {
+/**
+ * Horizontal strip of individual featured items selected by the owner.
+ * Displays game name, item image, item name, and price, linking directly
+ * to `/games/[gameSlug]?item=[itemSlug]` with that item pre-selected.
+ */
+export default function StorySlider({ featuredItems = [] }) {
   const [outOfStockSlugs, setOutOfStockSlugs] = useState([]);
 
   useEffect(() => {
@@ -113,61 +57,86 @@ export default function StorySlider() {
     };
   }, []);
 
-  const visibleStories = storyData.filter((item) => {
-    if (outOfStockSlugs.includes(item.slug)) return false;
-    return true;
-  });
+  const sourceItems =
+    Array.isArray(featuredItems) && featuredItems.length > 0
+      ? featuredItems
+      : DEFAULT_FEATURED_ITEMS;
 
-  if (visibleStories.length === 0) {
+  const items = sourceItems.filter(
+    (item) => item?.gameSlug && item?.itemSlug && !outOfStockSlugs.includes(item.gameSlug)
+  );
+
+  if (items.length === 0) {
     return null;
   }
 
   return (
-    <section className="relative py-4 px-4">
+    <section className="relative py-3 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex gap-3 md:gap-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory relative z-10">
-          {visibleStories.map((item) => (
-            <div
-              key={item.id}
-              className="opacity-100"
-            >
+        <div className="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+          {items.map((item, idx) => {
+            const href = `/games/${item.gameSlug}?item=${encodeURIComponent(item.itemSlug)}`;
+            const sell = Number(item.sellingPrice) || 0;
+            const dummy = Number(item.dummyPrice) || 0;
+            const hasDiscount = dummy > sell && sell > 0;
+            const discountPct = hasDiscount ? Math.round(((dummy - sell) / dummy) * 100) : 0;
+
+            return (
               <Link
-                href={item.link}
-                className="group relative flex flex-col items-center min-w-[72px] md:min-w-[82px] snap-center"
+                key={`${item.gameSlug}-${item.itemSlug}-${idx}`}
+                href={href}
+                className="group relative shrink-0 snap-start min-w-[176px] sm:min-w-[196px] rounded-2xl border border-[var(--border)]/80 bg-gradient-to-br from-[var(--card)] via-[var(--card)] to-[var(--accent)]/[0.06] hover:border-[var(--accent)]/60 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-8px_rgba(var(--accent-rgb),0.28)] transition-all duration-200 p-2.5 sm:p-3 flex items-center gap-3 overflow-hidden"
               >
-                <div className="relative">
-                  {/* Clean Colored Ring (Static, No Animation) */}
-                  <div
-                    className="relative p-[2px] rounded-full z-10"
-                    style={{
-                      background: item.color || 'var(--accent)'
-                    }}
-                  >
-                    <div className="p-0.5 rounded-full bg-[var(--background)]">
-                      <div className="relative w-[58px] h-[58px] md:w-[70px] md:h-[70px] rounded-full overflow-hidden">
-                        <Image
-                          src={item.image}
-                          alt=""
-                          role="presentation"
-                          fill
-                          sizes="(max-width: 768px) 58px, 70px"
-                          priority={item.id <= 2}
-                          className="object-cover"
-                        />
-                      </div>
-                    </div>
+                {/* Discount Tag */}
+                {discountPct > 0 && (
+                  <span className="absolute top-0 right-0 px-1.5 py-0.5 rounded-bl-lg bg-[var(--accent)] text-white text-[9px] font-black tracking-tight leading-none">
+                    -{discountPct}%
+                  </span>
+                )}
+
+                {/* Item Image Pedestal */}
+                <div className="relative w-12 h-12 sm:w-[52px] sm:h-[52px] rounded-xl overflow-hidden shrink-0 border border-[var(--border)]/60 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--accent-rgb),0.14),transparent_72%)] bg-[var(--foreground)]/[0.03] p-1">
+                  <div className="relative w-full h-full rounded-lg overflow-hidden">
+                    <Image
+                      src={item.image || "/game-assets/weeklypass.webp"}
+                      alt={item.itemName}
+                      fill
+                      sizes="52px"
+                      className="object-contain group-hover:scale-110 transition-transform duration-300"
+                    />
                   </div>
                 </div>
 
-                {/* Title - Clean & Static */}
-                <div className="mt-2 h-[24px] md:h-[28px] w-full max-w-[76px] md:max-w-[88px] flex items-start justify-center text-center">
-                  <span className="text-[9px] md:text-[10px] font-bold text-[var(--muted)] group-hover:text-[var(--foreground)] tracking-wider text-center uppercase leading-[1.2] line-clamp-2">
-                    {item.title}
-                  </span>
+                {/* Game Name + Item Name + Price */}
+                <div className="min-w-0 flex-1 pr-1">
+                  {item.gameName && (
+                    <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[var(--accent)] truncate leading-none mb-1">
+                      {item.gameName}
+                    </p>
+                  )}
+                  <p className="text-xs sm:text-[13px] font-extrabold text-[var(--foreground)] truncate leading-tight">
+                    {item.itemName}
+                  </p>
+                  <div className="flex items-center justify-between gap-2 mt-1.5">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-xs sm:text-sm font-black text-[var(--foreground)] tabular-nums">
+                        ₹{sell}
+                      </span>
+                      {hasDiscount && (
+                        <span className="text-[10px] text-[var(--muted)] line-through tabular-nums">
+                          ₹{dummy}
+                        </span>
+                      )}
+                    </div>
+                    <FiArrowUpRight
+                      size={13}
+                      className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"
+                    />
+                  </div>
                 </div>
               </Link>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

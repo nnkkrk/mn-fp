@@ -46,6 +46,17 @@ const AppSettingsSchema = new mongoose.Schema(
             type: String, 
             default: "Google Play App" 
         },
+        featuredStoryItems: [
+            {
+                gameSlug: { type: String, required: true },
+                gameName: { type: String, default: "" },
+                itemSlug: { type: String, required: true },
+                itemName: { type: String, required: true },
+                sellingPrice: { type: Number, default: 0 },
+                dummyPrice: { type: Number, default: 0 },
+                image: { type: String, default: "" },
+            },
+        ],
         // We can add more settings here in the future
     },
     { timestamps: true }

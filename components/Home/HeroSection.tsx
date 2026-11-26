@@ -9,7 +9,6 @@ import BattleRoyaleSection from "./BattleRoyaleSection";
 import TradeMarketplaceBanner from "./TradeMarketplaceBanner";
 import HomeEarnPromotion from "./HomeEarnPromotion";
 import SEOContent from "./SEOContent";
-import SupportBanner from "./SupportBanner";
 import AAdsBanner from "@/components/Ads/AAdsBanner";
 import CustomWebBanner from "./CustomWebBanner";
 import GamesWebBanner from "./GamesWebBanner";
@@ -78,7 +77,7 @@ export default function HeroSection({ bannerSettings, initialBanners }: { banner
       {bs.showGameBannerCarousel !== false && <GameBannerCarousel initialBanners={initialBanners} />}
 
       <div className="space-y-1 mt-2">
-        {bs.showStorySlider !== false && <StorySlider />}
+        {bs.showStorySlider !== false && <StorySlider featuredItems={bs.featuredStoryItems} />}
         {bs.showBattleRoyaleSection !== false && <BattleRoyaleSection />}
         {bs.showFlashSale !== false && <FlashSale />}
       </div>
@@ -91,8 +90,6 @@ export default function HeroSection({ bannerSettings, initialBanners }: { banner
 
       <GameCatalogSection />
 
-      <SupportBanner />
-    
       <SEOContent />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center py-2">
         <AAdsBanner />
