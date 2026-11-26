@@ -212,7 +212,7 @@ export default function PWAInstallBanner({
   const isPlayStoreActive = showPlayStore && playStoreVisible && !playStoreDismissed;
 
   // Do not show any install banners on login, register, or admin screens
-  const hideOnRoutes = ["/login", "/register", "/admin", "/owner-panal", "/games"];
+  const hideOnRoutes = ["/login",  "/admin", "/owner-panal", "/games", "/payment"];
   const isHiddenRoute = hideOnRoutes.some((route) => pathname?.startsWith(route));
 
   if (isHiddenRoute || (!isPwaActive && !isPlayStoreActive && !showModal)) return null;

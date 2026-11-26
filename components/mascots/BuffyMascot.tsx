@@ -22,12 +22,14 @@ export interface BuffyMascotProps {
   label?: string;
   /** Optional logo/sign content for Buff-y to hold in front with both hands */
   children?: ReactNode;
+  /** Optional speech bubble text shown beside Buff-y */
+  speech?: string;
 }
 
 /**
  * Buff-y — Simple, cute cartoon-anime Mini Blue Buff mascot.
- * Supports multiple poses (idle, happy, thinking, loading, error, sleepy)
- * and optional `children` so Buff-y can hold a logo or sign.
+ * Supports multiple poses (idle, happy, thinking, loading, error, sleepy),
+ * optional `speech` bubble, and optional `children` so Buff-y can hold a logo or sign.
  */
 export default function BuffyMascot({
   mood = "idle",
@@ -35,6 +37,7 @@ export default function BuffyMascot({
   className,
   label = "Buff-y the Blue Buff mascot",
   children,
+  speech,
 }: BuffyMascotProps) {
   const isHappy = mood === "happy";
   const isError = mood === "error";
@@ -52,6 +55,28 @@ export default function BuffyMascot({
       role="img"
       aria-label={label}
     >
+      {speech && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85, y: 6 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 360, damping: 20, delay: 0.1 }}
+          className="relative z-30 mb-0.5 flex flex-col items-center"
+        >
+          <div
+            className={`px-3.5 py-1 rounded-full text-white text-[11px] font-black uppercase tracking-wider shadow-md ${
+              isError ? "bg-rose-500" : isThinking || isLoading ? "bg-amber-500" : "bg-emerald-500"
+            }`}
+          >
+            <span>{speech}</span>
+          </div>
+          <span
+            className={`w-0 h-0 border-x-[6px] border-x-transparent border-t-[7px] -mt-[1px] ${
+              isError ? "border-t-rose-500" : isThinking || isLoading ? "border-t-amber-500" : "border-t-emerald-500"
+            }`}
+            aria-hidden="true"
+          />
+        </motion.div>
+      )}
       <svg
         viewBox="0 38 180 148"
         fill="none"
