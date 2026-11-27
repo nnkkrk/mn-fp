@@ -84,14 +84,28 @@ export default function StorySlider({ featuredItems = [] }) {
               className="w-5 h-5 shrink-0"
               aria-hidden="true"
             >
+              {/* Trophy cup */}
               <path
-                d="M12.5 2.5C12.5 2.5 17 6.4 17 11.2C17 14.9 14.3 17.8 11.2 18.4C13.1 16.9 13.7 14.6 12.6 12.5C11.9 14.2 10.6 15.1 9.5 15.3C9.9 13.4 9.1 11.4 7.7 10.1C6.2 11.7 5.5 13.8 6.1 16C4.4 14.7 3.5 12.6 4 10.2C4.7 6.7 8.4 4.1 12.5 2.5Z"
+                d="M7 4H17V10.5C17 13.26 14.76 15.5 12 15.5C9.24 15.5 7 13.26 7 10.5V4Z"
                 fill="#f59e0b"
               />
+              {/* Trophy handles */}
               <path
-                d="M12.2 10.5C12.2 10.5 15 12.8 15 15.8C15 18.4 13.1 20.5 10.5 21C8 20.5 6.5 18.6 6.8 16.1C7.4 17.2 8.4 17.6 9.3 17.4C8.9 15.8 9.9 13.5 12.2 10.5Z"
-                fill="#fbbf24"
+                d="M7 5.5H4.5C3.95 5.5 3.5 5.95 3.5 6.5V8C3.5 9.66 4.84 11 6.5 11H7"
+                stroke="#f59e0b"
+                strokeWidth="1.6"
+                strokeLinecap="round"
               />
+              <path
+                d="M17 5.5H19.5C20.05 5.5 20.5 5.95 20.5 6.5V8C20.5 9.66 19.16 11 17.5 11H17"
+                stroke="#f59e0b"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+              {/* Highlight & stem/base */}
+              <path d="M9.5 6.5H12.5L11.5 11.5H9.5V6.5Z" fill="#fde68a" fillOpacity="0.65" />
+              <rect x="10.75" y="15" width="2.5" height="3.2" fill="#d97706" />
+              <rect x="8" y="18" width="8" height="2.4" rx="1.2" fill="#f59e0b" />
             </svg>
             <h2 className="text-sm sm:text-base font-black tracking-tight text-[var(--foreground)]">
               Most Selling Items
@@ -122,25 +136,95 @@ export default function StorySlider({ featuredItems = [] }) {
                     image: item.image || "",
                   })
                 }
-                className="group relative shrink-0 snap-start min-w-[200px] sm:min-w-[220px] rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/50 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-10px_rgba(var(--accent-rgb),0.28)] transition-all duration-200 p-3 flex items-center gap-3"
+                className="group relative overflow-hidden shrink-0 snap-start min-w-[218px] sm:min-w-[238px] rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/50 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-10px_rgba(var(--accent-rgb),0.28)] transition-all duration-200 p-3 flex items-center gap-3"
               >
-                {/* Item Image (no outer border) */}
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 shrink-0">
+                {/* Decorative corner SVG 3D isometric cube wireframe */}
+                <svg
+                  viewBox="0 0 88 88"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="pointer-events-none absolute -top-1 -right-1 w-20 h-20 text-[var(--accent)] opacity-[0.08] group-hover:opacity-[0.16] transition-opacity duration-300"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M66 10L82 19V37L66 46L50 37V19L66 10Z"
+                    stroke="currentColor"
+                    strokeWidth="1.1"
+                  />
+                  <path
+                    d="M50 19L66 28L82 19M66 28V46"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  />
+                </svg>
+
+                {/* Item Image floating over a 3D isometric pedestal SVG */}
+                <div className="relative w-14 h-14 sm:w-[60px] sm:h-[60px] shrink-0 flex items-center justify-center">
+                  {/* 3D Isometric Pedestal SVG */}
+                  <svg
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="pointer-events-none absolute inset-0 w-full h-full"
+                    aria-hidden="true"
+                  >
+                    {/* Soft ground shadow */}
+                    <ellipse
+                      cx="32"
+                      cy="53"
+                      rx="20"
+                      ry="5"
+                      fill="currentColor"
+                      className="text-black/15 dark:text-black/45"
+                    />
+                    {/* 3D Pedestal top face */}
+                    <path
+                      d="M32 37L54 45.5L32 54L10 45.5L32 37Z"
+                      className="fill-[var(--accent)]/15 stroke-[var(--accent)]/35"
+                      strokeWidth="1"
+                    />
+                    {/* 3D Pedestal left/right extruded thickness */}
+                    <path
+                      d="M10 45.5V49.5L32 58V54L10 45.5Z"
+                      className="fill-[var(--accent)]/25"
+                    />
+                    <path
+                      d="M54 45.5V49.5L32 58V54L54 45.5Z"
+                      className="fill-[var(--accent)]/12"
+                    />
+                  </svg>
+
                   <Image
                     src={item.image || "/game-assets/weeklypass.webp"}
                     alt={item.itemName}
                     fill
-                    sizes="56px"
-                    className="object-contain group-hover:scale-110 transition-transform duration-300"
+                    sizes="60px"
+                    className="relative z-[1] object-contain p-1.5 -translate-y-1 drop-shadow-[0_6px_8px_rgba(0,0,0,0.22)] group-hover:-translate-y-2 group-hover:scale-110 transition-all duration-300"
                   />
                 </div>
 
                 {/* Game Name + Item Name + Price */}
-                <div className="min-w-0 flex-1">
+                <div className="relative z-[1] min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-1.5 mb-0.5">
-                    <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[var(--accent)] truncate">
-                      {item.gameName || "Game"}
-                    </p>
+                    <div className="flex items-center gap-1 min-w-0">
+                      {idx < 3 && (
+                        <svg
+                          viewBox="0 0 14 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-3 h-3 shrink-0"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M7 1L8.7 4.5L12.5 5L9.7 7.7L10.4 11.5L7 9.7L3.6 11.5L4.3 7.7L1.5 5L5.3 4.5L7 1Z"
+                            fill={idx === 0 ? "#f59e0b" : idx === 1 ? "#94a3b8" : "#d97706"}
+                          />
+                        </svg>
+                      )}
+                      <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[var(--accent)] truncate">
+                        {item.gameName || "Game"}
+                      </p>
+                    </div>
                     <FiArrowUpRight
                       size={13}
                       className="text-[var(--muted)]/60 group-hover:text-[var(--accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"
@@ -151,7 +235,7 @@ export default function StorySlider({ featuredItems = [] }) {
                     {item.itemName}
                   </p>
 
-                  <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex items-center gap-1.5 mt-1.5">
                     <span className="text-xs sm:text-sm font-black text-[var(--foreground)] tabular-nums">
                       ₹{sell}
                     </span>
@@ -160,7 +244,22 @@ export default function StorySlider({ featuredItems = [] }) {
                         <span className="text-[10px] text-[var(--muted)] line-through tabular-nums">
                           ₹{dummy}
                         </span>
-                        <span className="ml-auto px-1.5 py-0.5 rounded-md bg-emerald-500/12 text-emerald-600 dark:text-emerald-400 text-[9px] font-extrabold leading-none">
+                        <span className="ml-auto inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-emerald-500/14 border border-emerald-500/20 border-b-2 border-b-emerald-500/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] text-emerald-600 dark:text-emerald-400 text-[9px] font-extrabold leading-none">
+                          <svg
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-2.5 h-2.5 shrink-0"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M2 6.2L6.2 2H10V5.8L5.8 10L2 6.2Z"
+                              stroke="currentColor"
+                              strokeWidth="1.2"
+                              strokeLinejoin="round"
+                            />
+                            <circle cx="7.8" cy="4.2" r="0.8" fill="currentColor" />
+                          </svg>
                           -{discountPct}%
                         </span>
                       </>

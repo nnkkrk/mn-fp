@@ -197,20 +197,20 @@ export default function UserQuickSummary() {
               <>
                 <div className="min-w-0 text-left md:text-right">
                   <div className="flex items-center md:justify-end gap-1.5">
-                    <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.06] text-[var(--muted)] shrink-0">
+                    <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.06] text-[var(--muted)] shrink-0">
                       Last
                     </span>
-                    <p className="text-xs sm:text-[13px] font-extrabold text-[var(--foreground)] truncate max-w-[130px] sm:max-w-[180px]">
+                    <p className="text-[11px] sm:text-xs font-bold text-[var(--foreground)] truncate max-w-[140px] sm:max-w-[180px]">
                       {latestOrder.itemName}
                     </p>
                     {latestOrder.gameSlug && (
-                      <span className="text-[11px] font-bold text-[var(--accent)] truncate max-w-[110px] shrink-0">
+                      <span className="text-[10px] font-bold text-[var(--accent)] truncate max-w-[110px] shrink-0">
                         · {formatGameName(latestOrder.gameSlug)}
                       </span>
                     )}
                   </div>
-                  <p className="text-[10px] text-[var(--muted)] flex items-center md:justify-end gap-1 mt-0.5">
-                    <FiCalendar size={10} />
+                  <p className="text-[9px] text-[var(--muted)] flex items-center md:justify-end gap-1 mt-0.5">
+                    <FiCalendar size={9} />
                     <span>{formattedDate}</span>
                   </p>
                 </div>
@@ -218,9 +218,9 @@ export default function UserQuickSummary() {
                 <Link
                   href={reorderHref}
                   onClick={handleReorderClick}
-                  className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-b from-[var(--accent)] to-blue-600 text-white text-xs font-semibold hover:brightness-105 active:scale-[0.98] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_4px_12px_-3px_rgba(var(--accent-rgb),0.45)]"
+                  className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-b from-[var(--accent)] to-blue-600 text-white text-[11px] font-semibold hover:brightness-105 active:scale-[0.98] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_4px_12px_-3px_rgba(var(--accent-rgb),0.45)]"
                 >
-                  <FiRefreshCw size={12} />
+                  <FiRefreshCw size={11} />
                   <span>Reorder</span>
                 </Link>
               </>
