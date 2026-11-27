@@ -199,20 +199,70 @@ function GameCatalogContent() {
   };
 
   /* ================= RENDER COMPONENTS ================= */
-  const SectionHeader = ({ title, icon: Icon, count, gradient }) => (
-    <div className="group flex items-center justify-between gap-2 mb-3 border-b border-[var(--border)]/30 pb-2">
-      <div className="flex items-center gap-2">
-        <div className={`w-1 h-4 rounded-full bg-gradient-to-b ${gradient}`} />
-        <div className="flex flex-col">
-          <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-[var(--foreground)] leading-tight flex items-center gap-1.5">
-            {Icon && <Icon size={13} className="text-[var(--foreground)] opacity-75 shrink-0" />}
-            <span>{title}</span>
-          </h2>
-          <span className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5">
-            {count} Items Found
-          </span>
-        </div>
+  const renderSectionSvg = (variant) => {
+    switch (variant) {
+      case "mlbb":
+        return (
+          <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 shrink-0" aria-hidden="true">
+            <path d="M6 4H18L22 9.5L12 20.5L2 9.5L6 4Z" fill="#3b82f6" />
+            <path d="M6 4H18L15 9.5H9L6 4Z" fill="#93c5fd" />
+            <path d="M9 9.5H15L12 20.5L9 9.5Z" fill="#60a5fa" />
+          </svg>
+        );
+      case "armory":
+        return (
+          <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 shrink-0" aria-hidden="true">
+            <path
+              d="M6.5 7.5H17.5C19.7 7.5 21.5 9.3 21.5 11.5V15C21.5 16.9 19.9 18.5 18 18.5C16.7 18.5 15.6 17.8 15 16.7L14.2 15.2H9.8L9 16.7C8.4 17.8 7.3 18.5 6 18.5C4.1 18.5 2.5 16.9 2.5 15V11.5C2.5 9.3 4.3 7.5 6.5 7.5Z"
+              fill="#10b981"
+            />
+            <path d="M8 10.5V13.5M6.5 12H9.5" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
+            <circle cx="15.5" cy="11.2" r="1" fill="#ffffff" />
+            <circle cx="17.5" cy="12.8" r="1" fill="#d1fae5" />
+          </svg>
+        );
+      case "memberships":
+        return (
+          <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 shrink-0" aria-hidden="true">
+            <path d="M3 17L4.8 7.5L9.2 11.2L12 5.5L14.8 11.2L19.2 7.5L21 17H3Z" fill="#ec4899" />
+            <rect x="4" y="18" width="16" height="2.2" rx="1.1" fill="#f472b6" />
+          </svg>
+        );
+      case "vouchers":
+        return (
+          <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 shrink-0" aria-hidden="true">
+            <path
+              d="M3.5 7C3.5 5.9 4.4 5 5.5 5H18.5C19.6 5 20.5 5.9 20.5 7V9.8C19.4 9.8 18.5 10.7 18.5 11.8C18.5 12.9 19.4 13.8 20.5 13.8V17C20.5 18.1 19.6 19 18.5 19H5.5C4.4 19 3.5 18.1 3.5 17V13.8C4.6 13.8 5.5 12.9 5.5 11.8C5.5 10.7 4.6 9.8 3.5 9.8V7Z"
+              fill="#f59e0b"
+            />
+            <path d="M9.5 8.5V15.5" stroke="#fef3c7" strokeWidth="1.5" strokeDasharray="2 2" strokeLinecap="round" />
+            <circle cx="15" cy="12" r="1.8" fill="#fef3c7" />
+          </svg>
+        );
+      case "services":
+      default:
+        return (
+          <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 shrink-0" aria-hidden="true">
+            <path d="M12 2.5L19.5 5.8V11.5C19.5 16.2 16.3 20.3 12 21.5C7.7 20.3 4.5 16.2 4.5 11.5V5.8L12 2.5Z" fill="#6366f1" />
+            <path d="M9.5 12L11.3 13.8L15 10" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        );
+    }
+  };
+
+  const SectionHeader = ({ title, variant, count, dotColor = "bg-[var(--accent)]" }) => (
+    <div className="flex items-center gap-2.5 mb-3.5">
+      <div className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] shadow-[0_2px_8px_-4px_rgba(0,0,0,0.12)] min-w-0">
+        {renderSectionSvg(variant)}
+        <h2 className="text-[11px] sm:text-xs font-black tracking-wide uppercase text-[var(--foreground)] truncate">
+          {title}
+        </h2>
       </div>
+      <div className="flex-1 h-px bg-gradient-to-r from-[var(--border)] via-[var(--border)]/40 to-transparent" />
+      <span className="shrink-0 inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)]/80 text-[9px] sm:text-[10px] font-bold text-[var(--muted)] tabular-nums">
+        <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />
+        {count} {count === 1 ? "item" : "items"}
+      </span>
     </div>
   );
 
@@ -337,9 +387,9 @@ function GameCatalogContent() {
                 <div className="mb-6">
                   <SectionHeader
                     title="MLBB Indian Most Used"
-                    icon={FiZap}
+                    variant="mlbb"
                     count={processedMlbbGames.length}
-                    gradient="from-blue-500 to-indigo-600"
+                    dotColor="bg-blue-500"
                   />
                   {viewMode === "grid"
                     ? <GameGrid games={processedMlbbGames} isOutOfStock={isOutOfStock} />
@@ -353,9 +403,9 @@ function GameCatalogContent() {
                 <div className="mb-6">
                   <SectionHeader
                     title="Full Armory"
-                    icon={FiLayers}
+                    variant="armory"
                     count={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g)).length}
-                    gradient="from-[var(--accent)] to-cyan-600"
+                    dotColor="bg-emerald-500"
                   />
                   {viewMode === "grid"
                     ? <GameGrid games={processedGames.filter(g => activeTab !== "others" || !isMlbbGame(g))} isOutOfStock={isOutOfStock} />
@@ -369,9 +419,9 @@ function GameCatalogContent() {
                 <div className="mb-4 border-t border-[var(--border)]/40 pt-4">
                   <SectionHeader
                     title="Premium Memberships"
-                    icon={FiAward}
+                    variant="memberships"
                     count={processedMemberships.length}
-                    gradient="from-pink-500 to-rose-600"
+                    dotColor="bg-pink-500"
                   />
                   <ServiceGridSection
                     title={null}
@@ -388,9 +438,9 @@ function GameCatalogContent() {
                 <div className="mb-4 border-t border-[var(--border)]/40 pt-4">
                   <SectionHeader
                     title="Premium Vouchers"
-                    icon={FiTag}
+                    variant="vouchers"
                     count={processedVouchers.length}
-                    gradient="from-amber-400 to-orange-600"
+                    dotColor="bg-amber-500"
                   />
                   <ServiceGridSection
                     title={null}
@@ -407,9 +457,9 @@ function GameCatalogContent() {
                 <div className="mb-4 border-t border-[var(--border)]/40 pt-4">
                   <SectionHeader
                     title="Premium Services"
-                    icon={FiPackage}
+                    variant="services"
                     count={processedServices.length}
-                    gradient="from-blue-400 to-indigo-600"
+                    dotColor="bg-indigo-500"
                   />
                   <ServiceGridSection
                     title={null}

@@ -288,11 +288,26 @@ function BuyFlowContent() {
           <div className="pb-5 mb-5 border-b border-[var(--border)]">
             <div className="flex items-center justify-between gap-3 text-left">
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="relative w-14 h-14 shrink-0 rounded-2xl bg-[var(--card)] p-2 flex items-center justify-center">
+                <div className="relative w-16 h-16 sm:w-[70px] sm:h-[70px] shrink-0 rounded-2xl bg-[var(--card)] border border-[var(--border)]/70 border-b-[3px] shadow-[0_8px_16px_-4px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.35)] p-2 flex items-center justify-center">
+                  {/* 3D Pedestal Disc + Shadow SVG */}
+                  <svg
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="pointer-events-none absolute inset-0 w-full h-full"
+                    aria-hidden="true"
+                  >
+                    <ellipse cx="32" cy="54" rx="18" ry="4.5" fill="currentColor" className="text-black/15 dark:text-black/45" />
+                    <path
+                      d="M14 50.5C14 53.2 22.1 55.5 32 55.5C41.9 55.5 50 53.2 50 50.5V53C50 55.7 41.9 58 32 58C22.1 58 14 55.7 14 53V50.5Z"
+                      className="fill-[var(--accent)]/25"
+                    />
+                    <ellipse cx="32" cy="50.5" rx="18" ry="5" className="fill-[var(--accent)]/15 stroke-[var(--accent)]/35" strokeWidth="1" />
+                  </svg>
                   <img
                     src={item?.itemImageId?.image || fallbackImage || ""}
                     alt={item?.itemName || fallbackName}
-                    className="w-full h-full object-contain"
+                    className="relative z-[1] w-12 h-12 sm:w-13 sm:h-13 object-contain -translate-y-0.5 drop-shadow-[0_6px_8px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 hover:scale-105 transition-all duration-300"
                   />
                 </div>
                 <div className="min-w-0">

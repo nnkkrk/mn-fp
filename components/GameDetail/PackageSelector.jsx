@@ -94,25 +94,40 @@ export default function PackageSelector({
                   )}
 
                   {/* RIBBON (TOP RIGHT) */}
-                  <div className={`absolute top-0 right-2.5 w-9 h-11 transition-all duration-300 ribbon-shape flex items-center justify-center pt-0.5 shadow-sm
+                  <div className={`absolute top-0 right-2.5 w-11 h-[52px] transition-all duration-300 ribbon-shape flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_6px_12px_-3px_rgba(0,0,0,0.2)]
                     ${isActive 
-                        ? isOOS ? "bg-gradient-to-b from-rose-500/20 to-transparent" : "bg-gradient-to-b from-[var(--accent)]/30 to-[var(--accent)]/10" 
-                        : "bg-gradient-to-b from-[var(--accent)]/[0.08] to-transparent"
+                        ? isOOS ? "bg-gradient-to-b from-rose-500/25 to-rose-500/5" : "bg-gradient-to-b from-[var(--accent)]/35 to-[var(--accent)]/10" 
+                        : "bg-gradient-to-b from-[var(--accent)]/14 to-transparent"
                     }
                   `}>
-                    <div className="relative w-6 h-6 transition-transform duration-300 group-hover:scale-105">
+                    <div className="relative w-9 h-9 flex items-center justify-center">
+                      {/* 3D Pedestal Disc + Shadow SVG */}
+                      <svg
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="pointer-events-none absolute inset-0 w-full h-full"
+                        aria-hidden="true"
+                      >
+                        <ellipse cx="20" cy="34" rx="12" ry="3.2" fill="currentColor" className="text-black/20 dark:text-black/50" />
+                        <path d="M8 31.5C8 33.4 13.4 35 20 35C26.6 35 32 33.4 32 31.5V33.5C32 35.4 26.6 37 20 37C13.4 37 8 35.4 8 33.5V31.5Z" className="fill-[var(--accent)]/25" />
+                        <ellipse cx="20" cy="31.5" rx="12" ry="3.5" className="fill-[var(--accent)]/15 stroke-[var(--accent)]/35" strokeWidth="0.8" />
+                      </svg>
+
+                      <div className="relative w-8 h-8 -translate-y-0.5 transition-all duration-300 group-hover:-translate-y-1.5 group-hover:scale-110">
                         <Image
                             src={item?.itemImageId?.image || item?.image || "/logo.png"}
                             alt={`${item.itemName || "Package"} Top Up icon`}
                             fill
                             unoptimized
-                            className={`object-contain transition-all duration-300 ${isOOS ? "grayscale opacity-40" : isActive ? "opacity-100 scale-105" : "opacity-40 group-hover:opacity-100"}`}
+                            className={`object-contain drop-shadow-[0_6px_8px_rgba(0,0,0,0.36)] transition-all duration-300 ${isOOS ? "grayscale opacity-40" : isActive ? "opacity-100 scale-105" : "opacity-85 group-hover:opacity-100"}`}
                         />
+                      </div>
                     </div>
                   </div>
 
                   {/* CONTENT */}
-                  <div className="relative z-10 flex flex-col h-full pr-10 pt-0.5">
+                  <div className="relative z-10 flex flex-col h-full pr-12 pt-0.5">
                     <p className={`text-[9.5px] font-black tracking-tight uppercase leading-tight mb-1 truncate ${isActive ? (isOOS ? "text-rose-400" : "text-[var(--foreground)]") : "text-[var(--muted)] group-hover:text-[var(--foreground)]"}`}>
                       {item.itemName}
                     </p>
@@ -166,13 +181,13 @@ export default function PackageSelector({
                 `}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="relative w-7 h-7 shrink-0">
+                    <div className="relative w-9 h-9 shrink-0 rounded-lg bg-[var(--foreground)]/[0.04] border border-[var(--border)]/60 border-b-2 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] transition-transform duration-300 group-hover:-translate-y-0.5">
                       <Image
                         src={item?.itemImageId?.image || item?.image || "/logo.png"}
                         alt={`${item.itemName || "Package"} Top Up icon`}
                         fill
                         unoptimized
-                        className={`object-contain ${isOOS ? "grayscale opacity-40" : ""}`}
+                        className={`object-contain p-0.5 drop-shadow-[0_3px_5px_rgba(0,0,0,0.25)] ${isOOS ? "grayscale opacity-40" : ""}`}
                       />
                     </div>
                     <div className="flex items-center gap-2 min-w-0">
