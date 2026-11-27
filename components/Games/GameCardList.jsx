@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/logo.png";
-import { FiArrowRight, FiZap, FiShield } from "react-icons/fi";
+import { FiArrowRight, FiZap } from "react-icons/fi";
 
 export default function GameCardList({ game, isOutOfStock, index = 0 }) {
   const disabled = isOutOfStock(game.gameName);
@@ -38,87 +38,53 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
     <div>
       <Link
         href={disabled ? "#" : `/games/${game.gameSlug}`}
-        className={`group relative flex items-center gap-6 p-4 rounded-none border overflow-hidden
+        className={`group relative flex items-center gap-3.5 sm:gap-4 p-2.5 sm:p-3 rounded-2xl border overflow-hidden
         ${disabled
-            ? "opacity-40 grayscale cursor-not-allowed border-[var(--border)] bg-[var(--card)]/50"
-            : "border-[var(--border)] bg-[var(--card)]/40 backdrop-blur-2xl hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/80 shadow-sm"
+            ? "opacity-50 grayscale cursor-not-allowed border-[var(--border)] bg-[var(--card)]/50"
+            : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/60 hover:shadow-[0_10px_22px_-10px_rgba(var(--accent-rgb),0.25)] transition-all duration-300"
           }`}
       >
-        {/* LIGHT SWEEP EFFECT REMOVED */}
-
-        {/* AVATAR SYSTEM with tactical SVG frame */}
-        <div className="relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 ml-2 mr-2 p-1.5 flex items-center justify-center overflow-hidden">
-          
-          {/* Decorative Tactical SVG Background */}
-          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
-            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--accent)]/[0.08] via-transparent to-purple-500/[0.05] opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
-            
-            {/* Corner Tech Brackets SVG */}
-            <svg
-              className="absolute inset-0.5 w-[calc(100%-4px)] h-[calc(100%-4px)] text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-300"
-              viewBox="0 0 100 100"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M 0 14 L 0 0 L 14 0" stroke="currentColor" strokeWidth="2" />
-              <path d="M 86 0 L 100 0 L 100 14" stroke="currentColor" strokeWidth="2" />
-              <path d="M 0 86 L 0 100 L 14 100" stroke="currentColor" strokeWidth="2" />
-              <path d="M 86 100 L 100 100 L 100 86" stroke="currentColor" strokeWidth="2" />
-            </svg>
-          </div>
-
-          {/* Center main image */}
-          <div className={`
-            relative w-[90%] h-[90%] rounded-none border z-10 bg-[var(--background)] shadow-xs group-hover:scale-[1.03] transition-transform duration-300
-            ${disabled
-              ? "border-white/10"
-              : "border-white/10"
-            }
-          `}>
+        {/* 3D IMAGE CONTAINER */}
+        <div className="relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20">
+          <div className="relative w-full h-full rounded-xl overflow-hidden bg-[var(--foreground)]/[0.04] border border-black/10 dark:border-white/15 border-b-[3px] border-b-black/25 dark:border-b-black/60 shadow-[0_8px_16px_-4px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.28)] group-hover:-translate-y-0.5 group-hover:shadow-[0_12px_20px_-4px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.35)] active:translate-y-0.5 active:border-b transition-all duration-300">
             <Image
               src={game.gameImageId?.image || logo}
               alt={game.gameName}
               fill
-              sizes="120px"
-              quality={60}
-              className={`object-cover rounded-none
-                ${disabled ? "" : ""}
-              `}
+              sizes="96px"
+              quality={70}
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            {/* INNER GLOW */}
-            {!disabled && (
-              <div className="absolute inset-0 rounded-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
-            )}
+            {/* Top specular sheen + subtle bottom vignette for 3D depth */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-black/45 opacity-80" />
           </div>
         </div>
 
         {/* INFO SYSTEM */}
-        <div className="flex-1 min-w-0 pr-2">
-          <div className="flex flex-col mb-1.5 sm:mb-2">
-            <h3
-              className={`text-base sm:text-lg font-[1000] uppercase italic tracking-tighter leading-tight
-              ${disabled ? "text-[var(--muted)]" : "text-[var(--foreground)]"}`}
-            >
-              {game.gameName}
-            </h3>
-          </div>
+        <div className="flex-1 min-w-0 pr-1">
+          <h3
+            className={`text-xs sm:text-sm font-extrabold uppercase tracking-tight leading-snug line-clamp-2 mb-1.5
+            ${disabled ? "text-[var(--muted)]" : "text-[var(--foreground)]"}`}
+          >
+            {game.gameName}
+          </h3>
 
           <div className="flex flex-wrap items-center gap-2">
             {!disabled && (displayTagName || game.tagId) && (
               <span
-                className="text-[6.5px] sm:text-[7.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded border shadow-sm flex items-center gap-1 leading-none"
+                className="text-[7px] sm:text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-md border border-b-2 shadow-[0_2px_6px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.28)] flex items-center gap-1 leading-none"
                 style={{
-                  background: tagBg || game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.2)",
+                  background: tagBg || game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.25)",
                   color: tagColor || game?.tagId?.tagColor || "#ffffff",
-                  borderColor: tagBg ? `${tagBg}80` : (game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.3)"),
+                  borderColor: tagBg ? `${tagBg}99` : (game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.4)"),
                 }}
               >
-                {displayTagName === "Manual" && <FiZap size={10} fill="currentColor" />}
+                {displayTagName === "Manual" && <FiZap size={9} fill="currentColor" />}
                 {displayTagName || game?.tagId?.tagName}
               </span>
             )}
             {disabled && (
-              <span className="px-3 py-1 rounded-lg bg-red-400/10 border border-red-400/20 text-red-500/60 text-[7.5px] sm:text-[8px] font-black uppercase tracking-widest italic">
+              <span className="px-2.5 py-0.5 rounded-md bg-red-500/15 border border-red-500/30 text-red-500 text-[8px] font-black uppercase tracking-widest italic">
                 Out of Stock
               </span>
             )}
@@ -127,9 +93,9 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
 
         {/* ACTION SYSTEM */}
         {!disabled && (
-          <div className="relative shrink-0 pr-3 sm:pr-4">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--background)] group-hover:bg-[var(--accent)]">
-              <FiArrowRight size={20} />
+          <div className="relative shrink-0 pr-1">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[var(--border)] border-b-2 bg-[var(--foreground)]/[0.04] flex items-center justify-center text-[var(--muted)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] group-hover:text-white group-hover:bg-[var(--accent)] group-hover:border-[var(--accent)] transition-all duration-200">
+              <FiArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
             </div>
           </div>
         )}
@@ -137,4 +103,3 @@ export default function GameCardList({ game, isOutOfStock, index = 0 }) {
     </div>
   );
 }
-

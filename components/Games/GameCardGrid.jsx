@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/logo.png";
-import { FiChevronRight, FiEye, FiZap } from "react-icons/fi";
+import { FiChevronRight, FiZap } from "react-icons/fi";
 
 export default function GameCardGrid({ game, isOutOfStock, index = 0 }) {
   const disabled = isOutOfStock(game.gameName);
@@ -38,106 +38,72 @@ export default function GameCardGrid({ game, isOutOfStock, index = 0 }) {
     <div className="h-full">
       <Link
         href={disabled ? "#" : `/games/${game.gameSlug}`}
-        className={`group relative flex flex-col h-full rounded-none overflow-hidden border
+        className={`group relative flex flex-col h-full rounded-2xl overflow-hidden border
         ${disabled
             ? "opacity-60 cursor-not-allowed border-[var(--border)] bg-[var(--background)]"
-            : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/50 shadow-sm transition-all duration-300"
+            : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/60 hover:shadow-[0_10px_22px_-10px_rgba(var(--accent-rgb),0.25)] transition-all duration-300"
           }`}
       >
         {/* IMAGE CONTAINER */}
-        <div className="relative w-full aspect-square p-1.5 sm:p-2 flex items-center justify-center shrink-0 bg-black/10 overflow-hidden">
-          
-          {/* Decorative Tactical SVG Background */}
-          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
-            {/* Ambient subtle glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--accent)]/[0.08] via-transparent to-purple-500/[0.05] opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
-
-            {/* Tactical Dot Matrix Grid SVG */}
-            <svg
-              className="absolute inset-0 w-full h-full text-[var(--foreground)] opacity-[0.06] dark:opacity-[0.10] group-hover:opacity-[0.15] transition-opacity duration-300"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <pattern id={`dot-grid-${game.gameSlug || index}`} width="12" height="12" patternUnits="userSpaceOnUse">
-                  <circle cx="2" cy="2" r="0.75" fill="currentColor" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill={`url(#dot-grid-${game.gameSlug || index})`} />
-            </svg>
-
-            {/* Corner Tech Brackets SVG */}
-            <svg
-              className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-300"
-              viewBox="0 0 100 100"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M 0 12 L 0 0 L 12 0" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M 88 0 L 100 0 L 100 12" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M 0 88 L 0 100 L 12 100" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M 88 100 L 100 100 L 100 88" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </div>
-
-          {/* Main card */}
-          <div className="relative w-[90%] h-[92%] z-10 border border-white/10 bg-[var(--background)] shadow-sm group-hover:scale-[1.03] transition-transform duration-300">
+        <div className="relative w-full aspect-square p-1.5 pb-0 shrink-0">
+          <div className="relative w-full h-full rounded-xl overflow-hidden bg-[var(--foreground)]/[0.04] border border-black/10 dark:border-white/15 border-b-[3px] border-b-black/25 dark:border-b-black/60 shadow-[0_8px_16px_-4px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.28)] group-hover:-translate-y-0.5 group-hover:shadow-[0_12px_20px_-4px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.35)] active:translate-y-0.5 active:border-b transition-all duration-300">
             <Image
               src={game.gameImageId?.image || logo}
               alt={game.gameName}
               fill
               sizes="(max-width: 768px) 33vw, 25vw"
               quality={75}
-              className={`object-cover rounded-none
+              className={`object-cover transition-transform duration-300 group-hover:scale-105
                 ${disabled
                   ? "grayscale blur-[2px]"
                   : ""
                 }`}
             />
 
-          {/* OVERLAYS */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
+            {/* Top specular sheen + subtle bottom vignette for 3D depth */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-black/50 opacity-80" />
 
-          {/* TAG / BADGE */}
-          {!disabled && (displayTagName || game.tagId) && (
-            <div className="absolute top-1.5 left-1.5 z-20">
-              <span
-                className="text-[6.5px] sm:text-[7px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-[4px] border flex items-center gap-0.5 leading-none"
-                style={{
-                  background: tagBg || game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.2)",
-                  color: tagColor || game?.tagId?.tagColor || "#ffffff",
-                  borderColor: tagBg ? `${tagBg}80` : (game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.3)"),
-                }}
-              >
-                {displayTagName === "Manual" && <FiZap size={8} fill="currentColor" />}
-                {displayTagName || game?.tagId?.tagName}
-              </span>
-            </div>
-          )}
+            {/* TAG / BADGE */}
+            {!disabled && (displayTagName || game.tagId) && (
+              <div className="absolute top-1.5 left-1.5 z-20">
+                <span
+                  className="text-[6.5px] sm:text-[7.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-md border border-b-2 backdrop-blur-md shadow-[0_2px_6px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] flex items-center gap-0.5 leading-none"
+                  style={{
+                    background: tagBg || game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.25)",
+                    color: tagColor || game?.tagId?.tagColor || "#ffffff",
+                    borderColor: tagBg ? `${tagBg}99` : (game?.tagId?.tagBackground || "rgba(var(--accent-rgb), 0.4)"),
+                  }}
+                >
+                  {displayTagName === "Manual" && <FiZap size={8} fill="currentColor" />}
+                  {displayTagName || game?.tagId?.tagName}
+                </span>
+              </div>
+            )}
 
-          {/* OUT OF STOCK OVERLAY */}
-          {disabled && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
-              <span className="px-3 py-1.5 rounded-lg bg-red-500/90 text-white text-[8px] font-black uppercase tracking-widest italic text-center leading-tight">
-                OUT OF STOCK
-              </span>
-            </div>
-          )}
+            {/* OUT OF STOCK OVERLAY */}
+            {disabled && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/45 backdrop-blur-[1px]">
+                <span className="px-2.5 py-1 rounded-md bg-red-500/90 text-white text-[8px] font-black uppercase tracking-widest italic text-center leading-tight">
+                  OUT OF STOCK
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* CONTENT */}
-        <div className="p-2 sm:p-2.5 relative flex-1 flex flex-col justify-center">
-          <div className="flex items-start justify-between gap-1">
-            <h3
-              className={`text-[10px] sm:text-xs font-black uppercase tracking-tight leading-snug flex-1 line-clamp-2
-              ${disabled ? "text-[var(--muted)]" : "text-[var(--foreground)]"}`}
-            >
-              {game.gameName}
-            </h3>
-            {!disabled && (
-              <FiChevronRight className="text-[var(--muted)] shrink-0 mt-0.5" size={12} />
-            )}
-          </div>
+        <div className="px-2 py-2 sm:px-2.5 sm:py-2.5 relative flex-1 flex items-center justify-between gap-1.5">
+          <h3
+            className={`text-[10px] sm:text-xs font-extrabold uppercase tracking-tight leading-tight flex-1 line-clamp-2
+            ${disabled ? "text-[var(--muted)]" : "text-[var(--foreground)]"}`}
+          >
+            {game.gameName}
+          </h3>
+          {!disabled && (
+            <span className="inline-flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full border border-[var(--border)] border-b-2 bg-[var(--foreground)]/[0.05] text-[var(--muted)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] group-hover:bg-[var(--accent)] group-hover:border-[var(--accent)] group-hover:text-white transition-colors shrink-0">
+              <FiChevronRight size={11} />
+            </span>
+          )}
         </div>
       </Link>
     </div>
